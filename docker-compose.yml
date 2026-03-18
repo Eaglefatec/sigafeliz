@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database — simulates an external database server
+  db:
+    image: postgres:16-alpine
+    container_name: sigafeliz-db
+    environment:
+      POSTGRES_DB: sigafeliz
+      POSTGRES_USER: sigafeliz
+      POSTGRES_PASSWORD: sigafeliz
+    ports:
+      - "5432:5432"
+    volumes:
+      - sigafeliz-data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sigafeliz"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  sigafeliz-data:
