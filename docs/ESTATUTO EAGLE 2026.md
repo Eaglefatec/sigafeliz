@@ -31,15 +31,25 @@ IV – Contribuir com a comunidade acadêmica e externa por meio de soluções t
 
 **Art. 6º –** O grupo será administrado por todos integrantes.
 
-## 🛠️ Capítulo IV – Das Atribuições 
+## 📝 Capítulo IV - Dos Critérios de Aceitação e Permanência
 
-**Art. 7º –** Semestralmente e de maneira alternada, serão atribuídas as funções abaixo aos integrantes:
+**Art. 7º -** A entrada de um novo membro depende da existência de vaga e da aprovação por maioria simples dos integrantes.
+
+**Art. 8º -** O ingressante deve se adequar às ferramentas que utilizamos, como GitHub, IntelliJ, Jira, Google Meet e o grupo de WhatsApp.
+
+**Art. 9º -** O novo membro deve confirmar que tem horários livres compatíveis com os do grupo para reuniões e chamadas de alinhamento.
+
+**Art. 10º -** O candidato aceita que seu trabalho será revisado pelos outros membros e se compromete a refazer o que for solicitado caso a entrega não esteja no padrão do grupo.
+
+## 🛠️ Capítulo V – Das Atribuições 
+
+**Art. 11º –** Semestralmente e de maneira alternada, serão atribuídas as funções abaixo aos integrantes:
 
 * Product Owner (PO)
 * Scrum Master (SM) 
 * Developer (Dev) 
 
-**Art. 8º –** Compete ao PO:
+**Art. 12º –** Compete ao PO:
 
 I – Definir as funcionalidades do produto; <br>
 II – Priorizar os itens do Product Backlog; <br>
@@ -52,7 +62,7 @@ VIII – Manter comunicação com o cliente; <br>
 IX – Elaborar a Sprint Backlog antes do início do prazo da Sprint; <br>
 X – Estar disponível para entender as dificuldades do time e esclarecê-las. Se necessário consultar o cliente para esclarecer.
 
-**Art. 9º –** Compete ao SM:
+**Art. 13º –** Compete ao SM:
 
 I – Garantir o funcionamento do framework Scrum; <br>
 II – Remover obstáculos que atrapalhem o time; <br>
@@ -63,7 +73,7 @@ VI – Monitorar as tarefas da Sprint; <br>
 VII – Facilitar os eventos do Scrum; <br>
 VIII – Solucionar problemas que afetam a produtividade da equipe.
 
-**Art. 10º –** Compete ao Developer (Dev):
+**Art. 14º –** Compete ao Developer (Dev):
 
 I – Transformar os itens do Product Backlog em funcionalidades incrementais; <br>
 II – Estimar o esforço dos itens; <br>
@@ -73,27 +83,29 @@ V – Criação do Sprint Backlog; <br>
 VI – Definição de produto pronto – DOD; <br>
 VII – Ser adaptativo para chegar a meta da Sprint.
 
-## 📅 Capítulo V – Das Reuniões
+## 📅 Capítulo VI – Das Reuniões
 
-**Art. 11º –** O grupo se reunirá diariamente (daily) às 21 horas e 15 minutos durante o período de aulas, exceto se acordado por todos presentes um outro horário.
+**Art. 15º –** O grupo se reunirá diariamente (daily) às 21 horas e 15 minutos durante o período de aulas, exceto se acordado por todos presentes um outro horário.
 
-**Art. 12º –** As decisões serão tomadas por maioria simples dos membros presentes.
+**Art. 16º –** As decisões serão tomadas por maioria simples dos membros presentes.
 
-## 🚀 Capítulo VI – Dos Projetos e Atividades
+## 🚀 Capítulo VII – Dos Projetos e Atividades
 
-**Art. 13º –** Os projetos desenvolvidos pelo grupo poderão ter caráter acadêmico, experimental ou de extensão comunitária.
+**Art. 17º –** Os projetos desenvolvidos pelo grupo poderão ter caráter acadêmico, experimental ou de extensão comunitária.
 
-**Art. 14º –** Todo projeto deverá seguir o modelo de documentação interna definido pela faculdade (API).
+**Art. 18º –** Todo projeto deverá seguir o modelo de documentação interna definido pela faculdade (API).
 
-**Art. 15º –** A autoria e propriedade intelectual dos projetos seguirão as normas da instituição e acordos definidos entre os participantes.
+**Art. 19º –** A autoria e propriedade intelectual dos projetos seguirão as normas da instituição e acordos definidos entre os participantes.
 
-## ⚠️ Capítulo VII – Das Penalidades
-**Art. 16º –** O membro que descumprir as regras estabelecidas por este Estatuto estará sujeito à exclusão do grupo mediante votação dos demais participantes. 
+## ⚠️ Capítulo VIII – Das Penalidades
 
-## 🏁 Capítulo VIII – Das Disposições Finais
-**Art. 17º –** Este Estatuto poderá ser alterado mediante proposta aprovada pela maioria simples dos membros.
+**Art. 20º –** O membro que descumprir as atribuições estabelecidas por este Estatuto estará sujeito à exclusão do grupo mediante votação dos demais participantes. 
 
-**Art. 18º –** O presente Estatuto entra em vigor na data de sua aprovação pela assembleia de membros fundadores.
+## 🏁 Capítulo IX – Das Disposições Finais
 
-📘 **Aprovado em:** 11/03/2026 <br>
+**Art. 21º –** Este Estatuto poderá ser alterado mediante proposta aprovada pela maioria simples dos membros.
+
+**Art. 22º –** O presente Estatuto entra em vigor na data de sua aprovação pela assembleia de membros fundadores.
+
+📘 **Aprovado em:** 18/03/2026 <br>
 📍 **Local:** FATEC Prof. Jessen Vidal, São José dos Campos 
