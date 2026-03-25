@@ -17,9 +17,23 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 
 ---
 
-## 2. Requisitos de Usuário
+## 2. Histórias de Usuário
 
-### 2.1 Coordenador Acadêmico
+### 2.1 Priorização de Histórias
+
+| Rank | User Story | Prioridade | Dificuldade | Sprint Planejada |
+| :--- | :--- | :--- | :--- | :--- |
+| 1º | US01: Definição de Calendário Acadêmico do Semestre | Alta | Baixa | Sprint 3 |
+| 2º | US02: Cadastro de Identidade Docente | Alta | Baixa | Sprint 3 |
+| 3º | US03: Definição de Grade de Disciplina e Vínculo Docente | Alta | Média | Sprint 3 |
+| 4º | US05: Identificação de Usuário e Seleção de Disciplina | Alta | Média | Sprint 2 |
+| 5º | US06: Distribuição Automática de Conteúdo | Alta | Alta | Sprint 3 |
+| 6º | US04: Estabelecimento do Ciclo de Sprints | Média | Baixa | Sprint 2 |
+| 7º | US07: Compensação de Carga Horária aos Sábados | Média | Alta | Sprint 3 |
+| 8º | US08: Proteção Cíclica de Datas de Avaliação | Média | Média | Sprint 3 |
+| 9º | US09: Compatibilização de Dados para o SIGA | Baixa | Baixa | Sprint  3 |
+
+### 2.2 Coordenador Acadêmico
 
 **US01: Definição de Calendário Acadêmico do Semestre**
 ### HISTÓRIA PRINCIPAL DO COORDENADOR
@@ -52,7 +66,7 @@ Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a par
     * O sistema deve calcular períodos consecutivos de exatamente 28 dias (4 semanas), com o "Dia 1" da primeira Sprint sendo a data do Kickoff.
     * As semanas 3 e 4 de cada ciclo de 28 dias devem ser marcadas internamente no sistema como zonas de restrição para regras de negócio de avaliações.
 
-### 2.2 Professor
+### 2.3 Professor
 
 **US05: Identificação de Usuário e Seleção de Disciplina**
 Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento.
