@@ -22,7 +22,7 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 ## 2. Requisitos de Usuário
 
 ### 2.1 Coordenador Acadêmico
-**US01: Centralização de Calendário Acadêmico e Projeto Integrador**
+**US01: Definição de Calendário Acadêmico do Semestre**
 ### HISTÓRIA PRINCIPAL DO COORDENADOR
 Como coordenador, quero fornecer para o professor os parâmetros temporais do semestre regular e o início do Projeto API, para que o planejamento considere simultaneamente os dias úteis e os ciclos contínuos de Sprints.
 * **Critérios de Aceitação:**
@@ -32,7 +32,7 @@ Como coordenador, quero fornecer para o professor os parâmetros temporais do se
     * Definição da data exata do Kickoff do Projeto Integrador.
     * Cálculo automático do saldo líquido de dias úteis disponíveis na grade regular.
 
-**US02: Definição de Disponibilidade Docente**
+**US02: Definição de Grade do Docente**
 Como coordenador, quero registrar a carga semanal e os dias de trabalho de cada professor, para que o cronograma respeite a capacidade real de atendimento de cada disciplina.
 * **Critérios de Aceitação:**
     * Seleção dos dias da semana em que há aulas regulares.
