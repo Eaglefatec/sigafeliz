@@ -1,24 +1,29 @@
 # API 2º Semestre Banco de Dados
 
-# Siga Feliz
+<p align="center">
+      <img src="docs\assets\eagle_logo_2.png" alt="logo Eagle" width="200">
+      <h2 align="center">Eagle</h2>
+</p>
 
 ## Desafio
 O desafio consiste em criar uma aplicação desktop capaz de auxiliar os docentes no planejamento semestral dos cronogramas acadêmicos. O planejamento semestral é realizado de maneira manual, onde os professores devem cadastrar os temas ministrados garantindo a conformidade institucional com a carga exata de 40 ou 80 aulas e respeitando restrições de calendário (feriados, eventos institucionais e ciclos de Sprints).
 
 ## Solução
-O "Siga Feliz" será responsável por automatizar a distribuição dos temas, facilitando a entrada de dados do usuário e eliminando o esforço cognitivo de se distribuir 40 ou 80 aulas manualmente pelo calendário. A solução portará um algoritmo de alocação inteligente e validação de regras de negócio.
+O "Siga Feliz" será responsável por automatizar a distribuição dos temas, facilitando a entrada de dados do usuário e eliminando o esforço cognitivo de se distribuir as aulas manualmente pelo calendário. A solução portará um algoritmo de alocação inteligente e validação de regras de negócio.
 
 ## Backlog do Produto
 
-| Rank | User Story | Prioridade | Sprint | Status |
-| :---: | --- | :---: | :---: | :---: |
-| 1 | Como coordenador, quero centralizar os parâmetros do semestre e do Projeto API, para que o planejamento alinhe dias úteis e ciclos de Sprints. | | | |
-| 2 | Como coordenador, quero registrar a carga horária e dias de trabalho dos professores, para que o cronograma respeite a capacidade real de cada um. | | | |
-| 3 | Como coordenador, quero que o sistema projete ciclos de 28 dias pós-Kickoff, para que as Sprint Reviews sejam mapeadas automaticamente. | | | |
-| 4 | Como professor, quero planejar temas de aula com o mínimo de esforço manual, para que a distribuição siga as regras institucionais. | | | |
-| 5 | Como professor, quero utilizar sábados letivos (priorizando o fim do semestre), para que a carga horária seja cumprida se faltarem dias de semana. | | | |
-| 6 | Como professor, quero marcar datas de prova, para que o sistema impeça conflitos com as semanas de entrega do Projeto Integrador. | | | |
-| 7 | Como professor, quero visualizar a relação do planejamento final em um formato estruturado (.xlsx), para que as informações de data, tema e ordem sejam facilmente preenchidas no SIGA. | | | |
+| Rank | User Story | Prioridade | Dificuldade | Sprint Planejada | Status |
+| :---: | --- | :---: | :---: | :---: | :---: |
+| 1 | Como coordenador, quero fornecer para o professor os parâmetros temporais do semestre regular e o início do Projeto API, para que o planejamento considere simultaneamente os dias úteis e os ciclos contínuos de Sprints. | Alta | Baixa | Sprint 3 | |
+| 2 | Como coordenador, quero registrar o perfil de cada professor no sistema, para que o professor selecione seu registro e visualize somente suas grades. | Alta | Baixa | Sprint 3 | |
+| 3 | Como coordenador, quero criar a grade semanal de uma disciplina e vinculá-la ao perfil de um professor específico, para que o docente acesse e planeje apenas a capacidade real das matérias sob sua responsabilidade. | Alta | Média | Sprint 3 | |
+| 4 | Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. | Alta | Média | Sprint 2 | |
+| 5 | Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento. | Alta | Alta | Sprint 3 | |
+| 6 | Como professor, quero planejar a relação entre temas de aula e dias lecionados com o mínimo de input manual e esforço cognitivo possível, para que a distribuição da matéria ao longo do semestre siga as regras institucionais. | Média | Baixa | Sprint 2 | |
+| 7 | Como professor, quero que o cronograma utilize sábados letivos com prioridade para o final do semestre quando os dias de semana forem insuficientes, garantindo o cumprimento exato da carga horária de 40 ou 80 aulas. | Média | Alta | Sprint 3 | |
+| 8 | Como professor, quero identificar quais aulas são provas, para que o sistema impeça que elas sejam alocadas nas semanas de entrega de Projeto Integrador, garantindo conformidade com a política institucional de não sobreposição de avaliações. | Média | Média | Sprint 3 | |
+| 9 | Como professor, quero visualizar a relação do planejamento final em um formato estruturado (.xlsx), para que as informações de data, tema e ordem sejam facilmente preenchidas no SIGA. | Baixa | Baixa | Sprint 3| |
 
 ## DoR - Definition of Ready
 
@@ -87,12 +92,6 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
       <td>Fernando Montero da Costa</td>
       <td>Desenvolvedor</td>
       <td><a href="https://github.com/fernandocosta45"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
-      <td><a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
-    </tr>
-    <tr>
-      <td>Marcelo Faria Ribeiro</td>
-      <td>Desenvolvedor</td>
-      <td><a href="https://github.com/Ribeiro199"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
       <td><a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
     </tr>
     <tr>
