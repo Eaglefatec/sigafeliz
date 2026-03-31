@@ -23,15 +23,15 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 
 | Rank | User Story | Prioridade | Dificuldade | Sprint Planejada |
 | :--- | :--- | :--- | :--- | :--- |
-| 1º | US01: Definição de Calendário Acadêmico do Semestre | Alta | Baixa | Sprint 3 |
-| 2º | US02: Cadastro de Identidade Docente | Alta | Baixa | Sprint 3 |
-| 3º | US03: Definição de Grade de Disciplina e Vínculo Docente | Alta | Média | Sprint 3 |
-| 4º | US05: Identificação de Usuário e Seleção de Disciplina | Alta | Média | Sprint 2 |
-| 5º | US06: Distribuição Automática de Conteúdo | Alta | Alta | Sprint 3 |
-| 6º | US04: Estabelecimento do Ciclo de Sprints | Média | Baixa | Sprint 2 |
-| 7º | US07: Compensação de Carga Horária aos Sábados | Média | Alta | Sprint 3 |
-| 8º | US08: Proteção Cíclica de Datas de Avaliação | Média | Média | Sprint 3 |
-| 9º | US09: Compatibilização de Dados para o SIGA | Baixa | Baixa | Sprint  3 |
+| 1º | US01: Definição de Calendário Acadêmico do Semestre | Alta | Alta | Sprint 2 |
+| 2º | US03: Definição de Grade de Disciplina e Vínculo Docente | Alta | Média | Sprint 2 |
+| 3º | US06: Distribuição Automática de Conteúdo | Alta | Alta | Sprint 3 |
+| 4º | US02: Cadastro de Identidade Docente | Média | Baixa | Sprint 2 |
+| 5º | US07: Compensação de Carga Horária aos Sábados | Média | Alta | Sprint 3 |
+| 6º | US08: Proteção Cíclica de Datas de Avaliação | Média | Média | Sprint 3 |
+| 7º | US09: Geração de modelo para preenchimento | Média | Baixa | Sprint 3 |
+| 8º | US05: Identificação de Usuário e Seleção de Disciplina | Baixa | Baixa | Sprint 2 |
+| 9º | US04: Estabelecimento do Ciclo de Sprints | Baixa | Média | Sprint 2 |
 
 ### 2.2 Coordenador Acadêmico
 
@@ -101,7 +101,7 @@ Como professor, quero identificar quais aulas são provas, para que o sistema im
     * O sistema deve verificar se a data projetada para a avaliação incide entre o 15º e o 28º dia (semanas 3 e 4) de **qualquer** ciclo de Sprint originado pelo Kickoff.
     * Aviso bloqueante na interface caso a distribuição resulte em avaliação alocada dentro dessas semanas restritas em qualquer ponto do semestre, exigindo ajuste por parte do professor.
 
-**US09: Compatibilização de Dados para o SIGA**
+**US09: Geração de modelo para preenchimento**
 Como professor, quero visualizar a relação do planejamento final em um formato estruturado (.xlsx), para que as informações de data, tema e ordem sejam facilmente preenchidas no SIGA.
 * **Critérios de Aceitação:**
     * Geração de arquivo contendo as colunas: número da aula, data, tema, marcador de prova, dia da semana e identificação da disciplina.
