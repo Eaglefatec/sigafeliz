@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe - Siga Feliz - Caminho do Professor</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .wireframe-box {
+            border: 3px solid black;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 850px;
+            background-color: white;
+            box-shadow: 5px 5px 0px black;
+            display: none;
+        }
+
+        .wireframe-box.active {
+            display: block;
+        }
+
+        h1, h2, h3, h4 {
+            text-transform: uppercase;
+            border-bottom: 3px solid black;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid black;
+            margin-bottom: 15px;
+        }
+
+        th, td {
+            border: 2px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        input[type="text"], input[type="number"], select {
+            border: 2px solid black;
+            padding: 8px;
+            font-family: inherit;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        input[type="checkbox"] {
+            transform: scale(1.5);
+        }
+
+        button, .nav-arrow {
+            background: none;
+            border: 3px solid black;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-family: inherit;
+            display: inline-block;
+        }
+
+        button:hover, .nav-arrow:hover {
+            background-color: #eee;
+        }
+
+        .btn-action {
+            background-color: #e0e0e0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            border-top: 2px dashed black;
+            padding-top: 15px;
+        }
+
+        .nav-arrow-right::after { content: ' \2192'; }
+        .nav-arrow-left::before { content: '\2190 '; }
+
+        .btn-add {
+            width: 100%;
+            font-size: 18px;
+            padding: 5px;
+        }
+
+        .alert-box {
+            border: 2px solid black;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+        
+        .flex-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Estilos do Modal de Salvamento de Arquivo */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-dialog {
+            background-color: white;
+            border: 3px solid black;
+            padding: 20px;
+            width: 500px;
+            box-shadow: 10px 10px 0px black;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="screen-home" class="wireframe-box active">
+        <h2>Tela Inicial</h2>
+        <div style="display: flex; flex-direction: column; gap: 15px; width: 200px; margin: 0 auto; text-align: center;">
+            <button onclick="showScreen('screen-login')">Sou professor</button>
+            <button onclick="alert('Fluxo do coordenador não mapeado neste arquivo.')">Sou coordenador</button>
+        </div>
+    </div>
+
+    <div id="screen-login" class="wireframe-box">
+        <h3>IDENTIFICAÇÃO DOCENTE</h3>
+        <p>Selecione seu perfil previamente cadastrado pela coordenação:</p>
+        
+        <div style="border: 2px solid black; padding: 20px; text-align: center; width: 50%; margin: 0 auto;">
+            <label>Nome do Professor:</label><br><br>
+            <select style="width: 80%; margin-bottom: 20px;">
+                <option value="">-- Selecione --</option>
+                <option value="1">Prof. Carlos Silva</option>
+                <option value="2">Prof. Maria Oliveira</option>
+                <option value="3">Prof. João Pereira</option>
+            </select><br>
+            <button onclick="showScreen('screen-subjects')">Acessar Minhas Grades</button>
+        </div>
+
+        <div class="nav-container">
+            <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-home')">Voltar</button>
+        </div>
+    </div>
+
+    <div id="screen-subjects" class="wireframe-box">
+        <h3>MINHAS DISCIPLINAS</h3>
+        <p>Bem-vindo, <strong>Prof. Carlos Silva</strong>. Selecione a disciplina para planejar:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Disciplina</th>
+                    <th>Semestre</th>
+                    <th>Aulas/Semana</th>
+                    <th>Carga Exigida</th>
+                    <th style="width: 80px; text-align: center;">Selec.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Banco de Dados 1</td>
+                    <td>2025.1</td>
+                    <td>4 (Terça, Quinta)</td>
+                    <td>80</td>
+                    <td style="text-align: center;"><input type="radio" name="my_subj" checked></td>
+                </tr>
+                <tr>
+                    <td>Estrutura de Dados</td>
+                    <td>2025.1</td>
+                    <td>2 (Sexta)</td>
+                    <td>40</td>
+                    <td style="text-align: center;"><input type="radio" name="my_subj"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="nav-container">
+            <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-login')">Voltar</button>
+            <button class="nav-arrow nav-arrow-right" onclick="showScreen('screen-planning')">Planejar Ementa</button>
+        </div>
+    </div>
+
+    <div id="screen-planning" class="wireframe-box">
+        <h3>PLANEJAMENTO: BANCO DE DADOS 1 (2025.1)</h3>
+        
+        <div style="display: flex; gap: 10px;">
+            <div class="alert-box alert-info" style="flex: 1;">
+                <strong>Meta:</strong> 80 Aulas<br>
+                <strong>Dias letivos regulares mapeados:</strong> 76 Aulas
+            </div>
+            
+            <div class="alert-box alert-warning" style="flex: 1;">
+                ⚠️ <strong>Déficit identificado!</strong><br>
+                O sistema ativará automaticamente <strong>4 aulas</strong> em Sábados Letivos do final do semestre para atingir a meta de 80.
+            </div>
+        </div>
+
+        <div class="alert-box alert-danger" id="sprint-error" style="display: none;">
+            ❌ <strong>Conflito de Avaliação!</strong><br>
+            A aula "Prova 1" caiu no 18º dia de um ciclo de Sprint (Semana 3). Avaliações não podem ocorrer entre a 3ª e 4ª semana. Ajuste a ordem ou a carga dos temas anteriores.
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px;">
+            <h4>Ementa de Temas</h4>
+            <div class="flex-row">
+                <span style="font-size: 12px; border: 1px solid black; padding: 2px 5px;">Soma Atual Mín: 20 | Máx: 50</span>
+                <button onclick="toggleError('sprint-error')">Validar Distribuição</button>
+                <button class="btn-action" onclick="showSaveDialog()">📥 Exportar .XLSX</button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 50px;">Ord.</th>
+                    <th>Tema da Aula</th>
+                    <th style="width: 60px;">Mín</th>
+                    <th style="width: 60px;">Máx</th>
+                    <th style="width: 100px;">Prioridade</th>
+                    <th style="width: 60px; text-align: center;">Prova?</th>
+                    <th style="width: 80px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Introdução aos SGBDs</td>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>ALTA</td>
+                    <td style="text-align: center;"><input type="checkbox" disabled></td>
+                    <td style="text-align: center;"><button>✎</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Modelagem Entidade-Relacionamento</td>
+                    <td>8</td>
+                    <td>12</td>
+                    <td>ALTA</td>
+                    <td style="text-align: center;"><input type="checkbox" disabled></td>
+                    <td style="text-align: center;"><button>✎</button></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Avaliação P1 (Teórica)</td>
+                    <td>2</td>
+                    <td>2</td>
+                    <td>ALTA</td>
+                    <td style="text-align: center;"><input type="checkbox" checked disabled></td>
+                    <td style="text-align: center;"><button>✎</button></td>
+                </tr>
+                
+                <tr id="inline-add-tema" style="display: none; background-color: #f0f0f0;">
+                    <td><input type="number" value="4" tabindex="1" style="width: 40px;" disabled></td>
+                    <td><input type="text" placeholder="Nome do tema..." tabindex="2"></td>
+                    <td><input type="number" placeholder="Min" tabindex="3"></td>
+                    <td><input type="number" placeholder="Max" tabindex="4"></td>
+                    <td>
+                        <select tabindex="5">
+                            <option>ALTA</option>
+                            <option selected>MÉDIA</option>
+                            <option>BAIXA</option>
+                        </select>
+                    </td>
+                    <td style="text-align: center;"><input type="checkbox" tabindex="6"></td>
+                    <td style="text-align: center;"><button tabindex="7" onclick="hideInline('inline-add-tema')">Salvar</button></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7" style="padding: 0;">
+                        <button class="btn-add" onclick="showInline('inline-add-tema')">+</button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <p style="font-size: 12px; margin-top: 0;">* O sistema aloca primeiro a carga Mínima de todos os temas. As vagas restantes são preenchidas pela Prioridade até o limite Máximo.</p>
+
+        <div class="nav-container">
+            <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-subjects')">Voltar</button>
+            <button class="nav-arrow nav-arrow-right" onclick="alert('Salvo no banco de dados. Processo concluído.')">Finalizar Planejamento</button>
+        </div>
+    </div>
+
+    <div id="save-file-modal" class="modal-overlay">
+        <div class="modal-dialog">
+            <h3 style="border-bottom: none; margin-bottom: 10px;">Salvar Arquivo Como...</h3>
+            <p style="font-size: 14px;">Simulação do FileChooser do Sistema Operacional</p>
+            
+            <label style="font-weight: bold;">Caminho e Nome do Arquivo:</label>
+            <input type="text" id="file-path-input" value="C:\Users\Professor\Documents\Siga_Feliz_BD1_2025_1.xlsx" style="margin-top: 5px; margin-bottom: 20px;">
+            
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button onclick="hideSaveDialog()">Cancelar</button>
+                <button onclick="confirmSaveAndOpen()" style="background-color: #e0e0e0;">Salvar (OK)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            const screens = document.querySelectorAll('.wireframe-box');
+            screens.forEach(screen => screen.classList.remove('active'));
+
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+            }
+        }
+
+        function showInline(rowId) {
+            document.getElementById(rowId).style.display = 'table-row';
+            const inputName = document.getElementById(rowId).querySelector('input[type="text"]');
+            if(inputName) inputName.focus();
+        }
+
+        function hideInline(rowId) {
+            const row = document.getElementById(rowId);
+            row.style.display = 'none';
+            const textInputs = row.querySelectorAll('input[type="text"], input[type="number"]');
+            textInputs.forEach(input => {
+                if(!input.disabled) input.value = '';
+            });
+            const checkboxes = row.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(chk => chk.checked = false);
+        }
+
+        function toggleError(errorId) {
+            const el = document.getElementById(errorId);
+            if(el.style.display === 'none') {
+                el.style.display = 'block';
+            } else {
+                el.style.display = 'none';
+                alert('Distribuição validada com sucesso! Sem conflitos de Sprint.');
+            }
+        }
+
+        // Funções para controle do Modal de Exportação
+        function showSaveDialog() {
+            document.getElementById('save-file-modal').style.display = 'flex';
+        }
+
+        function hideSaveDialog() {
+            document.getElementById('save-file-modal').style.display = 'none';
+        }
+
+        function confirmSaveAndOpen() {
+            const path = document.getElementById('file-path-input').value;
+            hideSaveDialog();
+            
+            // Simula o delay da gravação e abertura via sistema operacional (Desktop.getDesktop().open)
+            setTimeout(() => {
+                alert("Arquivo exportado com sucesso!\n\nAbrindo automaticamente o Excel no caminho:\n" + path);
+            }, 300);
+        }
+    </script>
+
+</body>
+</html>
