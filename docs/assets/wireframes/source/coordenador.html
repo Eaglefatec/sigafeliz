@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe - Siga Feliz - Caminho do Coordenador</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .wireframe-box {
+            border: 3px solid black;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 800px;
+            background-color: white;
+            box-shadow: 5px 5px 0px black;
+            display: none;
+        }
+
+        .wireframe-box.active {
+            display: block;
+        }
+
+        h1, h2, h3 {
+            text-transform: uppercase;
+            border-bottom: 3px solid black;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 2px solid black;
+            margin-bottom: 15px;
+        }
+
+        th, td {
+            border: 2px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        input[type="text"], input[type="date"], textarea, select {
+            border: 2px solid black;
+            padding: 8px;
+            font-family: inherit;
+            width: 90%;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            width: 100%;
+            resize: vertical;
+        }
+
+        button, .nav-arrow {
+            background: none;
+            border: 3px solid black;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-family: inherit;
+            display: inline-block;
+        }
+
+        button:hover, .nav-arrow:hover {
+            background-color: #eee;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            border-top: 2px dashed black;
+            padding-top: 15px;
+        }
+
+        .nav-arrow-right::after { content: ' \2192'; }
+        .nav-arrow-left::before { content: '\2190 '; }
+
+        .btn-add {
+            width: 100%;
+            font-size: 18px;
+            padding: 5px;
+        }
+
+        .calendar-table td {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            border: 2px solid black;
+            cursor: pointer; /* Indica que é clicável */
+            user-select: none;
+        }
+
+        .calendar-table td:hover {
+            background-color: #f0f0f0;
+        }
+
+        .holiday {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .saturday-letivo {
+            background-color: #cfe2f3 !important;
+            border-color: #9ac4e6;
+            color: #084298;
+        }
+
+        .calendar-layout {
+            display: flex;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .obs-panel {
+            width: 350px;
+            border: 3px solid black;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="screen-home" class="wireframe-box active">
+        <h2>Tela Inicial</h2>
+        <div style="display: flex; flex-direction: column; gap: 15px; width: 200px; margin: 0 auto; text-align: center;">
+            <button onclick="alert('Fluxo do professor não mapeado neste wireframe.')">Sou professor</button>
+            <button onclick="showScreen('screen-professors')">Sou coordenador</button>
+        </div>
+    </div>
+
+    <div id="screen-professors" class="wireframe-box">
+        <h3>TELAS DE COORDENADOR: LISTA DE PROFESSORES</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th style="width: 80px; text-align: center;">Selec.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Prof. Carlos Silva</td>
+                    <td>carlos.silva@email.com</td>
+                    <td style="text-align: center;"><input type="radio" name="prof" checked></td>
+                </tr>
+                <tr>
+                    <td>Prof. Maria Oliveira</td>
+                    <td>maria.oliveira@email.com</td>
+                    <td style="text-align: center;"><input type="radio" name="prof"></td>
+                </tr>
+                <tr id="inline-add-prof" style="display: none; background-color: #f0f0f0;">
+                    <td><input type="text" placeholder="Nome do Professor" tabindex="1"></td>
+                    <td><input type="text" placeholder="E-mail" tabindex="2"></td>
+                    <td style="text-align: center;"><button tabindex="3" onclick="hideInline('inline-add-prof')">Salvar</button></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="padding: 0;">
+                        <button class="btn-add" onclick="showInline('inline-add-prof')">+</button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div class="nav-container">
+            <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-home')">Voltar</button>
+            <button class="nav-arrow nav-arrow-right" onclick="showScreen('screen-subjects')">Avançar</button>
+        </div>
+    </div>
+
+    <div id="screen-subjects" class="wireframe-box">
+        <h3>LISTA DE DISCIPLINAS</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Semestre</th>
+                    <th>Professor</th>
+                    <th>Carga Horária</th>
+                    <th style="width: 80px; text-align: center;">Selec.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Banco de Dados 1</td>
+                    <td>2025.1</td>
+                    <td>Prof. Carlos Silva</td>
+                    <td>80</td>
+                    <td style="text-align: center;"><input type="radio" name="subj" checked></td>
+                </tr>
+                <tr>
+                    <td>Redes de Computadores</td>
+                    <td>2025.1</td>
+                    <td>Prof. João Pereira</td>
+                    <td>40</td>
+                    <td style="text-align: center;"><input type="radio" name="subj"></td>
+                </tr>
+                <tr id="inline-add-subj" style="display: none; background-color: #f0f0f0;">
+                    <td><input type="text" placeholder="Disciplina" tabindex="1"></td>
+                    <td><input type="text" placeholder="Semestre" tabindex="2"></td>
+                    <td><input type="text" placeholder="Professor" tabindex="3"></td>
+                    <td>
+                        <select tabindex="4" style="width: 100%;">
+                            <option>40</option>
+                            <option>80</option>
+                        </select>
+                    </td>
+                    <td style="text-align: center;"><button tabindex="5" onclick="hideInline('inline-add-subj')">Salvar</button></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" style="padding: 0;">
+                        <button class="btn-add" onclick="showInline('inline-add-subj')">+</button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div class="nav-container">
+            <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-professors')">Voltar</button>
+            <button class="nav-arrow nav-arrow-right" onclick="showScreen('screen-semester-list')">Avançar</button>
+        </div>
+    </div>
+
+    <div id="screen-semester-list" class="wireframe-box">
+        <h3>CADASTRO DE SEMESTRE</h3>
+        
+        <div style="border: 2px solid black; padding: 10px; margin-bottom: 20px;">
+            <h4>Input pra criar novo semestre</h4>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <button style="height: fit-content;">CRIAR NOVO SEMESTRE</button>
+                <div style="flex-grow: 1;">
+                    Nome: <input type="text" placeholder="Ex: 2025.1" style="width: 100px;">
+                </div>
+                <div>
+                    Início: <input type="date">
+                </div>
+                <div>
+                    Fim: <input type="date">
+                </div>
+                <div>
+                    Kickoff: <input type="date">
+                </div>
+            </div>
+        </div>
+
+        <h4>Lista de semestres</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Kickoff</th>
+                    <th style="width: 100px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025.1</td>
+                    <td>01/02/2025</td>
+                    <td>01/06/2025</td>
+                    <td>15/02/2025</td>
+                    <td style="text-align: center;"><button onclick="showScreen('screen-calendar')">EDITAR</button></td>
+                </tr>
+                <tr>
+                    <td>2026.2</td>
+                    <td>01/07/2026</td>
+                    <td>01/12/2026</td>
+                    <td>10/07/2026</td>
+                    <td style="text-align: center;"><button onclick="showScreen('screen-calendar')">EDITAR</button></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="nav-container">
+            <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-subjects')">Voltar</button>
+        </div>
+    </div>
+
+    <div id="screen-calendar" class="wireframe-box">
+        <h3>FORMULÁRIO DE EDIÇÃO DE SEMESTRE</h3>
+        <div class="calendar-layout">
+            <table class="calendar-table">
+                <thead>
+                    <tr>
+                        <th>DOM</th>
+                        <th>SEG</th>
+                        <th>TER</th>
+                        <th>QUA</th>
+                        <th>QUI</th>
+                        <th>SEX</th>
+                        <th>SAB</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td onclick="toggleWeekday(this)">01/02</td>
+                        <td class="holiday" onclick="toggleWeekday(this)">02/02</td>
+                        <td onclick="toggleWeekday(this)">03/02</td>
+                        <td onclick="toggleWeekday(this)">04/02</td>
+                        <td class="holiday" onclick="toggleWeekday(this)">05/02</td>
+                        <td onclick="toggleWeekday(this)">06/02</td>
+                        <td onclick="toggleSaturday(this)">07/02</td>
+                    </tr>
+                    <tr>
+                        <td onclick="toggleWeekday(this)">...</td>
+                        <td onclick="toggleWeekday(this)"></td>
+                        <td onclick="toggleWeekday(this)"></td>
+                        <td onclick="toggleWeekday(this)"></td>
+                        <td onclick="toggleWeekday(this)"></td>
+                        <td onclick="toggleWeekday(this)"></td>
+                        <td class="saturday-letivo" onclick="toggleSaturday(this)">X/Y</td>
+                    </tr>
+                    <tr>
+                        <td onclick="toggleWeekday(this)">29/05</td>
+                        <td onclick="toggleWeekday(this)">30/05</td>
+                        <td onclick="toggleWeekday(this)">31/05</td>
+                        <td onclick="toggleWeekday(this)">01/06</td>
+                        <td onclick="toggleWeekday(this)"></td>
+                        <td onclick="toggleWeekday(this)"></td>
+                        <td onclick="toggleSaturday(this)"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="obs-panel">
+                <p>QUANDO CLICA NO SLOT DO DIA, SE FOR DIA DE SEMANA:<br>APARECE DIALOG BOX DE DIA DE BLOQUEIO:</p>
+                <div style="border: 2px solid black; padding: 10px; margin-bottom: 20px;">
+                    <label>Descrição:</label>
+                    <input type="text" value="Sexta Feira Santa">
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                        <button>Excluir</button>
+                        <button>Salvar</button>
+                    </div>
+                </div>
+                <p style="font-size: 12px;">PARA EXCLUIR, CLICA DE NOVO</p>
+                <hr style="border-top: 2px dashed black; margin: 15px 0;">
+                <p style="font-size: 12px;">SE CLICAR SÁBADO, MARCA COMO LETIVO, SE CLICAR DE NOVO, DESMARCA.</p>
+            </div>
+        </div>
+
+        <div class="nav-container">
+            <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-semester-list')">SALVAR / VOLTAR</button>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            const screens = document.querySelectorAll('.wireframe-box');
+            screens.forEach(screen => screen.classList.remove('active'));
+
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+            }
+        }
+
+        function showInline(rowId) {
+            document.getElementById(rowId).style.display = 'table-row';
+            const firstInput = document.getElementById(rowId).querySelector('input');
+            if(firstInput) firstInput.focus();
+        }
+
+        function hideInline(rowId) {
+            const row = document.getElementById(rowId);
+            row.style.display = 'none';
+            const inputs = row.querySelectorAll('input');
+            inputs.forEach(input => input.value = '');
+        }
+
+        function toggleSaturday(cell) {
+            if (cell.innerText.trim() !== '') {
+                cell.classList.toggle('saturday-letivo');
+            }
+        }
+
+        function toggleWeekday(cell) {
+            if (cell.innerText.trim() !== '' && cell.innerText !== '...') {
+                cell.classList.toggle('holiday');
+                if (cell.classList.contains('holiday')) {
+                    alert('Simulação: Abrindo Dialog Box de Bloqueio para o dia ' + cell.innerText);
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
