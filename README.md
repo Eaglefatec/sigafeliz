@@ -1,7 +1,7 @@
 # API 2º Semestre Banco de Dados
 
 <p align="center">
-      <img src="docs\assets\eagle_logo_2.png" alt="logo Eagle" width="200">
+      <img src="docs\assets\imagens\eagle_logo_2.png" alt="logo Eagle" width="200">
       <h2 align="center">Eagle</h2>
 </p>
 
