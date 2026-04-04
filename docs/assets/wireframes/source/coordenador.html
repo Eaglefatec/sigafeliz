@@ -52,7 +52,7 @@
             background-color: #eee;
         }
 
-        input[type="text"], input[type="date"], textarea, select {
+        input[type="text"], input[type="date"], input[type="number"], textarea, select {
             border: 2px solid black;
             padding: 8px;
             font-family: inherit;
@@ -103,7 +103,7 @@
             height: 60px;
             text-align: center;
             border: 2px solid black;
-            cursor: pointer; /* Indica que é clicável */
+            cursor: pointer;
             user-select: none;
         }
 
@@ -198,6 +198,7 @@
                     <th>Semestre</th>
                     <th>Professor</th>
                     <th>Carga Horária</th>
+                    <th style="width: 80px; text-align: center;">Grade</th>
                     <th style="width: 80px; text-align: center;">Selec.</th>
                 </tr>
             </thead>
@@ -207,6 +208,7 @@
                     <td>2025.1</td>
                     <td>Prof. Carlos Silva</td>
                     <td>80</td>
+                    <td style="text-align: center;"><button onclick="showScreen('screen-grade')">Aulas</button></td>
                     <td style="text-align: center;"><input type="radio" name="subj" checked></td>
                 </tr>
                 <tr>
@@ -214,24 +216,35 @@
                     <td>2025.1</td>
                     <td>Prof. João Pereira</td>
                     <td>40</td>
+                    <td style="text-align: center;"><button onclick="showScreen('screen-grade')">Aulas</button></td>
                     <td style="text-align: center;"><input type="radio" name="subj"></td>
                 </tr>
                 <tr id="inline-add-subj" style="display: none; background-color: #f0f0f0;">
                     <td><input type="text" placeholder="Disciplina" tabindex="1"></td>
                     <td><input type="text" placeholder="Semestre" tabindex="2"></td>
-                    <td><input type="text" placeholder="Professor" tabindex="3"></td>
+                    <td>
+                        <select tabindex="3" style="width: 100%;">
+                            <option value="">Selecione o Prof.</option>
+                            <option>Prof. Carlos Silva</option>
+                            <option>Prof. Maria Oliveira</option>
+                            <option>Prof. João Pereira</option>
+                        </select>
+                    </td>
                     <td>
                         <select tabindex="4" style="width: 100%;">
                             <option>40</option>
                             <option>80</option>
                         </select>
                     </td>
-                    <td style="text-align: center;"><button tabindex="5" onclick="hideInline('inline-add-subj')">Salvar</button></td>
+                    <td style="text-align: center;">
+                        <button tabindex="5" onclick="showScreen('screen-grade')" style="font-size: 12px; padding: 5px;">Aulas</button>
+                    </td>
+                    <td style="text-align: center;"><button tabindex="6" onclick="hideInline('inline-add-subj')">Salvar</button></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5" style="padding: 0;">
+                    <td colspan="6" style="padding: 0;">
                         <button class="btn-add" onclick="showInline('inline-add-subj')">+</button>
                     </td>
                 </tr>
@@ -241,6 +254,38 @@
         <div class="nav-container">
             <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-professors')">Voltar</button>
             <button class="nav-arrow nav-arrow-right" onclick="showScreen('screen-semester-list')">Avançar</button>
+        </div>
+    </div>
+
+    <div id="screen-grade" class="wireframe-box">
+        <h3>GRADE DE AULAS SEMANAL DA DISCIPLINA</h3>
+        <p>Defina a quantidade de aulas ministradas em cada dia da semana:</p>
+        
+        <div style="border: 2px solid black; padding: 20px; background-color: #f9f9f9; display: flex; justify-content: center;">
+            <table style="width: 80%; text-align: center;">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">SEG</th>
+                        <th style="text-align: center;">TER</th>
+                        <th style="text-align: center;">QUA</th>
+                        <th style="text-align: center;">QUI</th>
+                        <th style="text-align: center;">SEX</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="number" min="0" value="0" style="width: 60px; text-align: center;"></td>
+                        <td><input type="number" min="0" value="2" style="width: 60px; text-align: center;"></td>
+                        <td><input type="number" min="0" value="0" style="width: 60px; text-align: center;"></td>
+                        <td><input type="number" min="0" value="2" style="width: 60px; text-align: center;"></td>
+                        <td><input type="number" min="0" value="0" style="width: 60px; text-align: center;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="nav-container">
+            <button class="nav-arrow nav-arrow-left" onclick="showScreen('screen-subjects')">SALVAR / VOLTAR</button>
         </div>
     </div>
 
@@ -380,7 +425,7 @@
 
         function showInline(rowId) {
             document.getElementById(rowId).style.display = 'table-row';
-            const firstInput = document.getElementById(rowId).querySelector('input');
+            const firstInput = document.getElementById(rowId).querySelector('input, select');
             if(firstInput) firstInput.focus();
         }
 
