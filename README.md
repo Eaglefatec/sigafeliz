@@ -46,7 +46,7 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 
 | Sprint | Periodo | Documentação |
 | :---: | :---: | :---: |
-| Sprint 1 | 16/03 - 05/04 | Sprint 1 Docs |
+| Sprint 1 | 16/03 - 05/04 | [Sprint 1 Docs](/docs/Sprint%201/) |
 | Sprint 2 | 13/04 - 03/05 | Sprint 2 Docs |
 | Sprint 3 | 11/05 - 31/05 | Sprint 3 Docs |
 
