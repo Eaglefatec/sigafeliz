@@ -1,0 +1,32 @@
+### Java/Maven ###
+target/
+build/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+### VS Code ###
+.vscode/
+
+### Eclipse ###
+.metadata/
+.classpath
+.project
+.settings/
+bin/
+
+### Sistema ###
+.DS_Store
+Thumbs.db
+
+### Regras de Exceção (opcional para Maven Wrapper) ###
+!.mvn/wrapper/maven-wrapper.jar
