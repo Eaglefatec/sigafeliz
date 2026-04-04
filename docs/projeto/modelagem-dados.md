@@ -12,10 +12,8 @@ Cadastro dos docentes, feito pela coordenação (US02).
 
 | Coluna | Tipo | Observação |
 |---|---|---|
-| `nome` | VARCHAR(255) | **Chave primária** |
-| `email` | VARCHAR(255) | Único, não pode repetir |
-
-> 💡 Usamos `nome` como chave pois o professor entra por nome. Se dois professores tiverem o mesmo nome, a equipe decide se usa email como PK em vez disso.
+| `nome` | VARCHAR(255) | N/A |
+| `email` | VARCHAR(255) | **Chave primária** |
 
 ---
 
