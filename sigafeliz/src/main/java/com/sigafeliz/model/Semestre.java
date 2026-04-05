@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Semestre {
-    
+
     private String nome;
     private LocalDate dataInicio;
     private LocalDate dataFim;
     private LocalDate dataKickoff;
 
-    private List<SabadoLetivo> sabadosLetivos;
-    private List<DiaRestrito> diasRestritos;
+    private final List<SabadoLetivo> sabadosLetivos;
+    private final List<DiaRestrito> diasRestritos;
 
     public Semestre(String nome, LocalDate dataInicio, LocalDate dataFim, LocalDate dataKickoff) {
         this.nome = nome;
