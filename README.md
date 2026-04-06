@@ -1,8 +1,8 @@
-# API 2º Semestre Banco de Dados
+# API 2º Semestre Banco de Dados - Siga Feliz
 
 <p align="center">
       <img src="docs\assets\imagens\eagle_logo_2.png" alt="logo Eagle" width="200">
-      <h2 align="center">Eagle</h2>
+      <h2 align="center">Equipe Eagle</h2>
 </p>
 
 ## 🎯 Desafio
@@ -10,13 +10,6 @@ O desafio consiste em criar uma aplicação desktop capaz de auxiliar os docente
 
 ## 🏅 Solução
 O "Siga Feliz" será responsável por automatizar a distribuição dos temas, facilitando a entrada de dados do usuário e eliminando o esforço cognitivo de se distribuir as aulas manualmente pelo calendário. A solução portará um algoritmo de alocação inteligente e validação de regras de negócio.
-
-## 📅 Planejamento de Entregas
-O projeto será dividido em três fases principais de desenvolvimento:
-
-* **Sprint 1:** Foco em negociação com o cliente, discussões técnicas internas, formulação da solução e modelagem de dados. Esta etapa priorizou a estruturação do projeto e a execução de protótipos, sem o desenvolvimento de User Stories (US) operacionais.
-* **Sprint 2:** Desenvolvimento da infraestrutura de cadastro dos parâmetros de calendário e configurações da coordenação. Aqui também se planeja o início dos algorítmos de distribuição do planejamento ao longo do semestre.
-* **Sprint 3:** Foco total na implementação das funcionalidades voltadas aos perfis de professor usuário, refinamentos de interface e finalização do algoritmo de alocação.
 
 ## 📋 Backlog do Produto
 
@@ -32,22 +25,13 @@ O projeto será dividido em três fases principais de desenvolvimento:
 | 8º | US05: Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento. | Baixa | Baixa | Sprint 2 | 
 | 9º | US04: Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. | Baixa | Média | Sprint 2 | 
 
-## ✅ DoR - Definition of Ready
 
-Para que uma User Story seja considerada pronta para desenvolvimento, os seguintes critérios devem ser cumpridos:
-* A User Story possui um título claro, descrição bem definida (formato "Como... quero... para...") e objetivo compreendido.
-* Há wireframes e/ou imagens de protótipos das interfaces relacionadas.
-* Os Critérios de Aceitação estão escritos e detalhados.
-* As regras de negócio associadas estão claras e documentadas.
-* Não há dependências bloqueadoras.
-* A compreensão foi validada com o time.
+## 📅 Planejamento de Entregas
+O projeto será dividido em três fases principais de desenvolvimento:
 
-## 🏁 DoD - Definition of Done
-
-Para que uma User Story seja considerada finalizada, os seguintes critérios técnicos assumidos pela equipe devem ser satisfeitos:
-* Código devidamente versionado no Git.
-* Código revisado pela equipe.
-* Todos os casos de uso relacionados à história foram testados, conforme levantados pela equipe.
+* **Sprint 1:** Foco em negociação com o cliente, discussões técnicas internas, formulação da solução e modelagem de dados. Esta etapa priorizou a estruturação do projeto e a execução de protótipos, sem o desenvolvimento de User Stories (US) operacionais.
+* **Sprint 2:** Desenvolvimento da infraestrutura de cadastro dos parâmetros de calendário e configurações da coordenação. Aqui também se planeja o início dos algorítmos de distribuição do planejamento ao longo do semestre.
+* **Sprint 3:** Foco total na implementação das funcionalidades voltadas aos perfis de professor usuário, refinamentos de interface e finalização do algoritmo de alocação.
 
 ## 🗓️ Cronograma de Sprints
 
@@ -63,6 +47,25 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 ![JavaFX](https://img.shields.io/badge/javafx-%23FF0000.svg?style=for-the-badge&logo=javafx&logoColor=white)
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
+
+### Estrutura do Projeto
+
+```
+sigafeliz/                  ← raiz do repositório
+├── docs/                   ← documentação do projeto
+└── sigafeliz/              ← projeto Maven (abra esta pasta na IDE)
+    ├── pom.xml
+    └── src/
+        └── main/
+            ├── java/com/sigafeliz/
+            │   ├── Main.java           ← ponto de entrada da aplicação
+            │   ├── controller/         ← controladores JavaFX (FXML)
+            │   ├── model/              ← entidades e modelos de dados
+            │   └── service/            ← regras de negócio
+            └── resources/
+                ├── view/               ← arquivos .fxml (telas)
+                └── css/                ← estilos da aplicação
+```
 
 ## 🚀 Como Testar o Protótipo
 
@@ -110,25 +113,6 @@ Após a primeira compilação, o `clean` é desnecessário. Basta rodar direto p
 mvn javafx:run
 ```
 
-### Estrutura do Projeto
-
-```
-sigafeliz/                  ← raiz do repositório
-├── docs/                   ← documentação do projeto
-└── sigafeliz/              ← projeto Maven (abra esta pasta na IDE)
-    ├── pom.xml
-    └── src/
-        └── main/
-            ├── java/com/sigafeliz/
-            │   ├── Main.java           ← ponto de entrada da aplicação
-            │   ├── controller/         ← controladores JavaFX (FXML)
-            │   ├── model/              ← entidades e modelos de dados
-            │   └── service/            ← regras de negócio
-            └── resources/
-                ├── view/               ← arquivos .fxml (telas)
-                └── css/                ← estilos da aplicação
-```
-
 ### Solução de Problemas
 
 | Problema | Causa provável | Solução |
@@ -136,6 +120,27 @@ sigafeliz/                  ← raiz do repositório
 | `java version` mostra versão diferente de 17 | Versão errada no PATH | Configure a variável `JAVA_HOME` apontando para o JDK 17 |
 | `mvn` não é reconhecido | Maven não está no PATH | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH` |
 | Janela não abre mas o build é `SUCCESS` | Ambiente sem display gráfico | Execute em uma máquina com interface gráfica |
+
+## Documentação
+
+### ✅ DoR - Definition of Ready
+
+Para que uma User Story seja considerada pronta para desenvolvimento, os seguintes critérios devem ser cumpridos:
+* A User Story possui um título claro, descrição bem definida (formato "Como... quero... para...") e objetivo compreendido.
+* Há wireframes e/ou imagens de protótipos das interfaces relacionadas.
+* Os Critérios de Aceitação estão escritos e detalhados.
+* As regras de negócio associadas estão claras e documentadas.
+* Não há dependências bloqueadoras.
+* A compreensão foi validada com o time.
+
+### 🏁 DoD - Definition of Done
+
+Para que uma User Story seja considerada finalizada, os seguintes critérios técnicos assumidos pela equipe devem ser satisfeitos:
+* Código devidamente versionado no Git.
+* Código revisado pela equipe.
+* Todos os casos de uso relacionados à história foram testados, conforme levantados pela equipe.
+
+### [Estratégia de Branch](docs/equipe/Estratégia%20Branches.md/)
 
 ## Equipe
 
