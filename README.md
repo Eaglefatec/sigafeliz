@@ -140,7 +140,9 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 * Código revisado pela equipe.
 * Todos os casos de uso relacionados à história foram testados, conforme levantados pela equipe.
 
-### [Estratégia de Branch](docs/equipe/Estratégia%20Branches.md/)
+### 🌿 [Estratégia de Branch](docs/equipe/Estratégia%20Branches.md/)
+
+Definição de como as branches serão trabalhadas durante o projeto.
 
 ## Equipe
 
