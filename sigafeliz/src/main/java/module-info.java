@@ -7,4 +7,5 @@ module com.sigafeliz.sigafeliz {
     exports com.sigafeliz;
     exports com.sigafeliz.controller;
     opens com.sigafeliz.controller to javafx.fxml;
+    opens com.sigafeliz.model to javafx.base;
 }
