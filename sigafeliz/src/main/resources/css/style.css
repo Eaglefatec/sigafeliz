@@ -1,0 +1,54 @@
+/* Remove o fundo padrão da tabela */
+.wireframe-table {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-font-family: 'Monospaced';
+    -fx-font-size: 14px;
+}
+
+/* Estiliza o fundo da área de cabeçalhos (Cinza claro como no seu HTML) */
+.wireframe-table .column-header-background {
+    -fx-background-color: #eee;
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 2px;
+}
+
+/* Estiliza cada cabeçalho de coluna individualmente */
+.wireframe-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent black transparent transparent;
+    -fx-border-width: 2px;
+    -fx-size: 40px;
+}
+
+/* Estiliza o texto do cabeçalho */
+.wireframe-table .column-header .label {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+}
+
+/* Estiliza a linha da tabela e aumenta a altura */
+.wireframe-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-cell-size: 45px;
+}
+
+/* Sobrescreve o azul padrão do JavaFX para um cinza ao selecionar a linha */
+.wireframe-table .table-row-cell:selected {
+    -fx-background-color: #e0e0e0;
+}
+
+/* Estiliza as células individuais (adiciona bordas internas) */
+.wireframe-table .table-cell {
+    -fx-border-color: transparent black black transparent;
+    -fx-border-width: 1px;
+    -fx-text-fill: black;
+    -fx-alignment: center-left;
+}
+
+/* Remove o contorno azul ao clicar na tabela */
+.wireframe-table:focused {
+    -fx-background-color: white;
+}
