@@ -64,6 +64,79 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
 
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+
+Antes de começar, verifique se você tem os seguintes itens instalados na sua máquina:
+
+| Ferramenta | Versão mínima | Download |
+|---|---|---|
+| **Java JDK** | 17 | [Azul Zulu 17](https://www.azul.com/downloads/?version=java-17&os=windows&package=jdk) ou [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) |
+| **Apache Maven** | 3.8+ | [maven.apache.org](https://maven.apache.org/download.cgi) |
+
+> **Como verificar se já estão instalados:**
+> ```bash
+> java -version   # deve mostrar algo como: java version "17.x.x"
+> mvn -version    # deve mostrar algo como: Apache Maven 3.x.x
+> ```
+
+### Passo a Passo
+
+**1. Clone o repositório**
+```bash
+git clone https://github.com/Eaglefatec/sigafeliz.git
+cd sigafeliz
+```
+
+**2. Navegue até a pasta do projeto Java**
+```bash
+cd sigafeliz
+```
+> ⚠️ Atenção: a pasta do projeto Maven fica dentro de uma subpasta também chamada `sigafeliz`. Não se confunda com a pasta raiz do repositório.
+
+**3. Compile e execute a aplicação**
+```bash
+mvn clean javafx:run
+```
+
+Aguarde o Maven baixar as dependências (somente na primeira vez) e compilar. A janela do **Siga Feliz** abrirá automaticamente.
+
+### Executando pela IDE (IntelliJ IDEA)
+
+1. Abra o IntelliJ IDEA e selecione **File → Open**.
+2. Navegue até a pasta `sigafeliz/sigafeliz` (a pasta que contém o `pom.xml`) e clique em **OK**.
+3. Aguarde o IntelliJ indexar e baixar as dependências Maven.
+4. Abra o arquivo `src/main/java/com/sigafeliz/Main.java`.
+5. Clique no botão **▶ Run** ao lado do método `main`.
+
+### Estrutura do Projeto
+
+```
+sigafeliz/                  ← raiz do repositório
+├── docs/                   ← documentação do projeto
+└── sigafeliz/              ← projeto Maven (abra esta pasta na IDE)
+    ├── pom.xml
+    └── src/
+        └── main/
+            ├── java/com/sigafeliz/
+            │   ├── Main.java           ← ponto de entrada da aplicação
+            │   ├── controller/         ← controladores JavaFX (FXML)
+            │   ├── model/              ← entidades e modelos de dados
+            │   └── service/            ← regras de negócio
+            └── resources/
+                ├── view/               ← arquivos .fxml (telas)
+                └── css/                ← estilos da aplicação
+```
+
+### Solução de Problemas
+
+| Problema | Causa provável | Solução |
+|---|---|---|
+| `java version` mostra versão diferente de 17 | Versão errada no PATH | Configure a variável `JAVA_HOME` apontando para o JDK 17 |
+| `mvn` não é reconhecido | Maven não está no PATH | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH` |
+| Janela não abre mas o build é `SUCCESS` | Ambiente sem display gráfico | Execute em uma máquina com interface gráfica |
+
 ## Equipe
 
 <div align="center">
