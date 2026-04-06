@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" spacing="15.0"
+      style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.sigafeliz.controller.PlanejamentoEmentaController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <Label fx:id="lblTituloDisciplina" text="PLANEJAMENTO: DISCIPLINA">
+        <font>
+            <Font name="Monospaced Bold" size="18.0"/>
+        </font>
+    </Label>
+
+    <HBox spacing="15.0">
+        <VBox style="-fx-border-color: black; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #d1ecf1;"
+              HBox.hgrow="ALWAYS">
+            <children>
+                <Label fx:id="lblMetaAulas" text="Meta: 80 Aulas" style="-fx-font-weight: bold;"/>
+                <Label text="Dias letivos regulares mapeados: 76"/>
+            </children>
+        </VBox>
+        <VBox style="-fx-border-color: black; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #fff3cd;"
+              HBox.hgrow="ALWAYS">
+            <children>
+                <Label text="⚠️ Déficit identificado!" style="-fx-font-weight: bold;"/>
+                <Label text="O sistema ativará sábados automáticos."/>
+            </children>
+        </VBox>
+    </HBox>
+
+    <TableView fx:id="tabelaTemas" VBox.vgrow="ALWAYS" style="-fx-border-color: black; -fx-border-width: 2;">
+        <columns>
+            <TableColumn fx:id="colOrdem" prefWidth="50.0" text="Ord."/>
+            <TableColumn fx:id="colTitulo" prefWidth="350.0" text="Tema da Aula"/>
+            <TableColumn fx:id="colMin" prefWidth="70.0" text="Mín"/>
+            <TableColumn fx:id="colMax" prefWidth="70.0" text="Máx"/>
+            <TableColumn fx:id="colPrioridade" prefWidth="120.0" text="Prioridade"/>
+            <TableColumn fx:id="colProva" prefWidth="80.0" text="Prova?"/>
+        </columns>
+    </TableView>
+
+    <HBox alignment="CENTER_RIGHT" spacing="15.0">
+        <Button onAction="#handleVoltar"
+                style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;" text="← Voltar"/>
+        <Button onAction="#handleExportar"
+                style="-fx-background-color: #e0e0e0; -fx-border-color: black; -fx-border-width: 3;"
+                text="📥 Exportar .XLSX">
+            <font>
+                <Font name="Monospaced Bold" size="13.0"/>
+            </font>
+        </Button>
+        <Button onAction="#handleFinalizar"
+                style="-fx-background-color: #eee; -fx-border-color: black; -fx-border-width: 3;"
+                text="Finalizar Planejamento">
+            <font>
+                <Font name="Monospaced Bold" size="13.0"/>
+            </font>
+        </Button>
+    </HBox>
+</VBox>
