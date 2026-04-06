@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="900.0" spacing="30.0"
+      style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.sigafeliz.controller.TelaInicialController">
+
+    <children>
+        <Label style="-fx-border-color: transparent transparent black transparent; -fx-border-width: 0 0 3 0;" text="TELA INICIAL">
+            <font>
+                <Font name="Monospaced Bold" size="24.0" />
+            </font>
+            <padding>
+                <Insets bottom="5.0" />
+            </padding>
+        </Label>
+
+        <VBox alignment="CENTER" maxWidth="300.0" spacing="15.0">
+            <Button fx:id="btnProfessor" maxWidth="1.7976931348623157E308" onAction="#handleProfessorPath"
+                    style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand;"
+                    text="Sou professor">
+                <font>
+                    <Font name="Monospaced Bold" size="14.0"/>
+                </font>
+                <padding>
+                    <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
+                </padding>
+            </Button>
+
+            <Button fx:id="btnCoordinator" maxWidth="1.7976931348623157E308" onAction="#handleCoordinatorPath"
+                    style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand;"
+                    text="Sou coordenador">
+                <font>
+                    <Font name="Monospaced Bold" size="14.0"/>
+                </font>
+                <padding>
+                    <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
+                </padding>
+            </Button>
+        </VBox>
+    </children>
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

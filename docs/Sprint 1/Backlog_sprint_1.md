@@ -1,0 +1,11 @@
+| Rank | User Story | Prioridade | Dificuldade | Sprint Planejada |
+| :---: | --- | :---: | :---: | :---: |
+| 1º | US01: Como coordenador, quero fornecer para o professor os parâmetros temporais do semestre regular e o início do Projeto API, para que o planejamento considere simultaneamente os dias úteis e os ciclos contínuos de Sprints. | Alta | Alta | Sprint 2 | 
+| 2º | US03: Como coordenador, quero criar a grade semanal de uma disciplina e vinculá-la ao perfil de um professor específico, para que o docente acesse e planeje apenas a capacidade real das matérias sob sua responsabilidade. | Alta | Média | Sprint 2 | 
+| 3º | US06: Como professor, quero planejar a relação entre temas de aula e dias lecionados com o mínimo de input manual e esforço cognitivo possível, para que a distribuição da matéria ao longo do semestre siga as regras institucionais. | Alta | Alta | Sprint 3 | 
+| 4º | US02: Como coordenador, quero registrar o perfil de cada professor no sistema, para que o professor selecione seu registro e visualize somente suas grades. | Média | Baixa | Sprint 2 | 
+| 5º | US07: Como professor, quero que o cronograma utilize sábados letivos com prioridade para o final do semestre quando os dias de semana forem insuficientes, garantindo o cumprimento exato da carga horária de 40 ou 80 aulas. | Média | Alta | Sprint 3 | 
+| 6º | US08: Como professor, quero identificar quais aulas são provas, para que o sistema impeça que elas sejam alocadas nas semanas de entrega de Projeto Integrador, garantindo conformidade com a política institucional de não sobreposição de avaliações. | Média | Média | Sprint 3 | 
+| 7º | US09: Como professor, quero visualizar a relação do planejamento final em um formato estruturado (.xlsx), para que as informações de data, tema e ordem sejam facilmente preenchidas no SIGA. | Média | Baixa | Sprint 3 | 
+| 8º | US05: Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento. | Baixa | Baixa | Sprint 2 | 
+| 9º | US04: Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. | Baixa | Média | Sprint 2 | 

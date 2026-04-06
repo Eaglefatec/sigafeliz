@@ -1,35 +1,32 @@
-# Maven
+### Java/Maven ###
 target/
-
-# IDE
-.idea/
-*.iml
-.vscode/
-.settings/
-.classpath
-.project
-.factorypath
-
-# Compilados Java
+build/
+bin/
 *.class
-
-# Logs
-*.log
-
-# Banco de dados local (legado)
-*.db
-
-# Pacotes
 *.jar
 *.war
-*.zip
-*.tar.gz
-*.rar
+*.ear
 
-# JVM crash logs
-hs_err_pid*
-replay_pid*
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
 
-# OS
+### VS Code ###
+.vscode/
+
+### Eclipse ###
+.metadata/
+.classpath
+.project
+.settings/
+bin/
+
+### Sistema ###
 .DS_Store
 Thumbs.db
+
+### Regras de Exceção (opcional para Maven Wrapper) ###
+!.mvn/wrapper/maven-wrapper.jar

@@ -1,127 +1,107 @@
-# Siga Feliz — Planejamento Semestral Automatizado
+# API 2º Semestre Banco de Dados
 
-Aplicação desktop JavaFX para automação de cronogramas acadêmicos. Distribui aulas ao longo do semestre respeitando feriados, sábados letivos e ciclos de Sprint do Projeto Integrador.
+<p align="center">
+      <img src="docs\assets\imagens\eagle_logo_2.png" alt="logo Eagle" width="200">
+      <h2 align="center">Eagle</h2>
+</p>
 
----
+## 🎯 Desafio
+O desafio consiste em criar uma aplicação desktop capaz de auxiliar os docentes no planejamento semestral dos cronogramas acadêmicos. O planejamento semestral é realizado de maneira manual, onde os professores devem cadastrar os temas ministrados garantindo a conformidade institucional com a carga exata de 40 ou 80 aulas e respeitando restrições de calendário (feriados, eventos institucionais e ciclos de Sprints).
 
-## Pré-requisitos
+## 🏅 Solução
+O "Siga Feliz" será responsável por automatizar a distribuição dos temas, facilitando a entrada de dados do usuário e eliminando o esforço cognitivo de se distribuir as aulas manualmente pelo calendário. A solução portará um algoritmo de alocação inteligente e validação de regras de negócio.
 
-| Ferramenta | Versão mínima | Para quê |
-|---|---|---|
-| **Java JDK** | 17+ | Compilar e executar a aplicação |
-| **Maven** | 3.8+ | Gerenciar dependências e build |
-| **Docker + Docker Compose** | 20+ / v2+ | Subir o banco PostgreSQL |
+## 📋 Backlog do Produto
 
----
+| Rank | User Story | Prioridade | Dificuldade | Sprint Planejada |
+| :---: | --- | :---: | :---: | :---: |
+| 1º | US01: Como coordenador, quero fornecer para o professor os parâmetros temporais do semestre regular e o início do Projeto API, para que o planejamento considere simultaneamente os dias úteis e os ciclos contínuos de Sprints. | Alta | Alta | Sprint 2 | 
+| 2º | US03: Como coordenador, quero criar a grade semanal de uma disciplina e vinculá-la ao perfil de um professor específico, para que o docente acesse e planeje apenas a capacidade real das matérias sob sua responsabilidade. | Alta | Média | Sprint 2 | 
+| 3º | US06: Como professor, quero planejar a relação entre temas de aula e dias lecionados com o mínimo de input manual e esforço cognitivo possível, para que a distribuição da matéria ao longo do semestre siga as regras institucionais. | Alta | Alta | Sprint 3 | 
+| 4º | US02: Como coordenador, quero registrar o perfil de cada professor no sistema, para que o professor selecione seu registro e visualize somente suas grades. | Média | Baixa | Sprint 2 | 
+| 5º | US07: Como professor, quero que o cronograma utilize sábados letivos com prioridade para o final do semestre quando os dias de semana forem insuficientes, garantindo o cumprimento exato da carga horária de 40 ou 80 aulas. | Média | Alta | Sprint 3 | 
+| 6º | US08: Como professor, quero identificar quais aulas são provas, para que o sistema impeça que elas sejam alocadas nas semanas de entrega de Projeto Integrador, garantindo conformidade com a política institucional de não sobreposição de avaliações. | Média | Média | Sprint 3 | 
+| 7º | US09: Como professor, quero visualizar a relação do planejamento final em um formato estruturado (.xlsx), para que as informações de data, tema e ordem sejam facilmente preenchidas no SIGA. | Média | Baixa | Sprint 3 | 
+| 8º | US05: Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento. | Baixa | Baixa | Sprint 2 | 
+| 9º | US04: Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. | Baixa | Média | Sprint 2 | 
 
-## Como rodar
+## ✅ DoR - Definition of Ready
 
-### 1. Clonar o repositório
+Para que uma User Story seja considerada pronta para desenvolvimento, os seguintes critérios devem ser cumpridos:
+* A User Story possui um título claro, descrição bem definida (formato "Como... quero... para...") e objetivo compreendido.
+* Há wireframes e/ou imagens de protótipos das interfaces relacionadas.
+* Os Critérios de Aceitação estão escritos e detalhados.
+* As regras de negócio associadas estão claras e documentadas.
+* Não há dependências bloqueadoras.
+* A compreensão foi validada com o time.
 
-```bash
-git clone https://github.com/Eaglefatec/sigafeliz.git
-cd sigafeliz
-```
+## 🏁 DoD - Definition of Done
 
-### 2. Subir o banco de dados PostgreSQL
+Para que uma User Story seja considerada finalizada, os seguintes critérios técnicos assumidos pela equipe devem ser satisfeitos:
+* Código devidamente versionado no Git.
+* Código revisado pela equipe.
+* Todos os casos de uso relacionados à história foram testados, conforme levantados pela equipe.
 
-O Docker Compose cria um container PostgreSQL já configurado com o schema do projeto.
+## 🗓️ Cronograma de Sprints
 
-```bash
-docker-compose up -d
-```
+| Sprint | Periodo | Documentação |
+| :---: | :---: | :---: |
+| Sprint 1 | 16/03 - 05/04 | [Sprint 1 Docs](/docs/Sprint%201/) |
+| Sprint 2 | 13/04 - 03/05 | Sprint 2 Docs |
+| Sprint 3 | 11/05 - 31/05 | Sprint 3 Docs |
 
-Isso irá:
-- Baixar a imagem `postgres:16-alpine`
-- Criar o banco `sigafeliz` com usuário `sigafeliz` / senha `sigafeliz`
-- Executar o script `docker/init.sql` para criar as tabelas
-- Disponibilizar o banco na porta **5432**
+## ⚙️ Tecnologias Utilizadas
 
-Para verificar se o banco está rodando:
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![JavaFX](https://img.shields.io/badge/javafx-%23FF0000.svg?style=for-the-badge&logo=javafx&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
 
-```bash
-docker-compose ps
-```
+## Equipe
 
-### 3. Compilar e executar a aplicação
-
-```bash
-mvn clean javafx:run
-```
-
-A aplicação vai abrir uma janela JavaFX e conectar automaticamente ao PostgreSQL em `localhost:5432`.
-
----
-
-## Uso rápido
-
-1. **Tela inicial** — Escolha "Novo Planejamento" ou "Histórico de Cronogramas"
-2. **Painel do Coordenador** — Acesse com `Ctrl+Shift+D` → chave: `eagle`
-   - Cadastre semestres (com data de Kickoff do PI)
-   - Cadastre feriados, eventos e sábados letivos
-3. **Wizard do Professor** — 4 passos: Semestre → Grade → Temas → Gerar
-4. **Exportação** — O cronograma é salvo como `.xlsx` com as colunas do SIGA
-
----
-
-## Configuração avançada
-
-A conexão com o banco pode ser configurada via variáveis de ambiente:
-
-| Variável | Padrão | Descrição |
-|---|---|---|
-| `DB_HOST` | `localhost` | Host do PostgreSQL |
-| `DB_PORT` | `5432` | Porta |
-| `DB_NAME` | `sigafeliz` | Nome do banco |
-| `DB_USER` | `sigafeliz` | Usuário |
-| `DB_PASSWORD` | `sigafeliz` | Senha |
-
----
-
-## Comandos úteis do Docker
-
-```bash
-# Subir o banco
-docker-compose up -d
-
-# Ver logs do banco
-docker-compose logs db
-
-# Parar o banco
-docker-compose down
-
-# Parar e apagar os dados do banco
-docker-compose down -v
-```
-
----
-
-## Estrutura do projeto
-
-```
-sigafeliz/
-├── src/main/java/com/eaglefatec/sigafeliz/
-│   ├── App.java                  # Ponto de entrada
-│   ├── controller/               # MainController (UI)
-│   ├── dao/                      # Acesso a dados (JDBC)
-│   ├── engine/                   # Motor de agendamento + Excel
-│   └── model/                    # Entidades (Semester, Tema, etc.)
-├── src/main/resources/           # CSS + logo
-├── docker/init.sql               # Schema do banco
-├── docker-compose.yml            # PostgreSQL container
-├── pom.xml                       # Dependências Maven
-└── docs/                         # Documentação do projeto
-```
-
----
-
-## Tecnologias
-
-- **Java 17** + **JavaFX 21**
-- **PostgreSQL 16** (via Docker)
-- **Apache POI** (exportação Excel)
-- **Maven** (build)
-
----
-
-*Eagle FATEC — v1.0*
+<div align="center">
+  <table>
+    <tr>
+      <th>Membro</th>
+      <th>Função</th>
+      <th>Github</th>
+      <th>Linkedin</th>
+    </tr>
+    <tr>
+      <td>Guilherme Ioshua Sene</td>
+      <td>Product Owner</td>
+      <td><a href="https://github.com/guiioshua"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
+      <td><a href="https://www.linkedin.com/in/guilherme-ioshua-sene/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
+    </tr>
+    <tr>
+      <td>Breno Cefas dos Santos</td>
+      <td>Scrum Master</td>
+      <td><a href="https://github.com/cefasbreno"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
+      <td><a href="https://www.linkedin.com/in/breno-cefas-7aa909271/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
+    </tr>
+    <tr>
+      <td>Alessandro Augusto Ferreira Cabral</td>
+      <td>Desenvolvedor</td>
+      <td><a href="https://github.com/alessandrocabralfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
+      <td><a href="https://www.linkedin.com/in/alessandro-augusto-ferreira-cabral-9b805553//"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
+    </tr>
+    <tr>
+      <td>Eruano Rubens de Almeida</td>
+      <td>Desenvolvedor</td>
+      <td><a href="https://github.com/Eruano-Almeida"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
+      <td><a href="https://www.linkedin.com/in/eruano-rubens-de-almeida-b0ba19111/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
+    </tr>
+    <tr>
+      <td>Fernando Montero da Costa</td>
+      <td>Desenvolvedor</td>
+      <td><a href="https://github.com/fernandocosta45"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
+      <td><a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
+    </tr>
+    <tr>
+      <td>Renan Diniz da Silva</td>
+      <td>Desenvolvedor</td>
+      <td><a href="https://github.com/renandiniz8"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
+      <td><a href="https://www.linkedin.com/in/renan-diniz-/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
+    </tr>
+  </table>
+</div>
