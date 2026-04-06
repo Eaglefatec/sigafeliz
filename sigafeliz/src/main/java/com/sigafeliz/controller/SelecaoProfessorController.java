@@ -27,7 +27,7 @@ public class SelecaoProfessorController {
             }
             @Override
             public Professor fromString(String string) {
-                return null; // Não necessário para seleção simples
+                return null;
             }
         });
     }
@@ -36,14 +36,12 @@ public class SelecaoProfessorController {
     private void handleAcessar() {
         Professor selecionado = comboProfessores.getValue();
 
-        if (selecionado == null) {
-            exibirAlerta();
-            return;
+        if (selecionado != null) {
+            MockDataService.setProfessorLogado(selecionado);
+            Main.loadView("MinhasDisciplinas.fxml");
+        } else {
+            exibirAlerta("Selecione um professor para continuar.");
         }
-
-        // TODO: Salvar o professor logado em uma sessão (veremos em seguida)
-        System.out.println("Acessando como: " + selecionado.getNome());
-        Main.loadView("MinhasDisciplinas.fxml");
     }
 
     @FXML
@@ -51,9 +49,11 @@ public class SelecaoProfessorController {
         Main.loadView("TelaInicial.fxml");
     }
 
-    private void exibirAlerta() {
+    private void exibirAlerta(String mensagem) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText("Selecione um professor para continuar.");
+        alert.setTitle("Aviso");
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
         alert.showAndWait();
     }
 }
