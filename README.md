@@ -11,6 +11,13 @@ O desafio consiste em criar uma aplicação desktop capaz de auxiliar os docente
 ## 🏅 Solução
 O "Siga Feliz" será responsável por automatizar a distribuição dos temas, facilitando a entrada de dados do usuário e eliminando o esforço cognitivo de se distribuir as aulas manualmente pelo calendário. A solução portará um algoritmo de alocação inteligente e validação de regras de negócio.
 
+## 📅 Planejamento de Entregas
+O projeto será dividido em três fases principais de desenvolvimento:
+
+* **Sprint 1:** Foco em negociação com o cliente, discussões técnicas internas, formulação da solução e modelagem de dados. Esta etapa priorizou a estruturação do projeto e a execução de protótipos, sem o desenvolvimento de User Stories (US) operacionais.
+* **Sprint 2:** Desenvolvimento da infraestrutura de cadastro dos parâmetros de calendário e configurações da coordenação. Aqui também se planeja o início dos algorítmos de distribuição do planejamento ao longo do semestre.
+* **Sprint 3:** Foco total na implementação das funcionalidades voltadas aos perfis de professor usuário, refinamentos de interface e finalização do algoritmo de alocação.
+
 ## 📋 Backlog do Produto
 
 | Rank | User Story | Prioridade | Dificuldade | Sprint Planejada |
