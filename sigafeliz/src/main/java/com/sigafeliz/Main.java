@@ -23,7 +23,7 @@ public class Main extends Application {
         // Define o texto que aparece em cima, na barra da janela.
         primaryStage.setTitle("Siga Feliz");
         // Abre a primeira tela do sistema (a tela inicial).
-        loadView("HomeView.fxml");
+        loadView("TelaInicial.fxml");
     }
 
     /**
