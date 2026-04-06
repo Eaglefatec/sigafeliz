@@ -64,7 +64,7 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
 
-## 🚀 Como Executar o Projeto
+## 🚀 Como Testar o Protótipo
 
 ### Pré-requisitos
 
@@ -75,6 +75,7 @@ Antes de começar, verifique se você tem os seguintes itens instalados na sua m
 | **Java JDK** | 17 | [Azul Zulu 17](https://www.azul.com/downloads/?version=java-17&os=windows&package=jdk) ou [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) |
 | **Apache Maven** | 3.8+ | [maven.apache.org](https://maven.apache.org/download.cgi) |
 
+Os comandos a seguir podem ser feitos em terminais como `PowerShell` ou `Bash`.
 > **Como verificar se já estão instalados:**
 > ```bash
 > java -version   # deve mostrar algo como: java version "17.x.x"
@@ -95,20 +96,19 @@ cd sigafeliz
 ```
 > ⚠️ Atenção: a pasta do projeto Maven fica dentro de uma subpasta também chamada `sigafeliz`. Não se confunda com a pasta raiz do repositório.
 
-**3. Compile e execute a aplicação**
+**3. Compile e execute a aplicação (primeira vez)**
 ```bash
 mvn clean javafx:run
 ```
 
 Aguarde o Maven baixar as dependências (somente na primeira vez) e compilar. A janela do **Siga Feliz** abrirá automaticamente.
 
-### Executando pela IDE (IntelliJ IDEA)
+**Execuções seguintes (sem alterações no código)**
 
-1. Abra o IntelliJ IDEA e selecione **File → Open**.
-2. Navegue até a pasta `sigafeliz/sigafeliz` (a pasta que contém o `pom.xml`) e clique em **OK**.
-3. Aguarde o IntelliJ indexar e baixar as dependências Maven.
-4. Abra o arquivo `src/main/java/com/sigafeliz/Main.java`.
-5. Clique no botão **▶ Run** ao lado do método `main`.
+Após a primeira compilação, o `clean` é desnecessário. Basta rodar direto pelo terminal:
+```bash
+mvn javafx:run
+```
 
 ### Estrutura do Projeto
 
