@@ -74,4 +74,9 @@ public class MockDataService {
 
     public static void setDisciplinaSelecionada(Disciplina disciplina) { disciplinaSelecionada = disciplina; }
     public static Disciplina getDisciplinaSelecionada() { return disciplinaSelecionada; }
+
+    // Seleção de semestre
+    private static Semestre semestreSelecionado;
+    public static void setSemestreSelecionado(Semestre s) { semestreSelecionado = s; }
+    public static Semestre getSemestreSelecionado() { return semestreSelecionado; }
 }
