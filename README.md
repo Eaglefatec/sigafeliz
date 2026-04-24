@@ -1,8 +1,8 @@
-# API 2º Semestre Banco de Dados
+# API 2º Semestre Banco de Dados - Siga Feliz
 
 <p align="center">
       <img src="docs\assets\imagens\eagle_logo_2.png" alt="logo Eagle" width="200">
-      <h2 align="center">Eagle</h2>
+      <h2 align="center">Equipe Eagle</h2>
 </p>
 
 ## 🎯 Desafio
@@ -25,7 +25,105 @@ O "Siga Feliz" será responsável por automatizar a distribuição dos temas, fa
 | 8º | US05: Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento. | Baixa | Baixa | Sprint 2 | 
 | 9º | US04: Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. | Baixa | Média | Sprint 2 | 
 
-## ✅ DoR - Definition of Ready
+
+## 📅 Planejamento de Entregas
+O projeto será dividido em três fases principais de desenvolvimento:
+
+* **Sprint 1:** Foco em negociação com o cliente, discussões técnicas internas, formulação da solução e modelagem de dados. Esta etapa priorizou a estruturação do projeto e a execução de protótipos, sem o desenvolvimento de User Stories (US) operacionais.
+* **Sprint 2:** Desenvolvimento da infraestrutura de cadastro dos parâmetros de calendário e configurações da coordenação. Aqui também se planeja o início dos algorítmos de distribuição do planejamento ao longo do semestre.
+* **Sprint 3:** Foco total na implementação das funcionalidades voltadas aos perfis de professor usuário, refinamentos de interface e finalização do algoritmo de alocação.
+
+## 🗓️ Cronograma de Sprints
+
+| Sprint | Periodo | Documentação | Vídeo |
+| :---: | :---: | :---: | :---: |
+| Sprint 1 | 16/03 - 05/04 | [Sprint 1 Docs](/docs/Sprint%201/) | [Demonstração Protótipo](/docs/Sprint%201/prototipo.mp4) |
+| Sprint 2 | 13/04 - 03/05 | Sprint 2 Docs | |
+| Sprint 3 | 11/05 - 31/05 | Sprint 3 Docs | |
+
+## ⚙️ Tecnologias Utilizadas
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![JavaFX](https://img.shields.io/badge/javafx-%23FF0000.svg?style=for-the-badge&logo=javafx&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
+
+### Estrutura do Projeto
+
+```
+sigafeliz/                  ← raiz do repositório
+├── docs/                   ← documentação do projeto
+└── sigafeliz/              ← projeto Maven (abra esta pasta na IDE)
+    ├── pom.xml
+    └── src/
+        └── main/
+            ├── java/com/sigafeliz/
+            │   ├── Main.java           ← ponto de entrada da aplicação
+            │   ├── controller/         ← controladores JavaFX (FXML)
+            │   ├── model/              ← entidades e modelos de dados
+            │   └── service/            ← regras de negócio
+            └── resources/
+                ├── view/               ← arquivos .fxml (telas)
+                └── css/                ← estilos da aplicação
+```
+
+## 🚀 Como Testar o Protótipo
+
+### Pré-requisitos
+
+Antes de começar, verifique se você tem os seguintes itens instalados na sua máquina:
+
+| Ferramenta | Versão mínima | Download |
+|---|---|---|
+| **Java JDK** | 17 | [Azul Zulu 17](https://www.azul.com/downloads/?version=java-17&os=windows&package=jdk) ou [Oracle JDK 17](https://www.oracle.com/java/technologies/downloads/#java17) |
+| **Apache Maven** | 3.8+ | [maven.apache.org](https://maven.apache.org/download.cgi) |
+
+Os comandos a seguir podem ser feitos em terminais como `PowerShell` ou `Bash`.
+> **Como verificar se já estão instalados:**
+> ```bash
+> java -version   # deve mostrar algo como: java version "17.x.x"
+> mvn -version    # deve mostrar algo como: Apache Maven 3.x.x
+> ```
+
+### Passo a Passo
+
+**1. Clone o repositório**
+```bash
+git clone https://github.com/Eaglefatec/sigafeliz.git
+cd sigafeliz
+```
+
+**2. Navegue até a pasta do projeto Java**
+```bash
+cd sigafeliz
+```
+> ⚠️ Atenção: a pasta do projeto Maven fica dentro de uma subpasta também chamada `sigafeliz`. Não se confunda com a pasta raiz do repositório.
+
+**3. Compile e execute a aplicação (primeira vez)**
+```bash
+mvn clean javafx:run
+```
+
+Aguarde o Maven baixar as dependências (somente na primeira vez) e compilar. A janela do **Siga Feliz** abrirá automaticamente.
+
+**Execuções seguintes (sem alterações no código)**
+
+Após a primeira compilação, o `clean` é desnecessário. Basta rodar direto pelo terminal:
+```bash
+mvn javafx:run
+```
+
+### Solução de Problemas
+
+| Problema | Causa provável | Solução |
+|---|---|---|
+| `java version` mostra versão diferente de 17 | Versão errada no PATH | Configure a variável `JAVA_HOME` apontando para o JDK 17 |
+| `mvn` não é reconhecido | Maven não está no PATH | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH` |
+| Janela não abre mas o build é `SUCCESS` | Ambiente sem display gráfico | Execute em uma máquina com interface gráfica |
+
+## Documentação
+
+### ✅ DoR - Definition of Ready
 
 Para que uma User Story seja considerada pronta para desenvolvimento, os seguintes critérios devem ser cumpridos:
 * A User Story possui um título claro, descrição bem definida (formato "Como... quero... para...") e objetivo compreendido.
@@ -35,73 +133,66 @@ Para que uma User Story seja considerada pronta para desenvolvimento, os seguint
 * Não há dependências bloqueadoras.
 * A compreensão foi validada com o time.
 
-## 🏁 DoD - Definition of Done
+### 🏁 DoD - Definition of Done
 
 Para que uma User Story seja considerada finalizada, os seguintes critérios técnicos assumidos pela equipe devem ser satisfeitos:
 * Código devidamente versionado no Git.
 * Código revisado pela equipe.
 * Todos os casos de uso relacionados à história foram testados, conforme levantados pela equipe.
 
-## 🗓️ Cronograma de Sprints
+### 🌿 [Estratégia de Branch](docs/equipe/Estratégia%20Branches.md/)
 
-| Sprint | Periodo | Documentação |
-| :---: | :---: | :---: |
-| Sprint 1 | 16/03 - 05/04 | [Sprint 1 Docs](/docs/Sprint%201/) |
-| Sprint 2 | 13/04 - 03/05 | Sprint 2 Docs |
-| Sprint 3 | 11/05 - 31/05 | Sprint 3 Docs |
-
-## ⚙️ Tecnologias Utilizadas
-
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
-![JavaFX](https://img.shields.io/badge/javafx-%23FF0000.svg?style=for-the-badge&logo=javafx&logoColor=white)
-![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
+Definição de como as branches serão trabalhadas durante o projeto.
 
 ## Equipe
 
 <div align="center">
-  <table>
+  <table align="center">
     <tr>
-      <th>Membro</th>
-      <th>Função</th>
-      <th>Github</th>
-      <th>Linkedin</th>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/guilherme.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Guilherme Ioshua Sene</b><br>
+        <i>Product Owner</i><br>
+        <a href="https://github.com/guiioshua"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/guilherme-ioshua-sene/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/breno.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Breno Cefas dos Santos</b><br>
+        <i>Scrum Master</i><br>
+        <a href="https://github.com/cefasbreno"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/breno-cefas-7aa909271/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/alessandro.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Alessandro Cabral</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/alessandrocabralfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/alessandro-augusto-ferreira-cabral-9b805553//"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
     </tr>
     <tr>
-      <td>Guilherme Ioshua Sene</td>
-      <td>Product Owner</td>
-      <td><a href="https://github.com/guiioshua"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
-      <td><a href="https://www.linkedin.com/in/guilherme-ioshua-sene/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
-    </tr>
-    <tr>
-      <td>Breno Cefas dos Santos</td>
-      <td>Scrum Master</td>
-      <td><a href="https://github.com/cefasbreno"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
-      <td><a href="https://www.linkedin.com/in/breno-cefas-7aa909271/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
-    </tr>
-    <tr>
-      <td>Alessandro Augusto Ferreira Cabral</td>
-      <td>Desenvolvedor</td>
-      <td><a href="https://github.com/alessandrocabralfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
-      <td><a href="https://www.linkedin.com/in/alessandro-augusto-ferreira-cabral-9b805553//"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
-    </tr>
-    <tr>
-      <td>Eruano Rubens de Almeida</td>
-      <td>Desenvolvedor</td>
-      <td><a href="https://github.com/Eruano-Almeida"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
-      <td><a href="https://www.linkedin.com/in/eruano-rubens-de-almeida-b0ba19111/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
-    </tr>
-    <tr>
-      <td>Fernando Montero da Costa</td>
-      <td>Desenvolvedor</td>
-      <td><a href="https://github.com/fernandocosta45"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
-      <td><a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
-    </tr>
-    <tr>
-      <td>Renan Diniz da Silva</td>
-      <td>Desenvolvedor</td>
-      <td><a href="https://github.com/renandiniz8"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
-      <td><a href="https://www.linkedin.com/in/renan-diniz-/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/rubens.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Eruano Rubens</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/Eruano-Almeida"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/eruano-rubens-de-almeida-b0ba19111/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/fernando.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Fernando Montero</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/fernandocosta45"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/renan.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Renan Diniz</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/renandiniz8"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/renan-diniz-/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
     </tr>
   </table>
 </div>
