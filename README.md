@@ -150,11 +150,11 @@ Definição de como as branches serão trabalhadas durante o projeto.
   <table align="center">
     <tr>
       <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/guilherme.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Guilherme Ioshua Sene</b><br>
+        <img src="docs/assets/imagens/integrantes/alessandro.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Alessandro Cabral</b><br>
         <i>Product Owner</i><br>
-        <a href="https://github.com/guiioshua"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="https://www.linkedin.com/in/guilherme-ioshua-sene/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+        <a href="https://github.com/alessandrocabralfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/alessandro-augusto-ferreira-cabral-9b805553//"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
       </td>
       <td align="center" width="250px">
         <img src="docs/assets/imagens/integrantes/breno.png" width="120" height="120" style="border-radius: 10px;"><br>
@@ -164,11 +164,11 @@ Definição de como as branches serão trabalhadas durante o projeto.
         <a href="https://www.linkedin.com/in/breno-cefas-7aa909271/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
       </td>
       <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/alessandro.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Alessandro Cabral</b><br>
-        <i>Desenvolvedor</i><br>
-        <a href="https://github.com/alessandrocabralfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="https://www.linkedin.com/in/alessandro-augusto-ferreira-cabral-9b805553//"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+        <img src="docs/assets/imagens/integrantes/thayssa.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Thayssa Andrade</b><br>
+        <i>Desenvolvedora</i><br>
+        <a href="https://github.com/Thayssa-Andrade"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/thayssa-andrade/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
       </td>
     </tr>
     <tr>
@@ -187,11 +187,11 @@ Definição de como as branches serão trabalhadas durante o projeto.
         <a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
       </td>
       <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/renan.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Renan Diniz</b><br>
+        <img src="docs/assets/imagens/integrantes/rafael.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Rafael Rodrigues</b><br>
         <i>Desenvolvedor</i><br>
-        <a href="https://github.com/renandiniz8"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="https://www.linkedin.com/in/renan-diniz-/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+        <a href="https://github.com/Rafael-SantosR"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/rafaels-rodrigues/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
       </td>
     </tr>
   </table>
