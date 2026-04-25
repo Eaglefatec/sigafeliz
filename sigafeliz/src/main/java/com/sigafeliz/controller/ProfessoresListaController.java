@@ -5,9 +5,7 @@ import com.sigafeliz.model.Professor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ProfessoresListaController {
@@ -15,36 +13,90 @@ public class ProfessoresListaController {
     @FXML private TableView<Professor> tabelaProfessores;
     @FXML private TableColumn<Professor, String> colNome;
     @FXML private TableColumn<Professor, String> colEmail;
+    @FXML private TableColumn<Professor, Void> colSelec;
 
-    // Declarando os botões para que o JavaFX os reconheça
-    @FXML private Button btnVoltar;
-    @FXML private Button btnAvancar;
-    @FXML private Button btnAdd;
+    @FXML private TextField txtNome;
+    @FXML private TextField txtEmail;
 
-    private ObservableList<Professor> listaProfessores = FXCollections.observableArrayList();
+    private final ToggleGroup professorGroup = new ToggleGroup();
+    private final ObservableList<Professor> listaProfessores = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        // Dados de teste
-        listaProfessores.add(new Professor("Carlos Silva", "carlos.silva@email.com"));
-        listaProfessores.add(new Professor("Maria Oliveira", "maria.oliveira@email.com"));
+        configurarColunaSelecao();
+
+        listaProfessores.addAll(
+                new Professor("Carlos Silva", "carlos.silva@email.com"),
+                new Professor("Maria Oliveira", "maria.oliveira@email.com")
+        );
 
         tabelaProfessores.setItems(listaProfessores);
     }
 
+    private void configurarColunaSelecao() {
+        // Uso do <> (Diamond Operator) para limpar o alerta
+        colSelec.setCellFactory(param -> new TableCell<>() {
+            private final RadioButton rb = new RadioButton();
+            {
+                rb.setToggleGroup(professorGroup);
+                // Lambda simplificada (Expression Lambda)
+                rb.setOnAction(event -> getTableView().getSelectionModel().select(getIndex()));
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(rb);
+                    setStyle("-fx-alignment: CENTER;");
+                }
+            }
+        });
+    }
+
     @FXML
-    private void voltarParaHome() {
-        // Certifique-se que o arquivo existe em resources/view/
-        Main.loadView("TelaInicial.fxml");
+    private void salvarProfessor() {
+        String nome = txtNome.getText();
+        String email = txtEmail.getText();
+
+        if (nome == null || nome.trim().isEmpty() || email == null || email.trim().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText(null);
+            alert.setContentText("Preencha o nome e o e-mail!");
+            alert.show();
+            return;
+        }
+
+        listaProfessores.add(new Professor(nome, email));
+        txtNome.clear();
+        txtEmail.clear();
+        txtNome.requestFocus();
     }
 
     @FXML
     private void irParaProximaTela() {
-        // Substitua pelo nome real da sua próxima tela
-       // Main.loadView("ProximaTela.fxml");
-        System.out.println("O botão Avançar está funcionando perfeitamente!");
+        Professor selecionado = tabelaProfessores.getSelectionModel().getSelectedItem();
+        if (selecionado != null) {
+            System.out.println("Professor selecionado: " + selecionado.getNome());
+        } else {
+            exibirAlerta("Por favor, selecione um professor na lista.");
+        }
+    }
+
+    @FXML
+    private void voltarParaHome() {
+        Main.loadView("TelaInicial.fxml");
+    }
+
+    private void exibirAlerta(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }
