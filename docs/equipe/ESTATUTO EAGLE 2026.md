@@ -24,8 +24,9 @@ IV – Contribuir com a comunidade acadêmica e externa por meio de soluções t
 * Alessandro Augusto Ferreira Cabral;
 * Breno Cefas dos Santos;
 * Eruano Rubens de Almeida;
-* Guilherme Ioshua Sene;
-* Renan Diniz da Silva.
+* Fernando Montero da Costa;
+* Rafael Santos Rodrigues;
+* Thayssa Andrade Santos;
 
 **Art. 6º –** O grupo será administrado por todos integrantes.
 

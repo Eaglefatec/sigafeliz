@@ -1,12 +1,12 @@
 # 🌿 Estratégia de Branching: GitHub Flow 
 
-Esta organização utiliza o GitHub Flow como fluxo de trabalho padrão. O foco é manter a branch principal sempre estável e utilizar Pull Requests para todas as alterações.
+Esta organização utiliza o GitHub Flow como fluxo de trabalho padrão. O foco é manter a branch principal sempre estável e utilizar Pull Requests para todas as alterações de features e refatorações profundas.
 
 ## 🟢 Branch Principal (main)
 
 A branch main contém o código que está em produção e estável. Esta branch é protegida e exige revisão antes de qualquer merge.
-* Nunca faça commits diretamente na main.
-* Toda alteração deve vir de uma branch secundária (develop).
+* Nunca faça commits que afetem o funcionamento do produto diretamente na main.
+* Toda alterações do tipo devem vir de uma branch secundária (develop).
 
 ## 🛠️ Branches de Desenvolvimento (develop)
 
