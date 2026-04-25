@@ -33,10 +33,7 @@ public class TelaInicialController {
      */
     @FXML
     private void handleCoordinatorPath() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Siga Feliz - Protótipo");
-        alert.setHeaderText("Fluxo em Desenvolvimento");
-        alert.setContentText("O fluxo do coordenador não está mapeado nesta iteração.");
-        alert.showAndWait();
+        // Chamando o método utilitário da sua classe Main
+        Main.loadView("ProfessoresLista.fxml");
     }
 }
