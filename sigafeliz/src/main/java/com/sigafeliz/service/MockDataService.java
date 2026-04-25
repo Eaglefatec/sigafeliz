@@ -20,8 +20,7 @@ public class MockDataService {
     private static final List<Disciplina> disciplinasMock = new ArrayList<>();
     private static final List<Semestre> semestresMock = new ArrayList<>();
 
-    private static Professor professorLogado;
-    private static Disciplina disciplinaSelecionada;
+     private static Disciplina disciplinaSelecionada;
 
     static {
         // 1. Mock do Semestre (Seria feito pelac oordenação)
@@ -52,7 +51,7 @@ public class MockDataService {
     }
 
     // API para os Controllers
-    public static List<Professor> getAllProfessores() { return professoresMock; }
+
 
     public static List<Semestre> getAllSemestres() { return semestresMock; }
 
@@ -62,15 +61,9 @@ public class MockDataService {
                 .collect(Collectors.toList());
     }
 
-    public static Professor getProfessorPorNome(String nome) {
-        return professoresMock.stream()
-                .filter(p -> p.getNome().equalsIgnoreCase(nome))
-                .findFirst().orElse(null);
-    }
+
 
     // Getters e Setters de Sessão
-    public static void setProfessorLogado(Professor professor) { professorLogado = professor; }
-    public static Professor getProfessorLogado() { return professorLogado; }
 
     public static void setDisciplinaSelecionada(Disciplina disciplina) { disciplinaSelecionada = disciplina; }
     public static Disciplina getDisciplinaSelecionada() { return disciplinaSelecionada; }

@@ -3,6 +3,7 @@ package com.sigafeliz.controller;
 import com.sigafeliz.Main;
 import com.sigafeliz.model.Professor;
 import com.sigafeliz.service.MockDataService;
+import com.sigafeliz.service.ProfessorService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -18,7 +19,7 @@ public class SelecaoProfessorController {
     @FXML
     public void initialize() {
         // Carrega a lista do MockDataService para o ComboBox
-        comboProfessores.setItems(FXCollections.observableArrayList(MockDataService.getAllProfessores()));
+        comboProfessores.setItems(FXCollections.observableArrayList(ProfessorService.getAllProfessores()));
         // Configura como o Professor será exibido no ComboBox (apenas o nome)
         comboProfessores.setConverter(new StringConverter<Professor>() {
             @Override
@@ -37,7 +38,7 @@ public class SelecaoProfessorController {
         Professor selecionado = comboProfessores.getValue();
 
         if (selecionado != null) {
-            MockDataService.setProfessorLogado(selecionado);
+            ProfessorService.setProfessorLogado(selecionado);
             Main.loadView("MinhasDisciplinas.fxml");
         } else {
             exibirAlerta("Selecione um professor para continuar.");

@@ -3,6 +3,7 @@ package com.sigafeliz.controller;
 import com.sigafeliz.Main;
 import com.sigafeliz.model.Professor;
 import javafx.collections.FXCollections;
+import com.sigafeliz.service.ProfessorService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -28,10 +29,7 @@ public class ProfessoresListaController {
 
         configurarColunaSelecao();
 
-        listaProfessores.addAll(
-                new Professor("Carlos Silva", "carlos.silva@email.com"),
-                new Professor("Maria Oliveira", "maria.oliveira@email.com")
-        );
+        listaProfessores.addAll(ProfessorService.getAllProfessores());
 
         tabelaProfessores.setItems(listaProfessores);
     }
