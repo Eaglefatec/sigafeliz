@@ -2,25 +2,42 @@ package com.sigafeliz.service;
 
 import com.sigafeliz.dao.ProfessorDAO;
 import com.sigafeliz.model.Professor;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProfessorService {
 
     private static final ProfessorDAO dao = new ProfessorDAO();
-
-    // Estado de sessão (tira do Mock quando estiver pronto)
     private static Professor professorLogado;
 
-    public static List<Professor> getAllProfessores() {
+    public static ObservableList<Professor> getAllProfessores() {
         try {
-            return dao.listarTodos();
+            return FXCollections.observableArrayList(dao.listarTodos());
         } catch (SQLException e) {
             System.err.println("Erro ao buscar professores: " + e.getMessage());
-            return new ArrayList<>();
+            return FXCollections.observableArrayList(new ArrayList<>());
         }
+    }
+
+    public static void setProfessorLogado(Professor p) {
+        professorLogado = p;
+    }
+
+    public static Professor getProfessorLogado() {
+        return professorLogado;
+    }
+
+    public static boolean isSelecaoValida() {
+        return professorLogado != null &&
+                professorLogado.getEmail() != null &&
+                professorLogado.getEmail().contains("@");
+    }
+
+    public static void salvar(Professor p) throws SQLException {
+        dao.salvar(p);
     }
 
     public static Professor getProfessorPorNome(String nome) {
@@ -31,7 +48,4 @@ public class ProfessorService {
             return null;
         }
     }
-
-    public static void setProfessorLogado(Professor p) { professorLogado = p; }
-    public static Professor getProfessorLogado()       { return professorLogado; }
 }
