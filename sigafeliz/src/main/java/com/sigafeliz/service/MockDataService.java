@@ -12,9 +12,9 @@ public class MockDataService {
 
     // Listas internas
     private static final List<Professor> professoresMock = new ArrayList<>(List.of(
-            new Professor("mineda@fatec.com", "Prof. Mineda"),
-            new Professor("bertoti@fatec.com", "Prof. Bertoti"),
-            new Professor("sabha@fatec.com", "Prof. Sabha")
+            new Professor("Prof. Mineda", "mineda@fatec.com"),
+            new Professor("Prof. Bertoti", "bertoti@fatec.com"),
+            new Professor("Prof. Sabha", "sabha@fatec.com")
     ));
 
     private static final List<Disciplina> disciplinasMock = new ArrayList<>();

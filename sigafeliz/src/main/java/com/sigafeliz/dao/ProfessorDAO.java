@@ -68,4 +68,23 @@
                 ps.executeUpdate();
             }
         }
+
+        public void atualizar(Professor p) throws SQLException {
+            String sql = "UPDATE professor SET nome = ? WHERE email = ?";
+            try (Connection con = ConexaoDB.getConexao();
+                 PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, p.getNome());
+                ps.setString(2, p.getEmail());
+                ps.executeUpdate();
+            }
+        }
+
+        public void excluir(String email) throws SQLException {
+            String sql = "DELETE FROM professor WHERE email = ?";
+            try (Connection con = ConexaoDB.getConexao();
+                 PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, email);
+                ps.executeUpdate();
+            }
+        }
     }
