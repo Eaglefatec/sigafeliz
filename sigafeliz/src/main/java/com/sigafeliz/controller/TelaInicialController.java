@@ -23,7 +23,7 @@ public class TelaInicialController {
      */
     @FXML
     private void handleProfessorPath() {
-        // No futuro, loadView carregará "IdentificacaoDocente.fxml"
+        // TODO No futuro, loadView carregará "IdentificacaoDocente.fxml"
         Main.loadView("SelecaoProfessor.fxml");
     }
 
