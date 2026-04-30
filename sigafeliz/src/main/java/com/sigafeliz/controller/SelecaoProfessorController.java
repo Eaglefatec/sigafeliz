@@ -18,7 +18,7 @@ public class SelecaoProfessorController {
     // Chamado quando o controller do fxml atrelado a ele é carregado pelo JavaFX.
     @FXML
     public void initialize() {
-        // Carrega a lista do MockDataService para o ComboBox
+        // Carrega a lista de professores do mongo para o ComboBox
         comboProfessores.setItems(FXCollections.observableArrayList(ProfessorService.getAllProfessores()));
         // Configura como o Professor será exibido no ComboBox (apenas o nome)
         comboProfessores.setConverter(new StringConverter<Professor>() {
