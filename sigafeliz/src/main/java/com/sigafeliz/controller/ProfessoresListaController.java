@@ -112,10 +112,12 @@ public class ProfessoresListaController {
 
     @FXML
     private void irParaProximaTela() {
-        if (ProfessorService.isSelecaoValida()) {
-            System.out.println("Avançando com: " + ProfessorService.getProfessorLogado().getEmail());
-        } else {
+
+        Professor selecionado = ProfessorService.getProfessorLogado();
+        if (selecionado == null) {
             exibirAlerta("Por favor, selecione um professor.");
+        } else {
+            Main.loadView("CoordenadorListaDisciplinas.fxml");
         }
     }
 
