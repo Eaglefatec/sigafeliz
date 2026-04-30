@@ -34,7 +34,7 @@ public class CoordenadorListaDisciplinaController {
 
     @FXML
     void avancarSemestreEdicao(ActionEvent event) {
-        Main.loadView("SemestreEdicao.fxml");
+        Main.loadView("SemestreLista.fxml");
     }
 
     @FXML
