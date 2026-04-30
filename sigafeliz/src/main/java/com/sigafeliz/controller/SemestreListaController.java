@@ -2,7 +2,7 @@ package com.sigafeliz.controller;
 
 import com.sigafeliz.Main;
 import com.sigafeliz.model.Semestre;
-import com.sigafeliz.service.MockDataService;
+import com.sigafeliz.service.SemestreService; // ← Import alterado
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,18 +11,17 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class SemestreListaController {
 
-    // Inputs
     @FXML private TextField txtNome;
     @FXML private DatePicker dpInicio;
     @FXML private DatePicker dpFim;
     @FXML private DatePicker dpKickoff;
 
-    // Tabela e Colunas
     @FXML private TableView<Semestre> tabelaSemestres;
     @FXML private TableColumn<Semestre, String> colNome;
     @FXML private TableColumn<Semestre, String> colInicio;
@@ -31,16 +30,12 @@ public class SemestreListaController {
     @FXML private TableColumn<Semestre, Void> colAcoes;
 
     private ObservableList<Semestre> listaSemestres;
-
-    // Formatador de data para ficar no padrão BR (DD/MM/YYYY) igual ao wireframe
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @FXML
     public void initialize() {
-        // Vincula a coluna Nome com a propriedade da classe
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 
-        // Extrai a data formatada das instâncias para as colunas
         colInicio.setCellValueFactory(cellData -> new SimpleStringProperty(
                 cellData.getValue().getDataInicio() != null ? cellData.getValue().getDataInicio().format(formatter) : ""
         ));
@@ -53,21 +48,20 @@ public class SemestreListaController {
 
         configurarColunaAcoes();
 
-        // Carrega os dados existentes do MockDataService
-        listaSemestres = FXCollections.observableArrayList(MockDataService.getAllSemestres());
+        // ↓ Busca dados reais do banco usando o novo Service
+        listaSemestres = SemestreService.getAllSemestres();
         tabelaSemestres.setItems(listaSemestres);
     }
 
     private void configurarColunaAcoes() {
         colAcoes.setCellFactory(param -> new TableCell<>() {
             private final Button btnEditar = new Button("EDITAR");
-
             {
                 btnEditar.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
                 btnEditar.setOnAction(event -> {
                     Semestre s = getTableView().getItems().get(getIndex());
-                    MockDataService.setSemestreSelecionado(s);
-
+                    // ↓ Salva a sessão no Service correto
+                    SemestreService.setSemestreSelecionado(s);
                     Main.loadView("SemestreEdicao.fxml");
                 });
             }
@@ -75,9 +69,8 @@ public class SemestreListaController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
+                if (empty) setGraphic(null);
+                else {
                     setGraphic(btnEditar);
                     setAlignment(Pos.CENTER);
                 }
@@ -93,32 +86,42 @@ public class SemestreListaController {
         LocalDate kickoff = dpKickoff.getValue();
 
         if (nome == null || nome.trim().isEmpty() || inicio == null || fim == null || kickoff == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText("Aviso");
-            alert.setContentText("Preencha todos os campos e selecione todas as datas para criar o semestre.");
-            alert.showAndWait();
+            mostrarAlerta("Aviso", "Preencha todos os campos e selecione todas as datas para criar o semestre.", Alert.AlertType.WARNING);
             return;
         }
 
-        // Instancia a nova classe modelo do sistema
         Semestre novoSemestre = new Semestre(nome, inicio, fim, kickoff);
 
-        // Simula o INSERT no "banco" adicionando direto à lista estática do mock
-        MockDataService.getAllSemestres().add(novoSemestre);
+        try {
+            // ↓ Insere no PostgreSQL através do Service
+            SemestreService.salvar(novoSemestre);
 
-        // Atualiza a visualização da tabela instantaneamente
-        listaSemestres.add(novoSemestre);
+            // Se o banco aceitou, atualiza a tabela da tela
+            listaSemestres.add(novoSemestre);
 
-        // Limpa os campos
-        txtNome.clear();
-        dpInicio.setValue(null);
-        dpFim.setValue(null);
-        dpKickoff.setValue(null);
+            // Limpa os campos
+            txtNome.clear();
+            dpInicio.setValue(null);
+            dpFim.setValue(null);
+            dpKickoff.setValue(null);
+
+        } catch (SQLException e) {
+            // Exibe o erro vindo do banco/validação (Ex: UNIQUE violation)
+            mostrarAlerta("Erro ao salvar", e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
     private void handleVoltar() {
-        // Redireciona para o passo anterior do fluxo (que pelo que vi nos HTMLs pode ser o inicio ou a lista de professores)
         Main.loadView("TelaInicial.fxml");
+    }
+
+    // Método utilitário limpo para gerar alertas
+    private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 }
