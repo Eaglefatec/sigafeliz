@@ -1,16 +1,16 @@
 package com.sigafeliz.controller;
 
 import com.sigafeliz.Main;
-import com.sigafeliz.model.DiaRestrito;
-import com.sigafeliz.model.SabadoLetivo;
 import com.sigafeliz.model.Semestre;
-import com.sigafeliz.service.MockDataService;
+import com.sigafeliz.service.SemestreService; // Import do novo Service
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class SemestreEdicaoController {
+
     @FXML private Label lblSemestreSelecionado;
     @FXML private Label lblMesAno;
     @FXML private GridPane gridCalendario;
@@ -28,10 +29,18 @@ public class SemestreEdicaoController {
 
     @FXML
     public void initialize() {
-        semestreAtual = MockDataService.getSemestreSelecionado();
+        // Busca do novo Service
+        semestreAtual = SemestreService.getSemestreSelecionado();
+
         if (semestreAtual != null) {
+            try {
+                // Carrega os dados reais do banco para o calendário atual
+                SemestreService.carregarDetalhes(semestreAtual);
+            } catch (SQLException e) {
+                mostrarAlertaErro("Erro de Conexão", "Não foi possível carregar os feriados: " + e.getMessage());
+            }
+
             lblSemestreSelecionado.setText("Configurando: " + semestreAtual.getNome());
-            // Inicia no mês de início do semestre
             mesExibido = YearMonth.from(semestreAtual.getDataInicio());
             renderizarCalendario();
         }
@@ -41,7 +50,6 @@ public class SemestreEdicaoController {
         gridCalendario.getChildren().clear();
         lblMesAno.setText(mesExibido.getMonth().getDisplayName(TextStyle.FULL, new Locale("pt", "BR")).toUpperCase() + " " + mesExibido.getYear());
 
-        // Cabeçalho dos dias da semana (DOM a SAB)
         for (int i = 0; i < 7; i++) {
             Label header = new Label(diasSemana[i]);
             header.setPrefSize(65, 30);
@@ -50,9 +58,8 @@ public class SemestreEdicaoController {
             gridCalendario.add(header, i, 0);
         }
 
-        // Lógica de preenchimento dos dias
         LocalDate primeiroDiaMes = mesExibido.atDay(1);
-        int diaDaSemanaInicial = primeiroDiaMes.getDayOfWeek().getValue() % 7; // Ajusta para 0=Dom, 1=Seg...
+        int diaDaSemanaInicial = primeiroDiaMes.getDayOfWeek().getValue() % 7;
         int diasNoMes = mesExibido.lengthOfMonth();
 
         int linha = 1;
@@ -76,20 +83,19 @@ public class SemestreEdicaoController {
         lbl.setPrefSize(65, 65);
         lbl.setAlignment(Pos.CENTER);
 
-        // Verifica se a data está dentro do intervalo do semestre
         boolean dentroDoSemestre = (data.isEqual(semestreAtual.getDataInicio()) || data.isAfter(semestreAtual.getDataInicio())) &&
                 (data.isEqual(semestreAtual.getDataFim()) || data.isBefore(semestreAtual.getDataFim()));
 
         if (!dentroDoSemestre) {
             lbl.setStyle("-fx-border-color: #dee2e6; -fx-background-color: #e9ecef; -fx-text-fill: #adb5bd; -fx-font-family: 'Monospaced';");
         } else {
-            atualizarEstiloDinamico(lbl, data, coluna);
+            atualizarEstiloDinamico(lbl, data);
             lbl.setOnMouseClicked(event -> handleInteracaoDia(lbl, data, coluna));
         }
         return lbl;
     }
 
-    private void atualizarEstiloDinamico(Label lbl, LocalDate data, int coluna) {
+    private void atualizarEstiloDinamico(Label lbl, LocalDate data) {
         String style = "-fx-border-color: black; -fx-font-family: 'Monospaced'; -fx-cursor: hand; ";
 
         boolean feriado = semestreAtual.getDiasRestritos().stream().anyMatch(d -> d.getData().equals(data));
@@ -106,56 +112,68 @@ public class SemestreEdicaoController {
     }
 
     private void handleInteracaoDia(Label lbl, LocalDate data, int coluna) {
-        if (coluna == 0) return; // Domingo não interativo
+        if (coluna == 0) return; // Não há iteração no domingo
 
-        if (coluna == 6) { // Sábado: Alterna Sábado Letivo
-            boolean removido = semestreAtual.getSabadosLetivos().removeIf(s -> s.getData().equals(data));
-            if (!removido) semestreAtual.addSabadoLetivo(new SabadoLetivo(semestreAtual, data));
-        } else { // Dias de semana: Alterna Feriado
-            boolean removido = semestreAtual.getDiasRestritos().removeIf(d -> d.getData().equals(data));
-            if (!removido) {
-                TextInputDialog dialog = new TextInputDialog("Feriado");
-                dialog.setTitle("Restrição de Data");
-                dialog.setHeaderText("Definir feriado para " + data);
-                dialog.setContentText("Descrição:");
-                Optional<String> result = dialog.showAndWait();
-                result.ifPresent(desc -> semestreAtual.addDiaRestrito(new DiaRestrito(semestreAtual, data, desc)));
+        try {
+            if (coluna == 6) {
+                // Persiste e altera a cor do Sábado
+                SemestreService.alternarSabadoLetivo(semestreAtual, data);
+            } else {
+                // Lógica de Feriado/Dias Restritos
+                boolean isFeriado = semestreAtual.getDiasRestritos().stream().anyMatch(d -> d.getData().equals(data));
+
+                if (isFeriado) {
+                    // Remove do banco e da memória
+                    SemestreService.removerDiaRestrito(semestreAtual, data);
+                } else {
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Restrição de Data");
+                    dialog.setHeaderText("Definir feriado para " + data);
+                    dialog.setContentText("Descrição (Ex: Sexta Santa):");
+
+                    Optional<String> result = dialog.showAndWait();
+                    if (result.isPresent() && !result.get().trim().isEmpty()) {
+                        // Salva no banco e na memória
+                        SemestreService.adicionarDiaRestrito(semestreAtual, data, result.get().trim());
+                    }
+                }
             }
+            // Atualiza visualmente se a operação no banco deu certo
+            atualizarEstiloDinamico(lbl, data);
+
+        } catch (SQLException e) {
+            mostrarAlertaErro("Erro de Banco de Dados", "Ocorreu um erro ao salvar a alteração:\n" + e.getMessage());
         }
-        atualizarEstiloDinamico(lbl, data, coluna);
     }
 
-    /**
-     * Navega para o mês anterior, respeitando a data de início do semestre.
-     */
     @FXML
     private void mesAnterior() {
-        YearMonth limiteMinimo = YearMonth.from(semestreAtual.getDataInicio()); //
-
+        YearMonth limiteMinimo = YearMonth.from(semestreAtual.getDataInicio());
         if (mesExibido.isAfter(limiteMinimo)) {
             mesExibido = mesExibido.minusMonths(1);
             renderizarCalendario();
-        } else {
-            // Opcional: Feedback visual de que chegou ao limite
-            System.out.println("Limite inicial do semestre atingido.");
         }
     }
 
-    /**
-     * Navega para o próximo mês, respeitando a data de término do semestre.
-     */
     @FXML
     private void proximoMes() {
-        YearMonth limiteMaximo = YearMonth.from(semestreAtual.getDataFim()); //
-
+        YearMonth limiteMaximo = YearMonth.from(semestreAtual.getDataFim());
         if (mesExibido.isBefore(limiteMaximo)) {
             mesExibido = mesExibido.plusMonths(1);
             renderizarCalendario();
-        } else {
-            // Opcional: Feedback visual de que chegou ao limite
-            System.out.println("Limite final do semestre atingido.");
         }
     }
 
-    @FXML private void handleSalvarVoltar() { Main.loadView("SemestreLista.fxml"); }
+    @FXML
+    private void handleSalvarVoltar() {
+        Main.loadView("SemestreLista.fxml");
+    }
+
+    private void mostrarAlertaErro(String titulo, String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
 }
