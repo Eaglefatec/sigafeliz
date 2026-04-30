@@ -1,87 +1,50 @@
-package br.com.exemplo.controller;
+package com.sigafeliz.controller;
 
+import com.sigafeliz.Main;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
-public class CoordenadorListaController {
-
-    // CAMPOS DA LINHA DE INSERÇÃO
-    @FXML
-    private TextField txtDisciplina;
+public class CoordenadorListaDisciplinaController {
 
     @FXML
-    private ComboBox<String> cbProfessor;
+    private Button btnAvancar;
 
     @FXML
-    private ComboBox<Integer> cbCargaHoraria;
+    private Button btnEditarGrade;
 
     @FXML
     private Button btnSalvar;
 
-    // MÉTODO INICIAL (carrega dados)
     @FXML
-    public void initialize() {
-        carregarProfessores();
-        carregarCargaHoraria();
-    }
+    private Button btnVoltar;
 
-    private void carregarProfessores() {
-        cbProfessor.getItems().clear();
-        cbProfessor.getItems().addAll(
-                "Prof. Carlos Silva",
-                "Prof. João Pereira",
-                "Prof. Ana Souza"
-        );
-    }
-
-    private void carregarCargaHoraria() {
-        cbCargaHoraria.getItems().clear();
-        cbCargaHoraria.getItems().addAll(40, 80);
-    }
-
-    // AÇÃO DO BOTÃO SALVAR
     @FXML
-    private void salvarDisciplina() {
+    private ComboBox<?> cbProfessor;
 
-        String disciplina = txtDisciplina.getText();
-        String professor = cbProfessor.getValue();
-        Integer carga = cbCargaHoraria.getValue();
+    @FXML
+    private TextField txtDisciplina;
 
-        // 🔎 VALIDAÇÃO MELHORADA
-        if (disciplina == null || disciplina.trim().isEmpty()
-                || professor == null
-                || carga == null) {
-
-            mostrarAlerta("Preencha todos os campos!");
-            return;
-        }
-
-        // 🎯 SIMULAÇÃO DE SALVAMENTO
-        System.out.println("Disciplina: " + disciplina.trim());
-        System.out.println("Professor: " + professor);
-        System.out.println("Carga: " + carga);
-
-        mostrarAlerta("Disciplina salva com sucesso!");
-
-        limparCampos();
+    @FXML
+    void abrirEditarGrade(ActionEvent event) {
+        Main.loadView("GradeSemanal.fxml");
     }
 
-    // LIMPA FORMULÁRIO
-    private void limparCampos() {
-        txtDisciplina.clear();
-        cbProfessor.getSelectionModel().clearSelection();
-        cbCargaHoraria.getSelectionModel().clearSelection();
-
-        // Opcional: foco volta para o primeiro campo
-        txtDisciplina.requestFocus();
+    @FXML
+    void avancarSemestreEdicao(ActionEvent event) {
+        Main.loadView("SemestreEdicao.fxml");
     }
 
-    // ALERTA PADRÃO
-    private void mostrarAlerta(String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Informação");
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
+    @FXML
+    void salvarDisciplina(ActionEvent event) {
+
     }
+
+    @FXML
+    void voltarProfessorLista(ActionEvent event) {
+        Main.loadView("ProfessoresLista.fxml");
+    }
+
 }
