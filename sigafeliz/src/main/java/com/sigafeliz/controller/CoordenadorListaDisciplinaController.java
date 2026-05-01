@@ -37,24 +37,29 @@ public class CoordenadorListaDisciplinaController {
     // MÉTODO INICIAL (carrega dados)
     @FXML
     public void initialize() {
-        carregarProfessores();
-        carregarCargaHoraria();
+//        carregarCargaHoraria();
+
+//        // Carrega a lista de professores do mongo para o ComboBox
+//        comboProfessores.setItems(FXCollections.observableArrayList(ProfessorService.getAllProfessores()));
+//        // Configura como o Professor será exibido no ComboBox (apenas o nome)
+//        comboProfessores.setConverter(new StringConverter<Professor>() {
+//            @Override
+//            public String toString(Professor p) {
+//                return p == null ? "" : p.getNome();
+//            }
+//            @Override
+//            public Professor fromString(String string) {
+//                return null;
+//            }
+//        });
+
+
+
+
+
     }
 
     private void carregarProfessores() {
-        // Carrega a lista de professores do mongo para o ComboBox
-        comboProfessores.setItems(FXCollections.observableArrayList(ProfessorService.getAllProfessores()));
-        // Configura como o Professor será exibido no ComboBox (apenas o nome)
-        comboProfessores.setConverter(new StringConverter<Professor>() {
-            @Override
-            public String toString(Professor p) {
-                return p == null ? "" : p.getNome();
-            }
-            @Override
-            public Professor fromString(String string) {
-                return null;
-            }
-        });
 
     }
 
