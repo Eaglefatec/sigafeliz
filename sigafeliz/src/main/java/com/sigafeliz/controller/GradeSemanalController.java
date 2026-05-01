@@ -75,6 +75,10 @@ public class GradeSemanalController {
         int sex = spnSex.getValue();
 
         try {
+
+            //TODO Método que apaga o banco para colocar o novo.
+            gradeDAO.deletarPorDisciplina(disciplinaAtual.getNome());
+
             if (seg > 0) {
                 gradeDAO.salvarGrade(
                         new AulasPorDia(disciplinaAtual, DayOfWeek.MONDAY, seg)
@@ -105,8 +109,8 @@ public class GradeSemanalController {
             voltarTela();
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            // depois você pode mostrar um Alert JavaFX aqui
+        e.printStackTrace();
+        System.out.println("ERRO: não voltou por causa desse exception");
         }
     }
 
