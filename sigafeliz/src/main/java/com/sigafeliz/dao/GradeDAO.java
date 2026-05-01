@@ -18,7 +18,7 @@ public class GradeDAO{
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, a.getDisciplina().getNome());
-            ps.setString(2, a.getDiaSemana().name());
+            ps.setInt(2, a.getDiaSemana().getValue());
             ps.setInt(3, a.getQuantidadeAulas());
 
             ps.executeUpdate();

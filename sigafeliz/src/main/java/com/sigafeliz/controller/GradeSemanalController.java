@@ -1,6 +1,7 @@
 package com.sigafeliz.controller;
 
 
+import com.sigafeliz.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -35,9 +36,8 @@ public class GradeSemanalController {
     }
 
     @FXML
-    private void voltarParaHome() {
-        Stage stage = (Stage) spnSeg.getScene().getWindow();
-        stage.close();
+    private void voltarTela() {
+        Main.loadView("CoordenadorListaDisciplinas.fxml");
     }
 
     public int getAulasSeg() { return spnSeg.getValue(); }
@@ -56,8 +56,7 @@ public class GradeSemanalController {
         };
     }
 
-
-    private Disciplina disciplinaAtual;
+    private Disciplina disciplinaAtual = new Disciplina("Matematica", null, 0);
 
     public void setDisciplina(Disciplina disciplina) {
         this.disciplinaAtual = disciplina;
@@ -103,7 +102,7 @@ public class GradeSemanalController {
             }
 
             // ✅ Depois de salvar tudo, fecha a tela
-            voltarParaHome();
+            voltarTela();
 
         } catch (SQLException e) {
             e.printStackTrace();
