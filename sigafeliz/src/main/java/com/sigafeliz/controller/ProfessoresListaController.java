@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
 
+import static com.sigafeliz.Main.loadView;
+
 public class ProfessoresListaController {
 
     @FXML private TableView<Professor> tabelaProfessores;
@@ -117,13 +119,13 @@ public class ProfessoresListaController {
         if (selecionado == null) {
             exibirAlerta("Por favor, selecione um professor.");
         } else {
-            Main.loadView("CoordenadorListaDisciplinas.fxml");
+            loadView("CoordenadorListaDisciplinasEX.fxml"); //alterado para a tela nova
         }
     }
 
     @FXML
     private void voltarParaHome() {
-        Main.loadView("TelaInicial.fxml");
+        loadView("TelaInicial.fxml");
     }
 
     private void exibirAlerta(String mensagem) {

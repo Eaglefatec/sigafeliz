@@ -59,6 +59,7 @@ public class CoordenadorListaDisciplinaController {
 
     }
 
+
     private void carregarProfessores() {
 
     }
@@ -87,5 +88,7 @@ public class CoordenadorListaDisciplinaController {
     void voltarProfessorLista(ActionEvent event) {
         Main.loadView("ProfessoresLista.fxml");
     }
+
+
 
 }

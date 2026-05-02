@@ -42,13 +42,13 @@
 
     <HBox alignment="CENTER" spacing="20.0">
         <Button fx:id="btnSalvar" onAction="#salvarProfessor" prefHeight="40.0" prefWidth="100.0"
-                style="-fx-background-color: #E0E0E0; -fx-border-color: black; -fx-border-width: 3;" text="Salvar">
+                style="-fx-background-color: #E0E0E0; -fx-border-color: black; -fx-border-width: 3;-fx-cursor: hand;" text="Salvar">
             <font>
                 <Font name="Monospaced Bold" size="14.0" />
             </font>
         </Button>
         <Button fx:id="btnExcluir" onAction="#excluirProfessor" prefHeight="40.0" prefWidth="100.0"
-                style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;" text="Excluir">
+                style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;-fx-cursor: hand;" text="Excluir">
             <font>
                 <Font name="Monospaced Bold" size="14.0" />
             </font>
@@ -63,13 +63,13 @@
 
     <HBox alignment="CENTER" spacing="450.0">
         <Button fx:id="btnVoltar" mnemonicParsing="false" onAction="#voltarParaHome"
-                style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;" text="← Voltar">
+                style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;-fx-cursor: hand;" text="← Voltar">
             <font>
                 <Font name="Monospaced Bold" size="14.0" />
             </font>
         </Button>
         <Button fx:id="btnAvancar" mnemonicParsing="false" onAction="#irParaProximaTela"
-                style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;" text="Avançar →">
+                style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;-fx-cursor: hand;" text="Avançar →">
             <font>
                 <Font name="Monospaced Bold" size="14.0" />
             </font>

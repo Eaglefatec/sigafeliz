@@ -37,7 +37,7 @@ public class GradeSemanalController {
 
     @FXML
     private void voltarTela() {
-        Main.loadView("CoordenadorListaDisciplinas.fxml");
+        Main.loadView("CoordenadorListaDisciplinasEX.fxml");
     }
 
     public int getAulasSeg() { return spnSeg.getValue(); }

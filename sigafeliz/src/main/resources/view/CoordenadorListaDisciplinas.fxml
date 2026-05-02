@@ -57,6 +57,8 @@
 
                 <ComboBox fx:id="cbProfessor" promptText="Selecione o professor" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
+                <ComboBox fx:id="comboCargaHoraria" promptText="40" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+
                 <Button fx:id="btnSalvar" onAction="#salvarDisciplina" text="Salvar" GridPane.columnIndex="4" GridPane.rowIndex="3" />
             <Button fx:id="btnEditarGrade" mnemonicParsing="false" onAction="#abrirEditarGrade" text="Editar" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <rowConstraints>
