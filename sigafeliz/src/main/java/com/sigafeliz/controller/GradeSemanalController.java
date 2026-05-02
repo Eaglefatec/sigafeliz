@@ -32,7 +32,7 @@ public class GradeSemanalController {
     }
 
     private void configurarSpinner(Spinner<Integer> spinner) {
-        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10, 0));
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 5, 0));
         spinner.setEditable(true);
     }
 
