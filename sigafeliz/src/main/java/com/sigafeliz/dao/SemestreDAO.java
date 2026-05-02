@@ -28,6 +28,17 @@ public class SemestreDAO {
         }
     }
 
+    // --- NOVO MÉTODO DE EXCLUSÃO ---
+    public void excluir(String nome) throws SQLException {
+        String sql = "DELETE FROM semestre WHERE nome = ?";
+
+        try (Connection con = ConexaoDB.getConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nome);
+            ps.executeUpdate();
+        }
+    }
+
     public List<Semestre> listarTodos() throws SQLException {
         List<Semestre> lista = new ArrayList<>();
         String sql = "SELECT nome, data_inicio, data_fim, data_kickoff FROM semestre";

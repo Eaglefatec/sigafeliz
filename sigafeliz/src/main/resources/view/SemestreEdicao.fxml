@@ -69,8 +69,15 @@
             <HBox style="-fx-border-color: black transparent transparent transparent; -fx-border-width: 1 0 0 0; -fx-border-style: dashed;"/>
             <Label wrapText="true" text="INSTRUÇÕES:&#10;1. Use as setas para navegar entre os meses.&#10;2. Clique em dias úteis para definir feriados.&#10;3. Clique em sábados para torná-los letivos." style="-fx-font-family: 'Monospaced'; -fx-font-size: 11px;"/>
 
-            <VBox VBox.vgrow="ALWAYS" />
-            <Button onAction="#handleSalvarVoltar" maxWidth="Infinity" style="-fx-background-color: #eee; -fx-border-color: black; -fx-border-width: 3; -fx-font-family: 'Monospaced'; -fx-font-weight: bold; -fx-cursor: hand;" text="CONCLUIR CONFIGURAÇÃO" />
+            <HBox spacing="10" style="-fx-border-color: black transparent transparent transparent; -fx-border-width: 2 0 0 0; -fx-border-style: dashed; -fx-padding: 15 0 0 0;">
+                <Button onAction="#handleSalvarVoltar" maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                        style="-fx-background-color: #eee; -fx-border-color: black; -fx-border-width: 3; -fx-font-family: 'Monospaced'; -fx-font-weight: bold; -fx-cursor: hand;"
+                        text="CONCLUIR CONFIGURAÇÃO" />
+
+                <Button onAction="#handleCancelar" maxWidth="150.0"
+                        style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-family: 'Monospaced'; -fx-font-weight: bold; -fx-cursor: hand;"
+                        text="CANCELAR" />
+            </HBox>
         </VBox>
     </HBox>
 </VBox>

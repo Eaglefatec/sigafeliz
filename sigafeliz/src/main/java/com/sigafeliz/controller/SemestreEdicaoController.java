@@ -1,13 +1,12 @@
 package com.sigafeliz.controller;
 
 import com.sigafeliz.Main;
+import com.sigafeliz.model.DiaRestrito;
 import com.sigafeliz.model.Semestre;
-import com.sigafeliz.service.SemestreService; // Import do novo Service
+import com.sigafeliz.service.SemestreService;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.sql.SQLException;
@@ -29,18 +28,14 @@ public class SemestreEdicaoController {
 
     @FXML
     public void initialize() {
-        // Busca do novo Service
         semestreAtual = SemestreService.getSemestreSelecionado();
-
         if (semestreAtual != null) {
             try {
-                // Carrega os dados reais do banco para o calendário atual
                 SemestreService.carregarDetalhes(semestreAtual);
             } catch (SQLException e) {
-                mostrarAlertaErro("Erro de Conexão", "Não foi possível carregar os feriados: " + e.getMessage());
+                mostrarAlertaErro("Erro de Conexão", "Erro ao carregar detalhes: " + e.getMessage());
             }
-
-            lblSemestreSelecionado.setText("Configurando: " + semestreAtual.getNome());
+            lblSemestreSelecionado.setText("Semestre: " + semestreAtual.getNome());
             mesExibido = YearMonth.from(semestreAtual.getDataInicio());
             renderizarCalendario();
         }
@@ -98,74 +93,88 @@ public class SemestreEdicaoController {
     private void atualizarEstiloDinamico(Label lbl, LocalDate data) {
         String style = "-fx-border-color: black; -fx-font-family: 'Monospaced'; -fx-cursor: hand; ";
 
-        boolean feriado = semestreAtual.getDiasRestritos().stream().anyMatch(d -> d.getData().equals(data));
+        // Busca o feriado se existir
+        Optional<DiaRestrito> feriadoOpt = semestreAtual.getDiasRestritos().stream()
+                .filter(d -> d.getData().equals(data)).findFirst();
+
         boolean letivo = semestreAtual.getSabadosLetivos().stream().anyMatch(s -> s.getData().equals(data));
 
-        if (feriado) {
+        if (feriadoOpt.isPresent()) {
             style += "-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold;";
+            // ADICIONA TOOLTIP COM O NOME DO FERIADO
+            lbl.setTooltip(new Tooltip(feriadoOpt.get().getDescricao()));
         } else if (letivo) {
             style += "-fx-background-color: #cfe2f3; -fx-text-fill: #084298; -fx-font-weight: bold;";
+            lbl.setTooltip(new Tooltip("Sábado Letivo"));
         } else {
             style += "-fx-background-color: white;";
+            lbl.setTooltip(null); // Remove tooltip se não for mais restrição
         }
         lbl.setStyle(style);
     }
 
     private void handleInteracaoDia(Label lbl, LocalDate data, int coluna) {
-        if (coluna == 0) return; // Não há iteração no domingo
+        if (coluna == 0) return;
 
         try {
             if (coluna == 6) {
-                // Persiste e altera a cor do Sábado
                 SemestreService.alternarSabadoLetivo(semestreAtual, data);
             } else {
-                // Lógica de Feriado/Dias Restritos
-                boolean isFeriado = semestreAtual.getDiasRestritos().stream().anyMatch(d -> d.getData().equals(data));
+                // BUSCA O FERIADO ATUAL PARA PREENCHER O DIALOG
+                Optional<DiaRestrito> feriadoExistente = semestreAtual.getDiasRestritos().stream()
+                        .filter(d -> d.getData().equals(data)).findFirst();
 
-                if (isFeriado) {
-                    // Remove do banco e da memória
-                    SemestreService.removerDiaRestrito(semestreAtual, data);
-                } else {
-                    TextInputDialog dialog = new TextInputDialog();
-                    dialog.setTitle("Restrição de Data");
-                    dialog.setHeaderText("Definir feriado para " + data);
-                    dialog.setContentText("Descrição (Ex: Sexta Santa):");
+                String descricaoInicial = feriadoExistente.map(DiaRestrito::getDescricao).orElse("");
 
-                    Optional<String> result = dialog.showAndWait();
-                    if (result.isPresent() && !result.get().trim().isEmpty()) {
-                        // Salva no banco e na memória
-                        SemestreService.adicionarDiaRestrito(semestreAtual, data, result.get().trim());
+                TextInputDialog dialog = new TextInputDialog(descricaoInicial);
+                dialog.setTitle("Configurar Feriado");
+                dialog.setHeaderText("Dia " + data);
+                dialog.setContentText("Nome do Feriado (deixe vazio para remover):");
+
+                Optional<String> result = dialog.showAndWait();
+
+                // SÓ FAZ ALGO SE O USUÁRIO CLICAR EM "OK"
+                if (result.isPresent()) {
+                    String novaDesc = result.get().trim();
+
+                    if (feriadoExistente.isPresent()) {
+                        // Se já existia, removemos o antigo primeiro
+                        SemestreService.removerDiaRestrito(semestreAtual, data);
+                    }
+
+                    if (!novaDesc.isEmpty()) {
+                        // Se digitou algo, adicionamos (ou re-adicionamos com nome novo)
+                        SemestreService.adicionarDiaRestrito(semestreAtual, data, novaDesc);
                     }
                 }
             }
-            // Atualiza visualmente se a operação no banco deu certo
             atualizarEstiloDinamico(lbl, data);
 
         } catch (SQLException e) {
-            mostrarAlertaErro("Erro de Banco de Dados", "Ocorreu um erro ao salvar a alteração:\n" + e.getMessage());
+            mostrarAlertaErro("Erro", "Falha na operação: " + e.getMessage());
         }
     }
 
-    @FXML
-    private void mesAnterior() {
-        YearMonth limiteMinimo = YearMonth.from(semestreAtual.getDataInicio());
-        if (mesExibido.isAfter(limiteMinimo)) {
+    @FXML private void mesAnterior() {
+        if (mesExibido.isAfter(YearMonth.from(semestreAtual.getDataInicio()))) {
             mesExibido = mesExibido.minusMonths(1);
             renderizarCalendario();
         }
     }
 
-    @FXML
-    private void proximoMes() {
-        YearMonth limiteMaximo = YearMonth.from(semestreAtual.getDataFim());
-        if (mesExibido.isBefore(limiteMaximo)) {
+    @FXML private void proximoMes() {
+        if (mesExibido.isBefore(YearMonth.from(semestreAtual.getDataFim()))) {
             mesExibido = mesExibido.plusMonths(1);
             renderizarCalendario();
         }
     }
 
+    @FXML private void handleSalvarVoltar() { Main.loadView("SemestreLista.fxml"); }
+
     @FXML
-    private void handleSalvarVoltar() {
+    private void handleCancelar() {
+        // Volta para a lista sem salvar (embora as alterações pontuais já tenham ido ao banco)
+        // Em um sistema real, poderíamos usar transações para permitir um rollback aqui.
         Main.loadView("SemestreLista.fxml");
     }
 

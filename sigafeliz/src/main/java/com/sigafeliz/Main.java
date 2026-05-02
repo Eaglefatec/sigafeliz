@@ -36,7 +36,7 @@ public class Main extends Application {
             // Ele sempre olhará pro caminho pasado como argumento quando for instanciado.
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/" + fxmlFileName));
 
-            // 2. Chama o método que efetivamente carega o arquvo FXML em um nó do tipo Parent
+            // 2. Chama o método que efetivamente carrega o arquivo FXML em um nó do tipo Parent
             //  Atribui o resultado do método à variável root (raíz).
             Parent root = loader.load();
 

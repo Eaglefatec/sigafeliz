@@ -73,7 +73,7 @@
             <TableColumn fx:id="colInicio" text="Início" />
             <TableColumn fx:id="colFim" text="Fim" />
             <TableColumn fx:id="colKickoff" text="Kickoff" />
-            <TableColumn fx:id="colAcoes" maxWidth="120.0" minWidth="100.0" style="-fx-alignment: CENTER;" text="Ações" />
+            <TableColumn fx:id="colAcoes" maxWidth="180.0" minWidth="180.0" style="-fx-alignment: CENTER;" text="Ações" />
         </columns>
     </TableView>
 

@@ -31,13 +31,29 @@ public class SemestreService {
         }
     }
 
+    // Dentro do método salvar(Semestre s) no SemestreService.java:
     public static void salvar(Semestre s) throws SQLException {
         if (semestreDAO.buscarPorNome(s.getNome()) != null) {
             throw new SQLException("Já existe um semestre cadastrado com este nome.");
         }
-        if (s.getDataInicio().isAfter(s.getDataFim())) {
-            throw new SQLException("A data de início não pode ser depois da data de fim.");
+
+        // Validação de intervalo de dias do semestre
+        long dias = java.time.temporal.ChronoUnit.DAYS.between(s.getDataInicio(), s.getDataFim());
+        if (dias < 110 || dias > 200) {
+            throw new SQLException("O semestre deve ter entre 110 e 200 dias de duração.");
         }
+
+        // Validação da Segunda-Feira do Kickoff
+        if (s.getDataKickoff().getDayOfWeek() != java.time.DayOfWeek.MONDAY) {
+            throw new SQLException("A data de Kickoff deve ser obrigatoriamente uma segunda-feira.");
+        }
+
+        // Validação do ciclo mínimo de Sprints
+        long diasKickoffFim = java.time.temporal.ChronoUnit.DAYS.between(s.getDataKickoff(), s.getDataFim());
+        if (diasKickoffFim < 98) {
+            throw new SQLException("A data de Kickoff deve permitir no mínimo 98 dias até o fim do semestre.");
+        }
+
         semestreDAO.salvar(s);
     }
 
@@ -82,5 +98,11 @@ public class SemestreService {
 
     public static Semestre getSemestreSelecionado() {
         return semestreSelecionado;
+    }
+
+    public static void excluir(Semestre s) throws SQLException {
+        if (s != null && s.getNome() != null) {
+            semestreDAO.excluir(s.getNome());
+        }
     }
 }
