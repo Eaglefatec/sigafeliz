@@ -1,90 +1,160 @@
 package com.sigafeliz.controller;
 
-
 import com.sigafeliz.Main;
+import com.sigafeliz.model.Disciplina;
+import com.sigafeliz.model.Professor;
+import com.sigafeliz.service.DisciplinaService;
+import com.sigafeliz.service.ProfessorService;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
 
-import static com.sigafeliz.Main.loadView;
+import java.sql.SQLException;
 
-/**
-     * Controller para a gestão de Disciplinas no projeto sigafeliz.
-     * Focado no alinhamento entre a visualização e a área de CRUD.
-     */
-public class CoordenadorListaDisciplinasControllerEX implements Initializable {
+public class CoordenadorListaDisciplinasControllerEX {
 
-        @FXML
-        private TextField txtDisciplina;
+    @FXML private TableView<Disciplina> tabelaDisciplinas;
+    @FXML private TableColumn<Disciplina, String> colNome;
+    @FXML private TableColumn<Disciplina, String> colProfessor;
+    @FXML private TableColumn<Disciplina, Integer> colCarga;
+    @FXML private TableColumn<Disciplina, Void> colAcoesGrade;
+    @FXML private TableColumn<Disciplina, Void> colAcoesSelec;
 
-        @FXML
-        private ComboBox<String> cbProfessor;
+    @FXML private TextField txtDisciplina;
+    @FXML private ComboBox<Professor> cbProfessor;
+    @FXML private ComboBox<Integer> comboCarga;
 
-        @FXML
-        private ComboBox<Integer> comboCarga;
+    private ObservableList<Disciplina> listaDisciplinas;
+    private final ToggleGroup disciplinaGroup = new ToggleGroup();
+    private Disciplina disciplinaSelecionadaTable;
 
     @FXML
-    void abrirEditarGrade(ActionEvent event) {
-        Main.loadView("GradeSemanal.fxml");
+    public void initialize() {
+        comboCarga.getItems().addAll(40, 80);
+
+        // Carrega os professores do banco de dados
+        cbProfessor.setItems(ProfessorService.getAllProfessores());
+        cbProfessor.setConverter(new StringConverter<Professor>() {
+            @Override public String toString(Professor p) { return p == null ? "" : p.getNome(); }
+            @Override public Professor fromString(String string) { return null; }
+        });
+
+        // Configuração das colunas de texto
+        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colCarga.setCellValueFactory(new PropertyValueFactory<>("cargaHorariaTotal"));
+        colProfessor.setCellValueFactory(cellData -> new SimpleStringProperty(
+                cellData.getValue().getProfessor() != null ? cellData.getValue().getProfessor().getNome() : "Sem Professor"
+        ));
+
+        configurarColunasAcoes();
+
+        // Carrega a lista real de disciplinas do banco
+        listaDisciplinas = DisciplinaService.getAllDisciplinas();
+        tabelaDisciplinas.setItems(listaDisciplinas);
     }
 
-        @FXML
-        private Button btnSalvar;
-
-        @FXML
-        private Button btnExcluir;
-
-        @Override
-        public void initialize(URL url, ResourceBundle rb) {
-            // Inicializa as opções de carga horária comuns no curso da FATEC
-            comboCarga.getItems().addAll(40, 80);
-
-            // Mock de professores para teste de interface
-            cbProfessor.getItems().addAll("Prof. Mineda", "Prof. Carlos Silva", "Prof. João Pereira");
-        }
-
-        @FXML
-        private void salvarDisciplina(ActionEvent event) {
-            String nome = txtDisciplina.getText();
-            String professor = cbProfessor.getValue();
-            Integer carga = comboCarga.getValue();
-
-            if (nome != null && !nome.isEmpty() && professor != null) {
-                System.out.println("Salvando Disciplina: " + nome + " | Prof: " + professor + " | CH: " + carga);
-                // Aqui entra a sua lógica de persistência com MySQL
-                limparCampos();
-            } else {
-                System.out.println("Por favor, preencha todos os campos.");
+    private void configurarColunasAcoes() {
+        // Coluna de Botão para Acessar Grade
+        colAcoesGrade.setCellFactory(param -> new TableCell<>() {
+            private final Button btn = new Button("Aulas");
+            {
+                btn.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-font-weight: bold; -fx-cursor: hand;");
+                btn.setOnAction(e -> {
+                    Disciplina d = getTableView().getItems().get(getIndex());
+                    DisciplinaService.setDisciplinaSelecionada(d);
+                    Main.loadView("GradeSemanal.fxml");
+                });
             }
+            @Override protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setGraphic(null);
+                else {
+                    setGraphic(btn);
+                    setAlignment(Pos.CENTER);
+                }
+            }
+        });
+
+        // Coluna de Seleção para Excluir
+        colAcoesSelec.setCellFactory(param -> new TableCell<>() {
+            private final RadioButton rb = new RadioButton();
+            {
+                rb.setToggleGroup(disciplinaGroup);
+                rb.setOnAction(e -> {
+                    disciplinaSelecionadaTable = getTableView().getItems().get(getIndex());
+                });
+            }
+            @Override protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setGraphic(null);
+                else {
+                    setGraphic(rb);
+                    setAlignment(Pos.CENTER);
+                    Disciplina d = getTableView().getItems().get(getIndex());
+                    rb.setSelected(d.equals(disciplinaSelecionadaTable));
+                }
+            }
+        });
+    }
+
+    @FXML
+    private void salvarDisciplina(ActionEvent event) {
+        String nome = txtDisciplina.getText();
+        Professor professor = cbProfessor.getValue();
+        Integer carga = comboCarga.getValue();
+
+        if (nome == null || nome.trim().isEmpty() || professor == null || carga == null) {
+            mostrarAlerta("Preencha todos os campos para salvar a disciplina.");
+            return;
         }
 
-        @FXML
-        private void excluirDisciplina(ActionEvent event) {
-            // Lógica para excluir a disciplina selecionada ou limpar a edição atual
-            System.out.println("Excluindo/Limpando seleção atual.");
+        Disciplina novaDisciplina = new Disciplina(nome, professor, carga);
+
+        try {
+            DisciplinaService.salvar(novaDisciplina);
+            listaDisciplinas.add(novaDisciplina);
             limparCampos();
+        } catch (SQLException e) {
+            mostrarAlerta("Erro ao salvar disciplina: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void excluirDisciplina(ActionEvent event) {
+        if (disciplinaSelecionadaTable == null) {
+            mostrarAlerta("Selecione uma disciplina na tabela para excluir.");
+            return;
         }
 
-        private void limparCampos() {
-            txtDisciplina.clear();
-            cbProfessor.setValue(null);
-            comboCarga.setValue(null);
+        try {
+            DisciplinaService.excluir(disciplinaSelecionadaTable);
+            listaDisciplinas.remove(disciplinaSelecionadaTable);
+            disciplinaSelecionadaTable = null;
+            disciplinaGroup.selectToggle(null);
+        } catch (SQLException e) {
+            mostrarAlerta("Erro ao excluir disciplina: " + e.getMessage());
         }
+    }
 
-        @FXML
-        private void voltar(ActionEvent event)  {loadView("ProfessoresLista.fxml");
-        }
-         //   System.out.println("Retornando para a tela anterior.");
+    private void limparCampos() {
+        txtDisciplina.clear();
+        cbProfessor.setValue(null);
+        comboCarga.setValue(null);
+    }
 
+    private void mostrarAlerta(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
+    }
 
-        @FXML
-        private void avancar(ActionEvent event) {
-            Main.loadView("SemestreLista.fxml");
-        }
+    @FXML private void voltar(ActionEvent event) { Main.loadView("ProfessoresLista.fxml"); }
+
+    @FXML private void avancar(ActionEvent event) { Main.loadView("SemestreLista.fxml"); }
 }
-
