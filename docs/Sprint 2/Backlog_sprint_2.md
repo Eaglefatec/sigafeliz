@@ -29,6 +29,7 @@ A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organiz
 
 - [DoR](Dor_sprint_2.md)
 - [DoD](Dor_sprint_2.md)
+- [Vídeo de Demonstração do Protótipo](prototipo_sprint_2.mp4)
 
 | Rank | Prioridade | User Story| Story Points |  Sprint   | Requisito do Cliente | Status |
 |:----:|:----------:| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: |:---------:| :------------------: | :----: |
