@@ -1,7 +1,7 @@
 # API 2º Semestre Banco de Dados - Siga Feliz
 
 <p align="center">
-      <img src="docs\assets\imagens\eagle_logo_2.png" alt="logo Eagle" width="200">
+      <img src="/docs\assets\imagens\eagle_logo_2.png" alt="logo Eagle" width="200">
       <h2 align="center">Equipe Eagle</h2>
 </p>
 
@@ -27,8 +27,8 @@ O "Siga Feliz" será responsável por automatizar a distribuição dos temas, fa
 
 A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organização do trabalho e na entrega das primeiras funcionalidades.
 
-- [DoR](Dor_sprint_2.md)
-- [DoD](Dor_sprint_2.md)
+- [DoR](DoR_sprint_2.md)
+- [DoD](DoD_sprint_2.md)
 - [Vídeo de Demonstração do Protótipo](prototipo_sprint_2.mp4)
 
 | Rank | Prioridade | User Story| Story Points |  Sprint   | Requisito do Cliente | Status |
