@@ -5,6 +5,26 @@
       <h2 align="center">Equipe Eagle</h2>
 </p>
 
+<!-- TOC -->
+* [API 2º Semestre Banco de Dados - Siga Feliz](#api-2º-semestre-banco-de-dados---siga-feliz)
+  * [🎯 Desafio](#-desafio)
+  * [🏅 Solução](#-solução)
+  * [📋 Backlog do Produto](#-backlog-do-produto)
+  * [📅 Planejamento de Entregas](#-planejamento-de-entregas)
+  * [🗓️ Cronograma de Sprints](#-cronograma-de-sprints)
+  * [⚙️ Tecnologias Utilizadas](#-tecnologias-utilizadas)
+    * [Estrutura do Projeto](#estrutura-do-projeto)
+  * [🚀 Como Testar o Protótipo](#-como-testar-o-protótipo)
+    * [Pré-requisitos](#pré-requisitos)
+    * [Passo a Passo](#passo-a-passo)
+    * [Solução de Problemas](#solução-de-problemas)
+  * [Documentação](#documentação)
+    * [✅ DoR - Definition of Ready](#-dor---definition-of-ready)
+    * [🏁 DoD - Definition of Done](#-dod---definition-of-done)
+    * [🌿 Estratégia de Branch](#-estratégia-de-branch)
+  * [Equipe](#equipe)
+<!-- TOC -->
+
 ## 🎯 Desafio
 O desafio consiste em criar uma aplicação desktop capaz de auxiliar os docentes no planejamento semestral dos cronogramas acadêmicos. O planejamento semestral é realizado de maneira manual, onde os professores devem cadastrar os temas ministrados garantindo a conformidade institucional com a carga exata de 40 ou 80 aulas e respeitando restrições de calendário (feriados, eventos institucionais e ciclos de Sprints).
 
@@ -30,7 +50,7 @@ O "Siga Feliz" será responsável por automatizar a distribuição dos temas, fa
 O projeto será dividido em três fases principais de desenvolvimento:
 
 * **Sprint 1:** Foco em negociação com o cliente, discussões técnicas internas, formulação da solução e modelagem de dados. Esta etapa priorizou a estruturação do projeto e a execução de protótipos, sem o desenvolvimento de User Stories (US) operacionais.
-* **Sprint 2:** Desenvolvimento da infraestrutura de cadastro dos parâmetros de calendário e configurações da coordenação. Aqui também se planeja o início dos algorítmos de distribuição do planejamento ao longo do semestre.
+* **Sprint 2:** Desenvolvimento da infraestrutura de cadastro dos parâmetros de calendário e configurações da coordenação. Aqui também se planeja o início dos algoritmos de distribuição do planejamento ao longo do semestre.
 * **Sprint 3:** Foco total na implementação das funcionalidades voltadas aos perfis de professor usuário, refinamentos de interface e finalização do algoritmo de alocação.
 
 ## 🗓️ Cronograma de Sprints
@@ -120,12 +140,12 @@ mvn javafx:run
 
 ### Solução de Problemas
 
-| Problema                                     | Causa provável                        | Solução                                                                                                                                                                                         |
-|----------------------------------------------|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `java version` mostra versão diferente de 17 | Versão errada no PATH                 | Configure a variável `JAVA_HOME` apontando para o JDK 17                                                                                                                                        |
-| `mvn` não é reconhecido                      | Maven não está no PATH                | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH`                                                                                                                                     |
-| Janela não abre mas o build é `SUCCESS`      | Ambiente sem display gráfico          | Execute em uma máquina com interface gráfica                                                                                                                                                    |
-| Erro de conexão com o banco de dados         | Credenciais do banco não configuradas | Acesse a pasta **/sigafeliz/sigafeliz/src/main/resources/secret** e crie um arquivo com o nome **db.properties**. Preencha os dados de acesso igual o templat do arquivo **db.properties.mock** |
+| Problema                                     | Causa provável                        | Solução                                                                                                                                                                                           |
+|----------------------------------------------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `java version` mostra versão diferente de 17 | Versão errada no PATH                 | Configure a variável `JAVA_HOME` apontando para o JDK 17                                                                                                                                          |
+| `mvn` não é reconhecido                      | Maven não está no PATH                | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH`                                                                                                                                       |
+| Janela não abre mas o build é `SUCCESS`      | Ambiente sem display gráfico          | Execute em uma máquina com interface gráfica                                                                                                                                                      |
+| Erro de conexão com o banco de dados         | Credenciais do banco não configuradas | Acesse a pasta **/sigafeliz/sigafeliz/src/main/resources/secret** e crie um arquivo com o nome **db.properties**. Preencha os dados de acesso igual ao template do arquivo **db.properties.mock** |
 
 ## Documentação
 
@@ -149,5 +169,58 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 ### 🌿 [Estratégia de Branch](docs/equipe/Estratégia%20Branches.md/)
 
 Definição de como as branches serão trabalhadas durante o projeto.
+
+## Equipe
+
+<div align="center">
+  <table align="center">
+    <tr>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/alessandro.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Alessandro Cabral</b><br>
+        <i>Product Owner</i><br>
+        <a href="https://github.com/alessandrocabralfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/alessandro-augusto-ferreira-cabral-9b805553//"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/breno.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Breno Cefas</b><br>
+        <i>Scrum Master</i><br>
+        <a href="https://github.com/cefasbreno"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/breno-cefas-7aa909271/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/thayssa.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Thayssa Andrade</b><br>
+        <i>Desenvolvedora</i><br>
+        <a href="https://github.com/Thayssa-Andrade"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/thayssa-andrade/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/rubens.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Eruano Rubens</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/Eruano-Almeida"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/eruano-rubens-de-almeida-b0ba19111/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/fernando.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Fernando Montero</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/fernandocosta45"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/rafael.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Rafael Rodrigues</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/Rafael-SantosR"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/rafaels-rodrigues/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
