@@ -22,6 +22,7 @@
     * [✅ DoR - Definition of Ready](#-dor---definition-of-ready)
     * [🏁 DoD - Definition of Done](#-dod---definition-of-done)
     * [🌿 Estratégia de Branch](#-estratégia-de-branch)
+  * [Equipe](#equipe)
 <!-- TOC -->
 
 ## 🎯 Desafio
@@ -168,5 +169,58 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 ### 🌿 [Estratégia de Branch](docs/equipe/Estratégia%20Branches.md/)
 
 Definição de como as branches serão trabalhadas durante o projeto.
+
+## Equipe
+
+<div align="center">
+  <table align="center">
+    <tr>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/alessandro.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Alessandro Cabral</b><br>
+        <i>Product Owner</i><br>
+        <a href="https://github.com/alessandrocabralfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/alessandro-augusto-ferreira-cabral-9b805553//"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/breno.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Breno Cefas</b><br>
+        <i>Scrum Master</i><br>
+        <a href="https://github.com/cefasbreno"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/breno-cefas-7aa909271/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/thayssa.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Thayssa Andrade</b><br>
+        <i>Desenvolvedora</i><br>
+        <a href="https://github.com/Thayssa-Andrade"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/thayssa-andrade/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/rubens.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Eruano Rubens</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/Eruano-Almeida"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/eruano-rubens-de-almeida-b0ba19111/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/fernando.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Fernando Montero</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/fernandocosta45"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+      <td align="center" width="250px">
+        <img src="docs/assets/imagens/integrantes/rafael.png" width="120" height="120" style="border-radius: 10px;"><br>
+        <b>Rafael Rodrigues</b><br>
+        <i>Desenvolvedor</i><br>
+        <a href="https://github.com/Rafael-SantosR"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
+        <a href="https://www.linkedin.com/in/rafaels-rodrigues/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
+      </td>
+    </tr>
+  </table>
+</div>
 
 
