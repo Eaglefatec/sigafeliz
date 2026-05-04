@@ -5,6 +5,25 @@
       <h2 align="center">Equipe Eagle</h2>
 </p>
 
+<!-- TOC -->
+* [API 2º Semestre Banco de Dados - Siga Feliz](#api-2º-semestre-banco-de-dados---siga-feliz)
+  * [🎯 Desafio](#-desafio)
+  * [🏅 Solução](#-solução)
+  * [📋 Backlog do Produto](#-backlog-do-produto)
+  * [📅 Planejamento de Entregas](#-planejamento-de-entregas)
+  * [🗓️ Cronograma de Sprints](#-cronograma-de-sprints)
+  * [⚙️ Tecnologias Utilizadas](#-tecnologias-utilizadas)
+    * [Estrutura do Projeto](#estrutura-do-projeto)
+  * [🚀 Como Testar o Protótipo](#-como-testar-o-protótipo)
+    * [Pré-requisitos](#pré-requisitos)
+    * [Passo a Passo](#passo-a-passo)
+    * [Solução de Problemas](#solução-de-problemas)
+  * [Documentação](#documentação)
+    * [✅ DoR - Definition of Ready](#-dor---definition-of-ready)
+    * [🏁 DoD - Definition of Done](#-dod---definition-of-done)
+    * [🌿 Estratégia de Branch](#-estratégia-de-branch)
+<!-- TOC -->
+
 ## 🎯 Desafio
 O desafio consiste em criar uma aplicação desktop capaz de auxiliar os docentes no planejamento semestral dos cronogramas acadêmicos. O planejamento semestral é realizado de maneira manual, onde os professores devem cadastrar os temas ministrados garantindo a conformidade institucional com a carga exata de 40 ou 80 aulas e respeitando restrições de calendário (feriados, eventos institucionais e ciclos de Sprints).
 
