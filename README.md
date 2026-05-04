@@ -38,7 +38,7 @@ O projeto será dividido em três fases principais de desenvolvimento:
 | Sprint | Periodo | Documentação | Vídeo |
 | :---: | :---: | :---: | :---: |
 | Sprint 1 | 16/03 - 05/04 | [Sprint 1 Docs](/docs/Sprint%201/) | [Demonstração Protótipo](/docs/Sprint%201/prototipo.mp4) |
-| Sprint 2 | 13/04 - 03/05 | Sprint 2 Docs | |
+| Sprint 2 | 13/04 - 03/05 | [Sprint 2 Docs](/docs/Sprint%202/) | [Demonstração Protótipo](https://youtu.be/x2odyvxCNWA)|
 | Sprint 3 | 11/05 - 31/05 | Sprint 3 Docs | |
 
 ## ⚙️ Tecnologias Utilizadas
@@ -60,11 +60,16 @@ sigafeliz/                  ← raiz do repositório
             ├── java/com/sigafeliz/
             │   ├── Main.java           ← ponto de entrada da aplicação
             │   ├── controller/         ← controladores JavaFX (FXML)
+            │   ├── dao/                ← conexao entre model e infra (CRUD BANCO)
+            │   ├── infra/              ← conexao com o banco de dados (FXML)
             │   ├── model/              ← entidades e modelos de dados
             │   └── service/            ← regras de negócio
             └── resources/
                 ├── view/               ← arquivos .fxml (telas)
+                ├── secret/             ← db.properties (conexao com POSTGRES)
+                ├── db/                 ← arquivos .sql (schemas para criar as tabelas SQL)
                 └── css/                ← estilos da aplicação
+                
 ```
 
 ## 🚀 Como Testar o Protótipo
@@ -115,11 +120,12 @@ mvn javafx:run
 
 ### Solução de Problemas
 
-| Problema | Causa provável | Solução |
-|---|---|---|
-| `java version` mostra versão diferente de 17 | Versão errada no PATH | Configure a variável `JAVA_HOME` apontando para o JDK 17 |
-| `mvn` não é reconhecido | Maven não está no PATH | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH` |
-| Janela não abre mas o build é `SUCCESS` | Ambiente sem display gráfico | Execute em uma máquina com interface gráfica |
+| Problema                                     | Causa provável                        | Solução                                                                                                                                                                                         |
+|----------------------------------------------|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `java version` mostra versão diferente de 17 | Versão errada no PATH                 | Configure a variável `JAVA_HOME` apontando para o JDK 17                                                                                                                                        |
+| `mvn` não é reconhecido                      | Maven não está no PATH                | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH`                                                                                                                                     |
+| Janela não abre mas o build é `SUCCESS`      | Ambiente sem display gráfico          | Execute em uma máquina com interface gráfica                                                                                                                                                    |
+| Erro de conexão com o banco de dados         | Credenciais do banco não configuradas | Acesse a pasta **/sigafeliz/sigafeliz/src/main/resources/secret** e crie um arquivo com o nome **db.properties**. Preencha os dados de acesso igual o templat do arquivo **db.properties.mock** |
 
 ## Documentação
 
@@ -144,55 +150,4 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 
 Definição de como as branches serão trabalhadas durante o projeto.
 
-## Equipe
 
-<div align="center">
-  <table align="center">
-    <tr>
-      <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/guilherme.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Guilherme Ioshua Sene</b><br>
-        <i>Product Owner</i><br>
-        <a href="https://github.com/guiioshua"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="https://www.linkedin.com/in/guilherme-ioshua-sene/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
-      </td>
-      <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/breno.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Breno Cefas dos Santos</b><br>
-        <i>Scrum Master</i><br>
-        <a href="https://github.com/cefasbreno"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="https://www.linkedin.com/in/breno-cefas-7aa909271/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
-      </td>
-      <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/alessandro.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Alessandro Cabral</b><br>
-        <i>Desenvolvedor</i><br>
-        <a href="https://github.com/alessandrocabralfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="https://www.linkedin.com/in/alessandro-augusto-ferreira-cabral-9b805553//"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/rubens.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Eruano Rubens</b><br>
-        <i>Desenvolvedor</i><br>
-        <a href="https://github.com/Eruano-Almeida"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="https://www.linkedin.com/in/eruano-rubens-de-almeida-b0ba19111/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
-      </td>
-      <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/fernando.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Fernando Montero</b><br>
-        <i>Desenvolvedor</i><br>
-        <a href="https://github.com/fernandocosta45"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="pendente"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
-      </td>
-      <td align="center" width="250px">
-        <img src="docs/assets/imagens/integrantes/renan.png" width="120" height="120" style="border-radius: 10px;"><br>
-        <b>Renan Diniz</b><br>
-        <i>Desenvolvedor</i><br>
-        <a href="https://github.com/renandiniz8"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" width="70"></a>
-        <a href="https://www.linkedin.com/in/renan-diniz-/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" width="70"></a>
-      </td>
-    </tr>
-  </table>
-</div>

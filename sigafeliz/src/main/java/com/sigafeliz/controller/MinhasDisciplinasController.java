@@ -6,6 +6,7 @@ import com.sigafeliz.model.Disciplina;
 import com.sigafeliz.model.Professor;
 import com.sigafeliz.model.Semestre;
 import com.sigafeliz.service.MockDataService;
+import com.sigafeliz.service.ProfessorService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -28,7 +29,7 @@ public class MinhasDisciplinasController {
 
     @FXML
     public void initialize() {
-        Professor logado = MockDataService.getProfessorLogado();
+        Professor logado = ProfessorService.getProfessorLogado();
         if (logado == null) return;
 
         lblNomeProfessor.setText(logado.getNome());

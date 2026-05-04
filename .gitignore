@@ -1,3 +1,6 @@
+### Secret ###
+sigafeliz/src/main/resources/secret/*.properties
+
 ### Java/Maven ###
 target/
 build/
