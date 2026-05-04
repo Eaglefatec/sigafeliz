@@ -27,7 +27,8 @@ O "Siga Feliz" será responsável por automatizar a distribuição dos temas, fa
 
 A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organização do trabalho e na entrega das primeiras funcionalidades.
 
-
+- [DoR](Dor_sprint_2.md)
+- [DoD](Dor_sprint_2.md)
 
 | Rank | Prioridade | User Story| Story Points |  Sprint   | Requisito do Cliente | Status |
 |:----:|:----------:| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: |:---------:| :------------------: | :----: |
@@ -37,26 +38,6 @@ A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organiz
 |  8   |   Baixa    | Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento.|      4      |    Sprint 2	     |       US05      |    ⏳   |
 |  9   |   Baixa    | Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. |      4      |    Sprint 2	     |       US04      |    ⏳   |
 
-## 🏅 DoR - Definition of Ready <a id="dor"></a>
-
-|             Critério					| Descrição                                                                              						|
-| :------------------------------:		| -------------------------------------------------------------------------------------------------				|
-|  Título Claro   						| É possível entender do que se trata? 																			|
-| Regra de Negócios Claras				| Estão definidos os INPUT  e OUTPUTs da User Story?															|
-| Compreensão validada c/ time			| Foi realizada reunião com o time para discutir se havia alguma dúvida? 										|
-| Sem dependência bloqueadora			| Há algum impedimento para desenvolver? Ex.: desconhecimento da função matemática pelo dev?					|
-| Estimado pela equipe					| Apesar de não ser avaliado para nota, decidimos que gostaríamos de já começar estimando o esforço do processo	|
-
-
-## 🏅 DoD - Definition of Done <a id="dod"></a>
-
-|                 Critério                 | Descrição                                                                           	|
-| :--------------------------------------: | ------------------------------------------------------------------------------------	|
-|     Código funcionando 				   | Todos os cenários de teste da história foram executados e aprovados.			     	|
-|     README atualizado				       | -																						|
-|     Código revisado          			   | O código foi revisado por pelo menos um colega de equipe.                          	|
-
----
 
 ## Equipe
 
