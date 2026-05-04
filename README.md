@@ -50,7 +50,7 @@ O "Siga Feliz" será responsável por automatizar a distribuição dos temas, fa
 O projeto será dividido em três fases principais de desenvolvimento:
 
 * **Sprint 1:** Foco em negociação com o cliente, discussões técnicas internas, formulação da solução e modelagem de dados. Esta etapa priorizou a estruturação do projeto e a execução de protótipos, sem o desenvolvimento de User Stories (US) operacionais.
-* **Sprint 2:** Desenvolvimento da infraestrutura de cadastro dos parâmetros de calendário e configurações da coordenação. Aqui também se planeja o início dos algorítmos de distribuição do planejamento ao longo do semestre.
+* **Sprint 2:** Desenvolvimento da infraestrutura de cadastro dos parâmetros de calendário e configurações da coordenação. Aqui também se planeja o início dos algoritmos de distribuição do planejamento ao longo do semestre.
 * **Sprint 3:** Foco total na implementação das funcionalidades voltadas aos perfis de professor usuário, refinamentos de interface e finalização do algoritmo de alocação.
 
 ## 🗓️ Cronograma de Sprints
@@ -140,12 +140,12 @@ mvn javafx:run
 
 ### Solução de Problemas
 
-| Problema                                     | Causa provável                        | Solução                                                                                                                                                                                         |
-|----------------------------------------------|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `java version` mostra versão diferente de 17 | Versão errada no PATH                 | Configure a variável `JAVA_HOME` apontando para o JDK 17                                                                                                                                        |
-| `mvn` não é reconhecido                      | Maven não está no PATH                | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH`                                                                                                                                     |
-| Janela não abre mas o build é `SUCCESS`      | Ambiente sem display gráfico          | Execute em uma máquina com interface gráfica                                                                                                                                                    |
-| Erro de conexão com o banco de dados         | Credenciais do banco não configuradas | Acesse a pasta **/sigafeliz/sigafeliz/src/main/resources/secret** e crie um arquivo com o nome **db.properties**. Preencha os dados de acesso igual o templat do arquivo **db.properties.mock** |
+| Problema                                     | Causa provável                        | Solução                                                                                                                                                                                           |
+|----------------------------------------------|---------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `java version` mostra versão diferente de 17 | Versão errada no PATH                 | Configure a variável `JAVA_HOME` apontando para o JDK 17                                                                                                                                          |
+| `mvn` não é reconhecido                      | Maven não está no PATH                | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH`                                                                                                                                       |
+| Janela não abre mas o build é `SUCCESS`      | Ambiente sem display gráfico          | Execute em uma máquina com interface gráfica                                                                                                                                                      |
+| Erro de conexão com o banco de dados         | Credenciais do banco não configuradas | Acesse a pasta **/sigafeliz/sigafeliz/src/main/resources/secret** e crie um arquivo com o nome **db.properties**. Preencha os dados de acesso igual ao template do arquivo **db.properties.mock** |
 
 ## Documentação
 
