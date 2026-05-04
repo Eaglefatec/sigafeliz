@@ -67,6 +67,7 @@ sigafeliz/                  ← raiz do repositório
             └── resources/
                 ├── view/               ← arquivos .fxml (telas)
                 ├── secret/             ← db.properties (conexao com POSTGRES)
+                ├── db/                 ← arquivos .sql (schemas para criar as tabelas SQL)
                 └── css/                ← estilos da aplicação
                 
 ```
