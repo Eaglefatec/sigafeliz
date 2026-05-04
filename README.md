@@ -119,11 +119,12 @@ mvn javafx:run
 
 ### Solução de Problemas
 
-| Problema | Causa provável | Solução |
-|---|---|---|
-| `java version` mostra versão diferente de 17 | Versão errada no PATH | Configure a variável `JAVA_HOME` apontando para o JDK 17 |
-| `mvn` não é reconhecido | Maven não está no PATH | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH` |
-| Janela não abre mas o build é `SUCCESS` | Ambiente sem display gráfico | Execute em uma máquina com interface gráfica |
+| Problema                                     | Causa provável                        | Solução                                                                                                                                                                                         |
+|----------------------------------------------|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `java version` mostra versão diferente de 17 | Versão errada no PATH                 | Configure a variável `JAVA_HOME` apontando para o JDK 17                                                                                                                                        |
+| `mvn` não é reconhecido                      | Maven não está no PATH                | Adicione `<pasta_maven>/bin` na variável de ambiente `PATH`                                                                                                                                     |
+| Janela não abre mas o build é `SUCCESS`      | Ambiente sem display gráfico          | Execute em uma máquina com interface gráfica                                                                                                                                                    |
+| Erro de conexão com o banco de dados         | Credenciais do banco não configuradas | Acesse a pasta **/sigafeliz/sigafeliz/src/main/resources/secret** e crie um arquivo com o nome **db.properties**. Preencha os dados de acesso igual o templat do arquivo **db.properties.mock** |
 
 ## Documentação
 
