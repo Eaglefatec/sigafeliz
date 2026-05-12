@@ -59,3 +59,4 @@ A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organiz
 - [x] Código devidamente versionado no Git.
 - [x] Código revisado pela equipe.
 - [x] Todos os casos de uso relacionados à história foram testados, conforme levantados pela equipe.
+

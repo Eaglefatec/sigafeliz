@@ -170,6 +170,73 @@ Para que uma User Story seja considerada finalizada, os seguintes critérios té
 
 Definição de como as branches serão trabalhadas durante o projeto.
 
+
+
+## Modelo Entidade Relacionamento <a id="modelo"></a>
+<details closed>
+<summary>
+ Modelo Entidade Relacionamento
+</summary> <br />
+
+<p align="center">
+
+```mermaid
+erDiagram
+    SEMESTRE ||--o{ DIA_RESTRITO : "possui (1,1) : (0,N)"
+    SEMESTRE ||--o{ SABADO_LETIVO : "tem (1,1) : (0,N)"
+    PROFESSOR ||--o{ DISCIPLINA : "ministra (0,N) : (1,1)"
+    DISCIPLINA ||--|{ TEMA : "abrange (1,1) : (0,N)"
+    DISCIPLINA ||--|{ AULA_POR_DIA : "ocorre (1,1) : (0,N)"
+
+    SEMESTRE {
+        string nome PK
+        date data_inicio
+        date data_fim
+        date data_kickoff
+    }
+
+    DIA_RESTRITO {
+        date data PK
+        string semestre_nome FK
+        string descricao
+    }
+
+    SABADO_LETIVO {
+        date data PK
+        string semestre_nome FK
+    }
+
+    PROFESSOR {
+        string email PK
+        string nome
+    }
+
+    DISCIPLINA {
+        string nome PK
+        string professor_email FK
+        int carga_horaria_total
+    }
+
+    TEMA {
+        string titulo PK
+        string disciplina_nome FK
+        int carga_minima
+        int carga_maxima
+        string prioridade
+        boolean e_avaliacao
+        int ordem
+    }
+
+    AULA_POR_DIA {
+        string disciplina_nome FK
+        int dia_semana PK
+        int quantidade_aulas
+    }
+```
+</p>
+
+</details>
+
 ## Equipe
 
 <div align="center">
