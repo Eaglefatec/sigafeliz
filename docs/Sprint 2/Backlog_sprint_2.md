@@ -31,15 +31,16 @@ A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organiz
 - [DoD](DoD_sprint_2.md)
 - [Vídeo de Demonstração do Protótipo](https://youtu.be/x2odyvxCNWA)
 
-**Meta da Sprint: ** US1, US2, US3
+**Meta da Sprint:** US01, US02, US03
+**Bônus da Sprint:** US04, US05
 
-| Rank | Prioridade | User Story| Story Points |  Sprint   | Requisito do Cliente | Status |
-|:----:|:----------:| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: |:---------:| :------------------: | :----: |
-|  1   |    Alta    | Como coordenador, quero fornecer para o professor os parâmetros temporais do semestre regular e o início do Projeto API, para que o planejamento considere simultaneamente os dias úteis e os ciclos contínuos de Sprints.	|      5      | Sprint 2	 |       US01      |    ✅   |
-|  2   |    Alta    | Como coordenador, quero criar a grade semanal de uma disciplina e vinculá-la ao perfil de um professor específico, para que o docente acesse e planeje apenas a capacidade real das matérias sob sua responsabilidade.	|      4      |    Sprint 2	     |       US03      |    ✅   |
-|  4   |   Média    | Como coordenador, quero registrar o perfil de cada professor no sistema, para que o professor selecione seu registro e visualize somente suas grades. |      4      |    Sprint 2	     |       US02      |    ✅   |
-|  8   |   Baixa    | Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento.|      4      |    Sprint 2	     |       US05      |    ⏳   |
-|  9   |   Baixa    | Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. |      4      |    Sprint 2	     |       US04      |    ⏳   |
+| User Story  | Prioridade | User Story|      Sprint     | Requisito do Cliente |          Status           |
+|:-----------:|:----------:| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: |:--------------:|:-------------------------:|
+|    US01     |    Alta    | Como coordenador, quero fornecer para o professor os parâmetros temporais do semestre regular e o início do Projeto API, para que o planejamento considere simultaneamente os dias úteis e os ciclos contínuos de Sprints.	|      5      |       2	       |             ✅             |
+|    US03     |    Alta    | Como coordenador, quero criar a grade semanal de uma disciplina e vinculá-la ao perfil de um professor específico, para que o docente acesse e planeje apenas a capacidade real das matérias sob sua responsabilidade.	|      4      |       2	       |             ✅             |
+|    US02     |   Média    | Como coordenador, quero registrar o perfil de cada professor no sistema, para que o professor selecione seu registro e visualize somente suas grades. |      4      |   2	    |             ✅             |
+|    US05     |   Baixa    | Como professor, quero me identificar no sistema e visualizar apenas as disciplinas atribuídas a mim, para garantir o isolamento dos dados e focar exclusivamente no meu planejamento.|      4      |   2	    | Transbordo para Sprint 3  |
+|    US04     |   Baixa    | Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. |      4      |   2	    |  Transbordo para Sprint 3 |
 
 
 ## Equipe
