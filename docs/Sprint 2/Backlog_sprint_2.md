@@ -31,6 +31,8 @@ A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organiz
 - [DoD](DoD_sprint_2.md)
 - [Vídeo de Demonstração do Protótipo](https://youtu.be/x2odyvxCNWA)
 
+**Meta da Sprint: ** US1, US2, US3
+
 | Rank | Prioridade | User Story| Story Points |  Sprint   | Requisito do Cliente | Status |
 |:----:|:----------:| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: |:---------:| :------------------: | :----: |
 |  1   |    Alta    | Como coordenador, quero fornecer para o professor os parâmetros temporais do semestre regular e o início do Projeto API, para que o planejamento considere simultaneamente os dias úteis e os ciclos contínuos de Sprints.	|      5      | Sprint 2	 |       US01      |    ✅   |
