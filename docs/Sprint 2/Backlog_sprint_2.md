@@ -32,6 +32,7 @@ A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organiz
 - [Vídeo de Demonstração do Protótipo](https://youtu.be/x2odyvxCNWA)
 
 **Meta da Sprint:** US01, US02, US03
+
 **Bônus da Sprint:** US04, US05
 
 |  ID  | Prioridade | User Story| Story Points | Sprint |          Status           |
@@ -43,4 +44,24 @@ A segunda SPRINT se concentrou em montar a infra-estrutura da solução, organiz
 | US04 |   Baixa    | Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre. |      4       |   2	   |  Transbordo para Sprint 3 |
 
 
+--------
+
+## 🏃‍ DoR - Definition of Ready <a id="dor"></a>
+
+| Categoria | Critério de Conclusão | Status |
+| :--- | :--- | :---: |
+| **Documentação** | A User Story possui um título claro, descrição bem definida (formato "Como... quero... para...") e objetivo compreendido. | ✅ |
+| **Design** | Há wireframes e/ou imagens de protótipos das interfaces relacionadas. | ✅ |
+| **Requisitos** | Os Critérios de Aceitação estão escritos e detalhados. | ✅ |
+| **Regras de Negócio** | As regras de negócio associadas estão claras e documentadas. | ✅ |
+| **Gestão** | Não há dependências bloqueadoras. | ✅ |
+| **Validação** | A compreensão foi validada com o time. | ✅ |
+
+## 🏆 DoD - Definition of Done <a id="dod"></a>
+
+| Categoria | Critério de Conclusão | Status |
+| :--- | :--- |:------:|
+| **Técnica** | Código devidamente versionado no Git. |   ✅    |
+| **Qualidade** | Código revisado pela equipe. |   ✅    |
+| **Funcionalidade** | Todos os casos de uso relacionados à história foram testados, conforme levantados pela equipe. |   ✅    |
 
