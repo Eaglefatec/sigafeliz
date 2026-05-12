@@ -180,7 +180,16 @@ Definição de como as branches serão trabalhadas durante o projeto.
 
 <p align="center">
 
+DER - Semestre
+
 ![DeR_Semestre.png](/docs/assets/imagens/diagramas/DeR_Semestre.png)
+</p>
+
+<p align="center">
+
+DER - Professor
+
+![DeR_Semestre.png](/docs/assets/imagens/diagramas/DeR_Professor.png)
 </p>
 
 </details>
