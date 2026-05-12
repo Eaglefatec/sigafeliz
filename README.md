@@ -59,7 +59,7 @@ O projeto será dividido em três fases principais de desenvolvimento:
 | :---: | :---: | :---: | :---: |
 | Sprint 1 | 16/03 - 05/04 | [Sprint 1 Docs](/docs/Sprint%201/) | [Demonstração Protótipo](/docs/Sprint%201/prototipo.mp4) |
 | Sprint 2 | 13/04 - 03/05 | [Sprint 2 Docs](/docs/Sprint%202/) | [Demonstração Protótipo](https://youtu.be/x2odyvxCNWA)|
-| Sprint 3 | 11/05 - 31/05 | Sprint 3 Docs | |
+| Sprint 3 | 11/05 - 31/05 | [Sprint 3 Docs](/docs/Sprint%203/) | [Demonstração Protótipo]() |
 
 ## ⚙️ Tecnologias Utilizadas
 
