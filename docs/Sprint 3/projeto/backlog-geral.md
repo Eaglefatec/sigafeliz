@@ -59,7 +59,8 @@ Como coordenador, quero criar a grade semanal de uma disciplina e vinculá-la ao
     * Definição da quantidade de aulas por dia selecionado.
     * Vinculação da disponibilidade ao total de aulas obrigatórias da disciplina (40 ou 80).
 
-**US04: Estabelecimento do Ciclo de Sprints - [CANCELADO]**
+**US04: Estabelecimento do Ciclo de Sprints - [CANCELADA]**
+
 MOTIVO do CANCELAMENTO: A User Story 01 já exige a definição de uma data de Kickoff que prevê o ciclo dos 28 dias.
 
 
@@ -80,18 +81,20 @@ Como professor, quero planejar a relação entre temas de aula e dias lecionados
     * Garantia de que o valor mínimo de todos os temas seja alocado primeiro.
     * Preenchimento do tempo restante baseado na prioridade até o limite máximo de cada tema.
 
-**US07: Compensação de Carga Horária aos Sábados - [CANCELADO]**
-MOTIVO do CANCELAMENTO: A User Story 09 já utiliza os sábados como uma restrição dos cálculos. Não é uma funcionalidade, mas a restrição de uma funcionalidade
+**US07: Compensação de Carga Horária aos Sábados - [CANCELADA]**
 
-**US08: Proteção Cíclica de Datas de Avaliação - [CANCELADO]**
-MOTIVO do CANCELAMENTO: A User Story 06 já estabelece que um conteúdo pode ser uma PROVA. Além disso, a US 09 já estabelece que a prova é uma restrição para a geração da planilha
+MOTIVO do CANCELAMENTO: A User Story 09 já utiliza os sábados como uma restrição dos cálculos. Não é uma funcionalidade, mas sim a restrição de uma funcionalidade.
+
+**US08: Proteção Cíclica de Datas de Avaliação - [CANCELADA]**
+
+MOTIVO do CANCELAMENTO: A User Story 06 já estabelece que um conteúdo pode ser uma PROVA. Além disso, a US09 já estabelece que a prova é uma restrição para a geração da planilha.
 
 **US09: Geração de PLANILHA para preenchimento do SIGA**
 ### HISTÓRIA PRINCIPAL DO PROFESSOR
 Como professor, quero visualizar a relação do planejamento final em um formato estruturado (.xlsx), para que as informações de data, tema e ordem sejam facilmente preenchidas no SIGA.
 * **Critérios de Aceitação:**
-    * Geração de arquivo contendo as colunas: número da aula, data, tema, marcador de prova, dia da semana e identificação da disciplina.
+    * Geração de arquivo contendo as colunas: número da aula, data, tema, marcador de prova, dia da semana e identificação da disciplina. (Depende da US06)
     * Numeração sequencial de aulas que avança apenas em dias letivos (ignorando feriados e dias sem aula).
-    * Considerar os feriados e/ou dias bloqueados do calendário (DEPENDE da USER STORY 1).
-    * Considerar sábados. Caso não haja dias suficientes no semestre no semestre, pode-se colocar compensações de aulas aos sábados. Dar preferência aos ÚLTIMOS SÁBADOS; e pode-se utilizar até 5 aulas no sábado. (depende da user story 1)
-    * Considerar a data de kickoff para criar ciclos de 28 dias por SPRINT. Na SPRINT, deve haver restrição de provas aos dias da 3ª e 4ª semanas. (depende da user story 1)
+    * Considerar os feriados e/ou dias bloqueados do calendário. (Depende da US01)
+    * Considerar sábados. Caso não haja dias suficientes no semestre no semestre, pode-se colocar compensações de aulas aos sábados. Dar preferência aos ÚLTIMOS SÁBADOS, e pode-se utilizar até 5 aulas no sábado. (Depende da US01)
+    * Considerar a data de kickoff para criar ciclos de 28 dias por SPRINT. Na SPRINT, deve haver restrição de provas aos dias da 3ª e 4ª semanas. (Depende da US01)

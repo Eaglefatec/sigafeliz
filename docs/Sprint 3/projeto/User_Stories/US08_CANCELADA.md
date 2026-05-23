@@ -1,4 +1,4 @@
-# 📝 User Story 08
+# 📝 User Story 08 - CANCELADA
 
 Como professor, quero identificar quais aulas são provas, para que o sistema impeça que elas sejam alocadas nas semanas de entrega de Projeto Integrador, garantindo conformidade com a política institucional de não sobreposição de avaliações.
 

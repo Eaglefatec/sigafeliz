@@ -1,4 +1,4 @@
-# 📝 User Story 04
+# 📝 User Story 04 - CANCELADA
 
 Como coordenador, quero que o sistema projete ciclos contínuos de 28 dias a partir da data do Kickoff, para que as restrições de planejamento e datas de Sprint Review sejam mapeadas automaticamente até o fim do semestre.
 

@@ -1,4 +1,4 @@
-# 📝 User Story 07
+# 📝 User Story 07 - CANCELADA
 
 Como professor, quero que o cronograma utilize sábados letivos com prioridade para o final do semestre quando os dias de semana forem insuficientes, garantindo o cumprimento exato da carga horária de 40 ou 80 aulas.
 
