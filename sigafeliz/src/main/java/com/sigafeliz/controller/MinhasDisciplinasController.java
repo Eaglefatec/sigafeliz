@@ -1,100 +1,153 @@
 package com.sigafeliz.controller;
 
 import com.sigafeliz.Main;
+import com.sigafeliz.dao.DisciplinaDAO;
 import com.sigafeliz.model.AulasPorDia;
 import com.sigafeliz.model.Disciplina;
 import com.sigafeliz.model.Professor;
-import com.sigafeliz.model.Semestre;
-import com.sigafeliz.service.MockDataService;
 import com.sigafeliz.service.ProfessorService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
-import java.time.DayOfWeek;
+import java.net.URL;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MinhasDisciplinasController {
 
     @FXML private Label lblNomeProfessor;
-    @FXML private ComboBox<Semestre> comboSemestre;
+    @FXML private ComboBox<String> comboSemestre;
     @FXML private TableView<Disciplina> tabelaDisciplinas;
     @FXML private TableColumn<Disciplina, String> colNome;
-    @FXML private TableColumn<Disciplina, Integer> colCarga;
     @FXML private TableColumn<Disciplina, String> colAulasSemana;
+    @FXML private TableColumn<Disciplina, Integer> colCarga;
+    @FXML private TableColumn<Disciplina, RadioButton> colSelec;
+
+    private DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+    private ObservableList<Disciplina> listaDisciplinas;
+    private ToggleGroup grupoSelecao = new ToggleGroup();
 
     @FXML
     public void initialize() {
-        Professor logado = ProfessorService.getProfessorLogado();
-        if (logado == null) return;
+        // Inicializa o ComboBox de Semestres
+        comboSemestre.setItems(FXCollections.observableArrayList("2026.1", "2025.2", "2025.1"));
+        comboSemestre.getSelectionModel().selectFirst();
 
-        lblNomeProfessor.setText(logado.getNome());
-
-        comboSemestre.setItems(FXCollections.observableArrayList(MockDataService.getAllSemestres()));
-        comboSemestre.setConverter(new StringConverter<Semestre>() {
-            @Override public String toString(Semestre s) { return s == null ? "" : s.getNome(); }
-            @Override public Semestre fromString(String string) { return null; }
-        });
-
+        // Configura as colunas básicas
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colCarga.setCellValueFactory(new PropertyValueFactory<>("cargaHorariaTotal"));
 
-        // Soma e Tradução
-        colAulasSemana.setCellValueFactory(data -> {
-            List<AulasPorDia> aulas = data.getValue().getAulasPorDia();
+        // Processa a lista de aulas dinamicamente sem exigir o método no Modelo
+        colAulasSemana.setCellValueFactory(cellData -> {
+            Disciplina disciplina = cellData.getValue();
+            List<AulasPorDia> aulas = disciplina.getAulasPorDia();
 
-            // Soma o total de aulas
-            int totalAulas = aulas.stream().mapToInt(AulasPorDia::getQuantidadeAulas).sum();
+            if (aulas == null || aulas.isEmpty()) {
+                return new SimpleStringProperty("Sem aulas registradas");
+            }
 
-            // Traduz os dias
-            String diasStr = aulas.stream()
-                    .map(a -> traduzirDiaDaSemana(a.getDiaSemana()))
-                    .collect(Collectors.joining(", "));
-
-            return new SimpleStringProperty(totalAulas + " (" + diasStr + ")");
+            try {
+                StringBuilder diasTexto = new StringBuilder();
+                for (int i = 0; i < aulas.size(); i++) {
+                    if (i > 0) diasTexto.append(", ");
+                }
+                return new SimpleStringProperty(aulas.size() + " dia(s) na semana");
+            } catch (Exception e) {
+                return new SimpleStringProperty(aulas.size() + " aulas");
+            }
         });
 
-        tabelaDisciplinas.setItems(FXCollections.observableArrayList(MockDataService.getDisciplinasPorProfessor(logado)));
+        // Configuração do RadioButton na coluna de seleção
+        colSelec.setCellFactory(new Callback<TableColumn<Disciplina, RadioButton>, TableCell<Disciplina, RadioButton>>() {
+            @Override
+            public TableCell<Disciplina, RadioButton> call(TableColumn<Disciplina, RadioButton> param) {
+                return new TableCell<Disciplina, RadioButton>() {
+                    private final RadioButton rb = new RadioButton();
+
+                    @Override
+                    protected void updateItem(RadioButton item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            rb.setToggleGroup(grupoSelecao);
+
+                            Disciplina disciplinaDaLinha = getTableView().getItems().get(getIndex());
+                            rb.setUserData(disciplinaDaLinha);
+                            rb.setFocusTraversable(false);
+
+                            // Garante que o clique na célula também selecione o RadioButton
+                            setOnMouseClicked(event -> rb.setSelected(true));
+
+                            setGraphic(rb);
+                            setStyle("-fx-alignment: CENTER;");
+                        }
+                    }
+                };
+            }
+        });
+
+        carregarDadosProfessor();
     }
 
-    private String traduzirDiaDaSemana(DayOfWeek day) {
-        switch (day) {
-            case MONDAY: return "Segunda";
-            case TUESDAY: return "Terça";
-            case WEDNESDAY: return "Quarta";
-            case THURSDAY: return "Quinta";
-            case FRIDAY: return "Sexta";
-            case SATURDAY: return "Sábado";
-            case SUNDAY: return "Domingo";
-            default: return "";
+    private void carregarDadosProfessor() {
+        Professor professorLogado = ProfessorService.getProfessorLogado();
+        if (professorLogado != null) {
+            lblNomeProfessor.setText(professorLogado.getNome());
+
+            try {
+                List<Disciplina> disciplines = disciplinaDAO.listarPorProfessor(professorLogado);
+                listaDisciplinas = FXCollections.observableArrayList(disciplines);
+                tabelaDisciplinas.setItems(listaDisciplinas);
+            } catch (java.sql.SQLException e) {
+                System.err.println("Erro ao buscar disciplinas no banco de dados: " + e.getMessage());
+                e.printStackTrace();
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro de Conexão");
+                alert.setHeaderText("Não foi possível carregar as disciplinas");
+                alert.setContentText("Ocorreu uma falha ao conectar com o banco de dados. Verifique sua conexão.");
+                alert.showAndWait();
+            }
+        } else {
+            lblNomeProfessor.setText("Professor não identificado");
         }
-    }
-
-    @FXML
-    private void handlePlanejar() {
-        Disciplina disc = tabelaDisciplinas.getSelectionModel().getSelectedItem();
-        Semestre sem = comboSemestre.getValue();
-
-        if (disc == null || sem == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText(null);
-            alert.setContentText("Selecione uma DISCIPLINA na tabela e um SEMESTRE letivo para prosseguir.");
-            alert.showAndWait();
-            return;
-        }
-
-        MockDataService.setDisciplinaSelecionada(disc);
-        MockDataService.setSemestreSelecionado(sem);
-        Main.loadView("PlanejamentoEmenta.fxml");
     }
 
     @FXML
     private void handleVoltar() {
         Main.loadView("SelecaoProfessor.fxml");
+    }
+
+    @FXML
+    private void handlePlanejar() {
+        Toggle selecionado = grupoSelecao.getSelectedToggle();
+
+        if (selecionado != null) {
+            Disciplina disciplinaSelecionada = (Disciplina) selecionado.getUserData();
+
+            // Se você precisar salvar a disciplina selecionada em um Service (igual fez com o Professor):
+            // DisciplinaService.setDisciplinaSelecionada(disciplinaSelecionada);
+
+            Main.loadView("PlanejamentoEmenta.fxml");
+        } else {
+            // Se você tiver um método utilitário de alerta no controller, use-o aqui. Ex:
+            // exibirAlerta("Por favor, selecione uma disciplina antes de avançar.");
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, selecione uma disciplina na tabela antes de avançar.");
+            alert.showAndWait();
+        }
     }
 }
