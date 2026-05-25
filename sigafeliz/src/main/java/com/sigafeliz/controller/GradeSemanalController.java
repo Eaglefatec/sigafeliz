@@ -1,6 +1,7 @@
 package com.sigafeliz.controller;
 
 import com.sigafeliz.Main;
+import com.sigafeliz.service.DisciplinaService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -19,7 +20,7 @@ public class GradeSemanalController {
     @FXML private Spinner<Integer> spnQui;
     @FXML private Spinner<Integer> spnSex;
 
-    private Disciplina disciplinaAtual = new Disciplina("Matematica", null, 0);
+    private Disciplina disciplinaAtual = DisciplinaService.getDisciplinaSelecionada();
 
     @FXML
     public void initialize() {
