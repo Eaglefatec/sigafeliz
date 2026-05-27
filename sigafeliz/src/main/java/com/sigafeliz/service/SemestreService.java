@@ -31,7 +31,6 @@ public class SemestreService {
         }
     }
 
-    // Dentro do método salvar(Semestre s) no SemestreService.java:
     public static void salvar(Semestre s) throws SQLException {
         if (semestreDAO.buscarPorNome(s.getNome()) != null) {
             throw new SQLException("Já existe um semestre cadastrado com este nome.");
@@ -57,9 +56,27 @@ public class SemestreService {
         semestreDAO.salvar(s);
     }
 
+    // --- NOVO: ATUALIZAR SEMESTRE ---
+    public static void atualizar(Semestre s) throws SQLException {
+        long dias = java.time.temporal.ChronoUnit.DAYS.between(s.getDataInicio(), s.getDataFim());
+        if (dias < 110 || dias > 200) {
+            throw new SQLException("O semestre deve ter entre 110 e 200 dias de duração.");
+        }
+
+        if (s.getDataKickoff().getDayOfWeek() != java.time.DayOfWeek.MONDAY) {
+            throw new SQLException("A data de Kickoff deve ser obrigatoriamente uma segunda-feira.");
+        }
+
+        long diasKickoffFim = java.time.temporal.ChronoUnit.DAYS.between(s.getDataKickoff(), s.getDataFim());
+        if (diasKickoffFim < 98) {
+            throw new SQLException("A data de Kickoff deve permitir no mínimo 98 dias até o fim do semestre.");
+        }
+
+        semestreDAO.atualizar(s);
+    }
+
     // --- MÉTODOS DOS DIAS DO SEMESTRE ---
 
-    // Busca no banco todos os feriados e sábados atrelados a um semestre selecionado
     public static void carregarDetalhes(Semestre semestre) throws SQLException {
         semestre.getDiasRestritos().clear();
         semestre.getSabadosLetivos().clear();
@@ -67,17 +84,21 @@ public class SemestreService {
         semestre.getSabadosLetivos().addAll(sabadoLetivoDAO.listarPorSemestre(semestre));
     }
 
-    // Insere ou deleta sábados letivos
     public static void alternarSabadoLetivo(Semestre semestre, LocalDate data) throws SQLException {
         boolean existe = semestre.getSabadosLetivos().stream().anyMatch(s -> s.getData().equals(data));
         if (existe) {
-            sabadoLetivoDAO.excluir(semestre.getNome(), data);
-            semestre.getSabadosLetivos().removeIf(s -> s.getData().equals(data));
+            removerSabadoLetivo(semestre, data);
         } else {
             SabadoLetivo sl = new SabadoLetivo(semestre, data);
             sabadoLetivoDAO.salvar(sl);
             semestre.addSabadoLetivo(sl);
         }
+    }
+
+    // --- NOVO: REMOVER SÁBADO LETIVO EXPLICITAMENTE ---
+    public static void removerSabadoLetivo(Semestre semestre, LocalDate data) throws SQLException {
+        sabadoLetivoDAO.excluir(semestre.getNome(), data);
+        semestre.getSabadosLetivos().removeIf(s -> s.getData().equals(data));
     }
 
     public static void adicionarDiaRestrito(Semestre semestre, LocalDate data, String descricao) throws SQLException {

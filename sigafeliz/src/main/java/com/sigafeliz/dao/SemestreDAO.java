@@ -28,7 +28,26 @@ public class SemestreDAO {
         }
     }
 
-    // --- NOVO MÉTODO DE EXCLUSÃO ---
+    // --- NOVO: MÉTODO DE ATUALIZAÇÃO ---
+    public void atualizar(Semestre semestre) throws SQLException {
+        String sql = """
+                UPDATE semestre
+                SET data_inicio = ?, data_fim = ?, data_kickoff = ?
+                WHERE nome = ?
+                """;
+
+        try (Connection con = ConexaoDB.getConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setDate(1, Date.valueOf(semestre.getDataInicio()));
+            ps.setDate(2, Date.valueOf(semestre.getDataFim()));
+            ps.setDate(3, Date.valueOf(semestre.getDataKickoff()));
+            ps.setString(4, semestre.getNome());
+
+            ps.executeUpdate();
+        }
+    }
+
     public void excluir(String nome) throws SQLException {
         String sql = "DELETE FROM semestre WHERE nome = ?";
 
