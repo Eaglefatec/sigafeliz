@@ -1,0 +1,18 @@
+# 📝 User Story 07 - CANCELADA
+
+Como professor, quero que o cronograma utilize sábados letivos com prioridade para o final do semestre quando os dias de semana forem insuficientes, garantindo o cumprimento exato da carga horária de 40 ou 80 aulas.
+
+## 📌 Síntese
+Gerencia o uso de sábados letivos para completar a carga horária obrigatória caso os dias úteis sejam insuficientes, priorizando datas no final do semestre.
+
+## 📌 Informações Apresentadas
+* Automação por algoritmo
+* Cumprimento de carga horária
+
+## 📌 Critérios de Aceitação
+* Identificação automática de déficit de aulas comparando os dias úteis gerados com a meta exigida da disciplina selecionada (40/80)
+* O sistema deve exibir um alerta visual informando a falta de dias regulares e a necessidade de uso de sábados
+* O algoritmo deve processar os sábados letivos cadastrados pela coordenação no intervalo do semestre
+* A ativação dos sábados necessários para suprir o déficit deve ocorrer em ordem cronológica inversa (priorizando os sábados mais próximos ao final do semestre letivo)
+* Após a ativação das datas compensatórias, a distribuição dos temas deve seguir a ordem cronológica normal do calendário estruturado
+* O fechamento do cronograma deve somar exatamente a carga letiva exigida

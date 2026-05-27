@@ -76,6 +76,17 @@ public class DisciplinaDAO {
         return lista;
     }
 
+    public boolean existeDisciplina(String nome) throws java.sql.SQLException {
+        String sql = "SELECT 1 FROM disciplina WHERE nome = ?";
+        try (Connection con = ConexaoDB.getConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nome);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // Retorna true se a disciplina já existir no banco
+            }
+        }
+    }
+
     public void salvar(Disciplina d) throws SQLException {
         String sql = """
                 INSERT INTO disciplina (nome, professor_email, carga_horaria_total)
