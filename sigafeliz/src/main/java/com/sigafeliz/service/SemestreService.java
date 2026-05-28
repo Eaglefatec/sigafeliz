@@ -1,6 +1,7 @@
 package com.sigafeliz.service;
 
 import com.sigafeliz.dao.DiaRestritoDAO;
+import com.sigafeliz.dao.FeriadoNacionalDAO; // Import adicionado
 import com.sigafeliz.dao.SabadoLetivoDAO;
 import com.sigafeliz.dao.SemestreDAO;
 import com.sigafeliz.model.DiaRestrito;
@@ -12,12 +13,14 @@ import javafx.collections.ObservableList;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List; // Import adicionado
 
 public class SemestreService {
 
     private static final SemestreDAO semestreDAO = new SemestreDAO();
     private static final DiaRestritoDAO diaRestritoDAO = new DiaRestritoDAO();
     private static final SabadoLetivoDAO sabadoLetivoDAO = new SabadoLetivoDAO();
+    private static final FeriadoNacionalDAO feriadoNacionalDAO = new FeriadoNacionalDAO(); // Instanciado o DAO de Feriados
 
     private static Semestre semestreSelecionado;
 
@@ -53,10 +56,20 @@ public class SemestreService {
             throw new SQLException("A data de Kickoff deve permitir no mínimo 98 dias até o fim do semestre.");
         }
 
+        // 1. Salva a entidade pai (Semestre)
         semestreDAO.salvar(s);
+
+        // --- 2. NOVO: BUSCA OS FERIADOS NACIONAIS DO INTERVALO E VINCULA COMO DIA RESTRITO ---
+        List<FeriadoNacionalDAO.FeriadoNacionalDTO> feriados = feriadoNacionalDAO.listarPorIntervalo(s.getDataInicio(), s.getDataFim());
+        for (FeriadoNacionalDAO.FeriadoNacionalDTO f : feriados) {
+            // Instancia e salva a restrição correspondente para este semestre
+            DiaRestrito dr = new DiaRestrito(s, f.data(), f.descricao());
+            diaRestritoDAO.salvar(dr);
+            s.addDiaRestrito(dr); // Sincroniza o objeto em memória
+        }
     }
 
-    // --- NOVO: ATUALIZAR SEMESTRE ---
+    // --- ATUALIZAR SEMESTRE ---
     public static void atualizar(Semestre s) throws SQLException {
         long dias = java.time.temporal.ChronoUnit.DAYS.between(s.getDataInicio(), s.getDataFim());
         if (dias < 110 || dias > 200) {
@@ -95,7 +108,6 @@ public class SemestreService {
         }
     }
 
-    // --- NOVO: REMOVER SÁBADO LETIVO EXPLICITAMENTE ---
     public static void removerSabadoLetivo(Semestre semestre, LocalDate data) throws SQLException {
         sabadoLetivoDAO.excluir(semestre.getNome(), data);
         semestre.getSabadosLetivos().removeIf(s -> s.getData().equals(data));
