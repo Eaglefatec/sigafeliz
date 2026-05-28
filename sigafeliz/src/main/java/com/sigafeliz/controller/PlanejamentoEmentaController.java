@@ -13,9 +13,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser; // Importado para Janela de salvar
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.util.List;
+
+// Importações do Apache POI
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class PlanejamentoEmentaController {
 
@@ -83,7 +92,7 @@ public class PlanejamentoEmentaController {
     private void configurarColunasInline() {
         colOrdem.setCellValueFactory(new PropertyValueFactory<>("ordem"));
 
-        // COLUNA TÍTULO: Vira um TextField se estiver em edição
+        // COLUNA TÍTULO
         colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         colTitulo.setCellFactory(col -> new TableCell<>() {
             private final TextField txt = new TextField();
@@ -106,7 +115,7 @@ public class PlanejamentoEmentaController {
             }
         });
 
-        // COLUNA MÍNIMO: Vira um Spinner numérico se estiver em edição
+        // COLUNA MÍNIMO
         colMin.setCellValueFactory(new PropertyValueFactory<>("cargaMinima"));
         colMin.setCellFactory(col -> new TableCell<>() {
             private final Spinner<Integer> spinner = new Spinner<>(1, 100, 1);
@@ -195,7 +204,7 @@ public class PlanejamentoEmentaController {
             }
         });
 
-        // COLUNA PROVA (CHECKBOX)
+        // COLUNA PROVA
         colProva.setCellValueFactory(new PropertyValueFactory<>("eAvaliacao"));
         colProva.setCellFactory(col -> new TableCell<>() {
             private final CheckBox chk = new CheckBox();
@@ -219,7 +228,7 @@ public class PlanejamentoEmentaController {
             }
         });
 
-        // COLUNA DE AÇÕES (Troca os botões dependendo do estado da linha)
+        // COLUNA DE AÇÕES
         colAcoes.setCellFactory(col -> new TableCell<>() {
             private final Button btnSalvar = new Button("✔ Salvar");
             private final Button btnCancelar = new Button("X");
@@ -257,7 +266,6 @@ public class PlanejamentoEmentaController {
     }
 
     // --- AÇÕES INLINE ---
-
     @FXML
     private void handleAdicionarTema() {
         if (temaEmEdicao != null) {
@@ -266,7 +274,6 @@ public class PlanejamentoEmentaController {
         }
         int proximaOrdem = disciplinaAtual.getTemas().size() + 1;
 
-        // Cria um tema VAZIO, mas não salva no banco ainda
         Tema novoTema = new Tema(disciplinaAtual, "", 2, 4, Prioridade.MEDIA, false, proximaOrdem);
         disciplinaAtual.getTemas().add(novoTema);
 
@@ -277,8 +284,8 @@ public class PlanejamentoEmentaController {
     private void iniciarEdicaoInline(Tema t) {
         if (temaEmEdicao != null) return;
         temaEmEdicao = t;
-        tituloOriginalEdicao = t.getTitulo(); // Guarda para o WHERE do SQL caso mude o nome
-        tabelaTemas.refresh(); // Força a tabela a desenhar os inputs na linha
+        tituloOriginalEdicao = t.getTitulo();
+        tabelaTemas.refresh();
     }
 
     private void salvarEdicaoInline(Tema t) {
@@ -289,10 +296,8 @@ public class PlanejamentoEmentaController {
 
         try {
             if (tituloOriginalEdicao == null || tituloOriginalEdicao.isEmpty()) {
-                // É um tema inteiramente novo, faz INSERT
                 TemaService.salvar(t);
             } else {
-                // É uma edição, faz UPDATE
                 TemaService.editar(t, tituloOriginalEdicao);
             }
             temaEmEdicao = null;
@@ -305,13 +310,12 @@ public class PlanejamentoEmentaController {
     }
 
     private void cancelarEdicaoInline(Tema t) {
-        // Se era uma linha nova (sem título original salvo), apenas removemos da lista
         if (tituloOriginalEdicao == null || tituloOriginalEdicao.isEmpty()) {
             disciplinaAtual.getTemas().remove(t);
         }
         temaEmEdicao = null;
         tituloOriginalEdicao = null;
-        carregarTemasDoBanco(); // Recarrega os dados intactos do banco
+        carregarTemasDoBanco();
     }
 
     private void excluirTema(Tema t) {
@@ -340,7 +344,68 @@ public class PlanejamentoEmentaController {
     }
 
     @FXML private void handleVoltar() { Main.loadView("MinhasDisciplinas.fxml"); }
-    @FXML private void handleExportar() { exibirAlerta("Exportação", "Arquivo exportado para a sua pasta de Documentos.", Alert.AlertType.INFORMATION); }
+
+    // --- NOVO: IMPLEMENTAÇÃO DA EXPORTAÇÃO EXCEL ---
+    @FXML
+    private void handleExportar() {
+        if (disciplinaAtual == null || disciplinaAtual.getTemas().isEmpty()) {
+            exibirAlerta("Aviso", "Não há temas cadastrados nesta disciplina para exportar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salvar Planejamento como Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Planilha do Excel (*.xlsx)", "*.xlsx"));
+
+        // Remove espaços do nome do arquivo por precaução
+        String defaultName = "Planejamento_" + disciplinaAtual.getNome().replaceAll("\\s+", "_") + ".xlsx";
+        fileChooser.setInitialFileName(defaultName);
+
+        // Pega o Window atual a partir da TableView para ancorar a janela de salvamento nativa
+        File file = fileChooser.showSaveDialog(tabelaTemas.getScene().getWindow());
+
+        if (file != null) {
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("Ementa Planejada");
+                Row headerRow = sheet.createRow(0);
+
+                // Criação do cabeçalho do Excel
+                String[] columns = {"Ordem", "Tema da Aula", "Carga Mínima", "Carga Máxima", "Prioridade", "É Prova?"};
+                for (int i = 0; i < columns.length; i++) {
+                    headerRow.createCell(i).setCellValue(columns[i]);
+                }
+
+                // Inserção dos dados iterando sobre os temas da disciplina
+                int rowNum = 1;
+                for (Tema tema : disciplinaAtual.getTemas()) {
+                    Row row = sheet.createRow(rowNum++);
+                    row.createCell(0).setCellValue(tema.getOrdem());
+                    row.createCell(1).setCellValue(tema.getTitulo());
+                    row.createCell(2).setCellValue(tema.getCargaMinima());
+                    row.createCell(3).setCellValue(tema.getCargaMaxima());
+                    row.createCell(4).setCellValue(tema.getPrioridade() != null ? tema.getPrioridade().name() : "");
+                    row.createCell(5).setCellValue(tema.isEAvaliacao() ? "Sim" : "Não");
+                }
+
+                // Ajusta a largura das colunas automaticamente para não cortar textos
+                for (int i = 0; i < columns.length; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Grava em disco o arquivo
+                try (FileOutputStream fileOut = new FileOutputStream(file)) {
+                    workbook.write(fileOut);
+                }
+
+                exibirAlerta("Sucesso", "Planejamento exportado com sucesso!\nO arquivo foi salvo em:\n" + file.getAbsolutePath(), Alert.AlertType.INFORMATION);
+
+            } catch (Exception e) {
+                exibirAlerta("Erro na Exportação", "Ocorreu um erro ao gerar a planilha XLSX:\n" + e.getMessage(), Alert.AlertType.ERROR);
+                e.printStackTrace();
+            }
+        }
+    }
+
     @FXML private void handleFinalizar() { exibirAlerta("Concluído", "Planejamento salvo.", Alert.AlertType.INFORMATION); }
 
     private void exibirAlerta(String titulo, String msg, Alert.AlertType tipo) {

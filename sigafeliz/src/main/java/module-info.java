@@ -3,6 +3,9 @@ module com.sigafeliz.sigafeliz {
     requires javafx.fxml;
     requires java.sql;
 
+    // Módulos do Apache POI
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
 
     opens com.sigafeliz to javafx.fxml;
     exports com.sigafeliz;
