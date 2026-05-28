@@ -323,7 +323,7 @@ public class SemestreListaController {
 
     @FXML
     private void handleVoltar() {
-        Main.loadView("TelaInicial.fxml");
+        Main.loadView("CoordenadorListaDisciplinasEX.fxml");
     }
 
     private void mostrarAlerta(String titulo, String mensagem, Alert.AlertType tipo) {
