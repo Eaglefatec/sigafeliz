@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.sql.SQLException;
+import java.time.DayOfWeek; // Import adicionado
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
@@ -91,21 +92,30 @@ public class SemestreEdicaoController {
     }
 
     private void atualizarEstiloDinamico(Label lbl, LocalDate data) {
-        String style = "-fx-border-color: black; -fx-font-family: 'Monospaced'; -fx-cursor: hand; ";
+        String style = "-fx-border-color: black; -fx-font-family: 'Monospaced'; ";
+
+        // Remove a "mãozinha" se for domingo, já que o clique nele é ignorado na lógica
+        if (data.getDayOfWeek() != DayOfWeek.SUNDAY) {
+            style += "-fx-cursor: hand; ";
+        }
 
         // Busca o feriado se existir
         Optional<DiaRestrito> feriadoOpt = semestreAtual.getDiasRestritos().stream()
                 .filter(d -> d.getData().equals(data)).findFirst();
 
         boolean letivo = semestreAtual.getSabadosLetivos().stream().anyMatch(s -> s.getData().equals(data));
+        boolean isFimDeSemana = (data.getDayOfWeek() == DayOfWeek.SATURDAY || data.getDayOfWeek() == DayOfWeek.SUNDAY);
 
         if (feriadoOpt.isPresent()) {
             style += "-fx-background-color: #f8d7da; -fx-text-fill: #721c24; -fx-font-weight: bold;";
-            // ADICIONA TOOLTIP COM O NOME DO FERIADO
             lbl.setTooltip(new Tooltip(feriadoOpt.get().getDescricao()));
         } else if (letivo) {
             style += "-fx-background-color: #cfe2f3; -fx-text-fill: #084298; -fx-font-weight: bold;";
             lbl.setTooltip(new Tooltip("Sábado Letivo"));
+        } else if (isFimDeSemana) {
+            // Se for sábado (mas não letivo) ou for domingo, fica cinza
+            style += "-fx-background-color: #d6d8db; -fx-text-fill: #383d41;";
+            lbl.setTooltip(null);
         } else {
             style += "-fx-background-color: white;";
             lbl.setTooltip(null); // Remove tooltip se não for mais restrição
@@ -114,10 +124,10 @@ public class SemestreEdicaoController {
     }
 
     private void handleInteracaoDia(Label lbl, LocalDate data, int coluna) {
-        if (coluna == 0) return;
+        if (coluna == 0) return; // Retorna pois coluna 0 (Domingo) não é iterável
 
         try {
-            if (coluna == 6) {
+            if (coluna == 6) { // Coluna 6 (Sábado)
                 SemestreService.alternarSabadoLetivo(semestreAtual, data);
             } else {
                 // BUSCA O FERIADO ATUAL PARA PREENCHER O DIALOG
@@ -173,8 +183,6 @@ public class SemestreEdicaoController {
 
     @FXML
     private void handleCancelar() {
-        // Volta para a lista sem salvar (embora as alterações pontuais já tenham ido ao banco)
-        // Em um sistema real, poderíamos usar transações para permitir um rollback aqui.
         Main.loadView("SemestreLista.fxml");
     }
 
