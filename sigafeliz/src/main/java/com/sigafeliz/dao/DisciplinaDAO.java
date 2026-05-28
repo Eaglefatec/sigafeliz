@@ -12,7 +12,6 @@ import java.util.List;
 
 public class DisciplinaDAO {
 
-    // NOVO: Listar Todas as Disciplinas (Para a tela do Coordenador)
     public List<Disciplina> listarTodas() throws SQLException {
         List<Disciplina> lista = new ArrayList<>();
         String sql = """
@@ -76,33 +75,57 @@ public class DisciplinaDAO {
         return lista;
     }
 
-    public boolean existeDisciplina(String nome) throws java.sql.SQLException {
+    public boolean existeDisciplina(String nome) throws SQLException {
         String sql = "SELECT 1 FROM disciplina WHERE nome = ?";
         try (Connection con = ConexaoDB.getConexao();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, nome);
             try (ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // Retorna true se a disciplina já existir no banco
+                return rs.next();
             }
         }
     }
 
     public void salvar(Disciplina d) throws SQLException {
         String sql = """
-                INSERT INTO disciplina (nome, professor_email, carga_horaria_total)
-                VALUES (?, ?, ?)
+                INSERT INTO disciplina (nome, professor_email, carga_horaria_total, 
+                                        aula_segunda, aula_terca, aula_quarta, aula_quinta, aula_sexta)
+                VALUES (?, ?, ?, 0, 0, 0, 0, 0)
                 """;
 
         try (Connection con = ConexaoDB.getConexao();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, d.getNome());
-            ps.setString(2, d.getProfessor().getEmail());
+            ps.setString(2, d.getProfessor() != null ? d.getProfessor().getEmail() : null);
             ps.setInt(3, d.getCargaHorariaTotal());
             ps.executeUpdate();
         }
     }
 
-    // NOVO: Excluir Disciplina do banco
+    // ADICIONADO: Método essencial para salvar a grade de aulas diretamente na tabela disciplina
+    public void atualizarGrade(String nomeDisciplina, int seg, int ter, int qua, int qui, int sex) throws SQLException {
+        String sql = """
+                UPDATE disciplina 
+                SET aula_segunda = ?, 
+                    aula_terca = ?, 
+                    aula_quarta = ?, 
+                    aula_quinta = ?, 
+                    aula_sexta = ? 
+                WHERE nome = ?
+                """;
+
+        try (Connection con = ConexaoDB.getConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, seg);
+            ps.setInt(2, ter);
+            ps.setInt(3, qua);
+            ps.setInt(4, qui);
+            ps.setInt(5, sex);
+            ps.setString(6, nomeDisciplina);
+            ps.executeUpdate();
+        }
+    }
+
     public void excluir(String nome) throws SQLException {
         String sql = "DELETE FROM disciplina WHERE nome = ?";
         try (Connection con = ConexaoDB.getConexao();
