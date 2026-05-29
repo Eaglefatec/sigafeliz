@@ -29,11 +29,11 @@ public class ProfessorService {
         dao.salvar(p);
     }
 
-    public static void atualizar(Professor p) throws SQLException {
-        if (p != null && p.getEmail() != null) {
-            dao.atualizar(p);
-        }
-    }
+//    public static void atualizar(Professor p) throws SQLException {
+//        if (p != null && p.getEmail() != null) {
+//            dao.atualizar(p);
+//        }
+//    }
 
     public static void excluir(Professor p) throws SQLException {
         if (p != null && p.getEmail() != null) {
