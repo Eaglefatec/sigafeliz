@@ -67,7 +67,7 @@ public class SemestreListaController {
         dpKickoff.setDisable(dpInicio.getValue() == null || dpFim.getValue() == null);
     }
 
-    // --- LOGICA PARA CÉLULAS DE DATA EDITÁVEIS NA TABLEVIEW ---
+    // --- LOGICA PARA CÉLULAS DE DATA EDITÁVEIS NA TABLEVIEW (COM INDICADOR DE LÁPIS EM CADA LINHA) ---
     private void configurarColunaEdicaoData(TableColumn<Semestre, LocalDate> coluna, String campo) {
         coluna.setCellFactory(col -> new TableCell<>() {
             private final DatePicker datePicker = new DatePicker();
@@ -112,7 +112,8 @@ public class SemestreListaController {
             public void cancelEdit() {
                 super.cancelEdit();
                 setGraphic(null);
-                setText(getItem() != null ? formatter.format(getItem()) : "");
+                // UX: Mantém o indicador de lápis ao cancelar a edição
+                setText(getItem() != null ? formatter.format(getItem()) + " ✎" : "");
                 setTooltip(new Tooltip("Dê um duplo clique para editar esta data"));
             }
 
@@ -131,8 +132,8 @@ public class SemestreListaController {
                         setTooltip(null);
                     } else {
                         setGraphic(null);
-                        setText(formatter.format(item));
-                        // UX: Adiciona tooltip orientando edição ao passar o mouse
+                        // UX UPGRADE: Adicionado o sufixo " ✎" dinamicamente para cada linha da tabela
+                        setText(formatter.format(item) + " ✎");
                         setTooltip(new Tooltip("Dê um duplo clique para editar esta data"));
                     }
                 }
@@ -218,7 +219,6 @@ public class SemestreListaController {
         tabelaSemestres.refresh(); // Força atualização visual
     }
 
-    // --- MÉTODO REVERTER EDICAO RESTAURADO ---
     private void reverterEdicao(Semestre semestre, LocalDate inicio, LocalDate fim, LocalDate kickoff) {
         semestre.setDataInicio(inicio);
         semestre.setDataFim(fim);

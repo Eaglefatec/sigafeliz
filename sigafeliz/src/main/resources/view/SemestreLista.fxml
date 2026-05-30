@@ -65,7 +65,7 @@
             </font>
         </Label>
 
-        <Label style="-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-border-color: #ffeeba; -fx-border-width: 2; -fx-padding: 4 10 4 10; -fx-border-radius: 4; -fx-background-radius: 4;" text="💡 Dica: Dê 2 cliques nas datas (✎) para editá-las diretamente na tabela.">
+        <Label style="-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-border-color: #ffeeba; -fx-border-width: 2; -fx-padding: 4 10 4 10; -fx-border-radius: 4; -fx-background-radius: 4;" text="💡 Dica: Dê 2 cliques nas datas para editá-las diretamente na tabela.">
             <font>
                 <Font name="Monospaced Bold" size="12.0" />
             </font>
@@ -78,9 +78,9 @@
         </columnResizePolicy>
         <columns>
             <TableColumn fx:id="colNome" text="Nome" editable="false" />
-            <TableColumn fx:id="colInicio" text="Início ✎" />
-            <TableColumn fx:id="colFim" text="Fim ✎" />
-            <TableColumn fx:id="colKickoff" text="Kickoff ✎" />
+            <TableColumn fx:id="colInicio" text="Início" />
+            <TableColumn fx:id="colFim" text="Fim" />
+            <TableColumn fx:id="colKickoff" text="Kickoff" />
             <TableColumn fx:id="colAcoes" maxWidth="250.0" minWidth="250.0" style="-fx-alignment: CENTER;" text="Ações do Semestre" editable="false" />
         </columns>
     </TableView>
