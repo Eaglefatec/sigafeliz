@@ -13,14 +13,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser; // Importado para Janela de salvar
+import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.util.List;
 
-// Importações do Apache POI
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -357,7 +356,7 @@ public class PlanejamentoEmentaController {
 
     @FXML private void handleVoltar() { Main.loadView("MinhasDisciplinas.fxml"); }
 
-    // --- NOVO: IMPLEMENTAÇÃO DA EXPORTAÇÃO EXCEL ---
+    // --- NOVO: EXPORTAÇÃO EXCEL ATUALIZADA SEGUNDO PO ---
     @FXML
     private void handleExportar() {
         if (disciplinaAtual == null || disciplinaAtual.getTemas().isEmpty()) {
@@ -369,11 +368,9 @@ public class PlanejamentoEmentaController {
         fileChooser.setTitle("Salvar Planejamento como Excel");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Planilha do Excel (*.xlsx)", "*.xlsx"));
 
-        // Remove espaços do nome do arquivo por precaução
         String defaultName = "Planejamento_" + disciplinaAtual.getNome().replaceAll("\\s+", "_") + ".xlsx";
         fileChooser.setInitialFileName(defaultName);
 
-        // Pega o Window atual a partir da TableView para ancorar a janela de salvamento nativa
         File file = fileChooser.showSaveDialog(tabelaTemas.getScene().getWindow());
 
         if (file != null) {
@@ -381,7 +378,16 @@ public class PlanejamentoEmentaController {
                 Sheet sheet = workbook.createSheet("Grade Diária");
                 Row headerRow = sheet.createRow(0);
 
-                String[] columns = {"Data", "Dia da Semana", "Conteúdo"};
+                // Novas Colunas solicitadas pelo PO
+                String[] columns = {
+                        "Número da Aula",
+                        "Data",
+                        "Tema",
+                        "Marcador de Prova",
+                        "Dia da Semana",
+                        "Identificação da Disciplina"
+                };
+
                 for (int i = 0; i < columns.length; i++) {
                     headerRow.createCell(i).setCellValue(columns[i]);
                 }
@@ -397,18 +403,16 @@ public class PlanejamentoEmentaController {
                     temasDistribuidos = new ArrayList<>(disciplinaAtual.getTemas());
                 }
 
-                // Ordena temas por ordem
                 temasDistribuidos.sort(Comparator.comparingInt(Tema::getOrdem));
 
-                // Monta fila de conteúdos: cada aula alocada vira um item na fila
-                Queue<String> filaConteudos = new LinkedList<>();
+                // Fila atualizada para armazenar o objeto Tema inteiro, permitindo extrair dados específicos por aula
+                Queue<Tema> filaAulas = new LinkedList<>();
                 for (Tema t : temasDistribuidos) {
                     for (int i = 0; i < t.getAulasAlocadas(); i++) {
-                        filaConteudos.add(t.getTitulo());
+                        filaAulas.add(t);
                     }
                 }
 
-                // Busca grade e dias restritos
                 GradeDAO gradeDAO = new GradeDAO();
                 DiaRestritoDAO diaRestritoDAO = new DiaRestritoDAO();
                 Map<DayOfWeek, Integer> gradeAulas = gradeDAO.buscarGradePorDisciplina(disciplinaAtual.getNome());
@@ -416,42 +420,38 @@ public class PlanejamentoEmentaController {
                         .stream().map(DiaRestrito::getData)
                         .collect(java.util.stream.Collectors.toSet());
 
-                // Itera os dias do semestre
                 String[] nomesDias = {"", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"};
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
                 int rowNum = 1;
+                int numeroDaAula = 1; // Contador absoluto de aulas
                 LocalDate data = semestre.getDataInicio();
 
-                while (!data.isAfter(semestre.getDataFim()) && !filaConteudos.isEmpty()) {
+                while (!data.isAfter(semestre.getDataFim()) && !filaAulas.isEmpty()) {
                     DayOfWeek dia = data.getDayOfWeek();
 
                     if (gradeAulas.containsKey(dia) && !datasRestritas.contains(data)) {
-                        int qtdAulas = gradeAulas.get(dia);
+                        int qtdAulasNoDia = gradeAulas.get(dia);
 
-                        // Agrupa conteúdos do dia
-                        Map<String, Integer> conteudosDoDia = new LinkedHashMap<>();
-                        for (int i = 0; i < qtdAulas && !filaConteudos.isEmpty(); i++) {
-                            String conteudo = filaConteudos.poll();
-                            conteudosDoDia.merge(conteudo, 1, Integer::sum);
+                        // Agora geramos 1 linha estrita para CADA aula dentro do dia
+                        for (int i = 0; i < qtdAulasNoDia && !filaAulas.isEmpty(); i++) {
+                            Tema temaAula = filaAulas.poll();
+
+                            Row row = sheet.createRow(rowNum++);
+
+                            row.createCell(0).setCellValue(numeroDaAula++); // Número da aula
+                            row.createCell(1).setCellValue(data.format(formatter)); // Data
+                            row.createCell(2).setCellValue(temaAula.getTitulo()); // Tema
+                            row.createCell(3).setCellValue(temaAula.isEAvaliacao() ? "Sim" : "Não"); // Marcador de prova
+                            row.createCell(4).setCellValue(nomesDias[dia.getValue()]); // Dia da Semana
+                            row.createCell(5).setCellValue(disciplinaAtual.getNome()); // Disciplina
                         }
-
-                        // Monta string do conteúdo: "Baskara (2 aulas) + Equações (1 aula)"
-                        StringBuilder conteudoStr = new StringBuilder();
-                        conteudosDoDia.forEach((titulo, qtd) -> {
-                            if (conteudoStr.length() > 0) conteudoStr.append(" + ");
-                            conteudoStr.append(titulo);
-                            if (qtd > 1) conteudoStr.append(" (").append(qtd).append(" aulas)");
-                        });
-
-                        Row row = sheet.createRow(rowNum++);
-                        row.createCell(0).setCellValue(data.format(formatter));
-                        row.createCell(1).setCellValue(nomesDias[dia.getValue()]);
-                        row.createCell(2).setCellValue(conteudoStr.toString());
                     }
 
                     data = data.plusDays(1);
                 }
 
+                // Ajuste automático da largura das colunas
                 for (int i = 0; i < columns.length; i++) {
                     sheet.autoSizeColumn(i);
                 }

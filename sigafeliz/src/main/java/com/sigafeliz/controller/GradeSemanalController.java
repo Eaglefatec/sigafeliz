@@ -7,6 +7,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import com.sigafeliz.model.Disciplina;
 import com.sigafeliz.dao.GradeDAO;
+import com.sigafeliz.dao.DisciplinaDAO; // NOVO IMPORT: Para acessar a DAO da disciplina
 import com.sigafeliz.model.AulasPorDia;
 import java.time.DayOfWeek;
 import java.sql.SQLException;
@@ -103,6 +104,7 @@ public class GradeSemanalController {
         }
 
         GradeDAO gradeDAO = new GradeDAO();
+        DisciplinaDAO disciplinaDAO = new DisciplinaDAO(); // Instanciado o DAO para sincronizar colunas nativas
 
         int seg = spnSeg.getValue();
         int ter = spnTer.getValue();
@@ -111,17 +113,28 @@ public class GradeSemanalController {
         int sex = spnSex.getValue();
 
         try {
-            // Limpa o histórico antigo na tabela temporária aula_por_dia
+            // 1. Limpa o histórico antigo na tabela temporária aula_por_dia
             gradeDAO.deletarPorDisciplina(disciplinaAtual.getNome());
 
-            // Grava as novas quantidades configuradas nos Spinners
+            // 2. Grava as novas quantidades configuradas nos Spinners na tabela aula_por_dia
             if (seg > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.MONDAY,    seg));
             if (ter > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.TUESDAY,   ter));
             if (qua > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.WEDNESDAY, qua));
             if (qui > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.THURSDAY,  qui));
             if (sex > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.FRIDAY,    sex));
 
-            voltarTela();
+            // 3. ATUALIZA A TABELA PAI DISCIPLINA PARA MANTER A SINCRONIA COM AS CONSULTAS DA TELA DE LISTA
+            disciplinaDAO.atualizarGrade(disciplinaAtual.getNome(), seg, ter, qua, qui, sex);
+
+            // 4. Atualiza o objeto em memória para refletir imediatamente as alterações nos acessos de sessão
+            disciplinaAtual.getAulasPorDia().clear();
+            if (seg > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.MONDAY, seg));
+            if (ter > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.TUESDAY, ter));
+            if (qua > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.WEDNESDAY, qua));
+            if (qui > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.THURSDAY, qui));
+            if (sex > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.FRIDAY, sex));
+
+            voltarTela(); // Executa o retorno com os dados sincronizados em DB e na Memória
 
         } catch (SQLException e) {
             e.printStackTrace();
