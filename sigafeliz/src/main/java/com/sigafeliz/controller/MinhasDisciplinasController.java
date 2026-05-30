@@ -3,9 +3,11 @@ package com.sigafeliz.controller;
 import com.sigafeliz.Main;
 import com.sigafeliz.dao.DisciplinaDAO;
 import com.sigafeliz.dao.GradeDAO;
+import com.sigafeliz.dao.SemestreDAO; // IMPORTADO: Para acessar os semestres do banco
 import com.sigafeliz.model.AulasPorDia;
 import com.sigafeliz.model.Disciplina;
 import com.sigafeliz.model.Professor;
+import com.sigafeliz.model.Semestre; // IMPORTADO: Para mapear a lista
 import com.sigafeliz.service.DisciplinaService;
 import com.sigafeliz.service.ProfessorService;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,14 +34,14 @@ public class MinhasDisciplinasController {
     @FXML private TableColumn<Disciplina, RadioButton> colSelec;
 
     private final DisciplinaDAO disciplinaDAO = new DisciplinaDAO();
+    private final SemestreDAO semestreDAO = new SemestreDAO(); // Instanciando o SemestreDAO
     private ObservableList<Disciplina> listaDisciplinas;
     private final ToggleGroup grupoSelecao = new ToggleGroup();
 
     @FXML
     public void initialize() {
-        // Inicializa o ComboBox de Semestres
-        comboSemestre.setItems(FXCollections.observableArrayList("2026.1", "2025.2", "2025.1"));
-        comboSemestre.getSelectionModel().selectFirst();
+        // CORREÇÃO: Carrega os semestres cadastrados no banco de dados dinamicamente
+        carregarSemestres();
 
         // Configura as colunas básicas
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
@@ -59,7 +62,7 @@ public class MinhasDisciplinasController {
                     AulasPorDia aula = aulas.get(i);
                     String diaAbreviado = traduzirDiaSemana(aula.getDiaSemana());
 
-                    diasTexto.append(diaAbreviado).append(" (").append(aula.getQuantidadeAulas()).append(")");
+                    diasTexto.append(diaAbreviado).append(" (").append(aula.getQuantidadeAulas()).append("h)");
 
                     if (i < aulas.size() - 1) {
                         diasTexto.append(", ");
@@ -103,6 +106,37 @@ public class MinhasDisciplinasController {
         });
 
         carregarDadosProfessor();
+    }
+
+    // NOVO MÉTODO: Busca os semestres do banco e popula o ComboBox
+    private void carregarSemestres() {
+        try {
+            List<Semestre> semestresDoBanco = semestreDAO.listarTodos();
+            List<String> nomesSemestres = new ArrayList<>();
+
+            // Extrai apenas a string do nome de cada objeto Semestre
+            for (Semestre s : semestresDoBanco) {
+                nomesSemestres.add(s.getNome());
+            }
+
+            if (!nomesSemestres.isEmpty()) {
+                // Preenche o combo com os nomes vindos do banco
+                comboSemestre.setItems(FXCollections.observableArrayList(nomesSemestres));
+                comboSemestre.getSelectionModel().selectFirst(); // Seleciona o primeiro da lista
+            } else {
+                // Fallback de segurança caso a tabela de semestres esteja totalmente vazia no BD
+                comboSemestre.setItems(FXCollections.observableArrayList("Nenhum semestre cadastrado"));
+                comboSemestre.getSelectionModel().selectFirst();
+            }
+
+        } catch (java.sql.SQLException e) {
+            System.err.println("Erro ao carregar semestres do banco: " + e.getMessage());
+            e.printStackTrace();
+
+            // Tratamento caso a conexão falhe, para a tela não abrir em branco
+            comboSemestre.setItems(FXCollections.observableArrayList("Erro ao carregar"));
+            comboSemestre.getSelectionModel().selectFirst();
+        }
     }
 
     private void carregarDadosProfessor() {
