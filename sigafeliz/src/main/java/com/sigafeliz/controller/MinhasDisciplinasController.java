@@ -22,6 +22,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import com.sigafeliz.service.SemestreService;
 
 public class MinhasDisciplinasController {
 
@@ -199,10 +200,37 @@ public class MinhasDisciplinasController {
     }
 
     @FXML
+    private void handlePlanejar() {
+        Toggle selecionado = grupoSelecao.getSelectedToggle();
+
+        if (selecionado != null) {
+            Disciplina disciplinaSelecionada = (Disciplina) selecionado.getUserData();
+            DisciplinaService.setDisciplinaSelecionada(disciplinaSelecionada);
+
+            // Busca o semestre selecionado no combo e seta no service
+            String nomeSemestre = comboSemestre.getValue();
+            try {
+                Semestre semestre = semestreDAO.buscarPorNome(nomeSemestre);
+                SemestreService.setSemestreSelecionado(semestre);
+            } catch (java.sql.SQLException e) {
+                System.err.println("Erro ao buscar semestre: " + e.getMessage());
+            }
+
+            Main.loadView("PlanejamentoEmenta.fxml");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, selecione uma disciplina na tabela antes de avançar.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
     private void handleVoltar() {
         Main.loadView("SelecaoProfessor.fxml");
     }
-
+    /*
     @FXML
     private void handlePlanejar() {
         Toggle selecionado = grupoSelecao.getSelectedToggle();
@@ -221,5 +249,5 @@ public class MinhasDisciplinasController {
             alert.setContentText("Por favor, selecione uma disciplina na tabela antes de avançar.");
             alert.showAndWait();
         }
-    }
+    } */
 }

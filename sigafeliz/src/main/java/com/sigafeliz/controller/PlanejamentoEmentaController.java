@@ -26,6 +26,18 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.sigafeliz.service.DistribuicaoAulaService;
+import com.sigafeliz.service.SemestreService;
+import com.sigafeliz.model.Semestre;
+import java.util.ArrayList;
+import com.sigafeliz.dao.DiaRestritoDAO;
+import com.sigafeliz.dao.GradeDAO;
+import com.sigafeliz.model.DiaRestrito;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
 public class PlanejamentoEmentaController {
 
     @FXML private Label lblTituloDisciplina;
@@ -366,38 +378,89 @@ public class PlanejamentoEmentaController {
 
         if (file != null) {
             try (Workbook workbook = new XSSFWorkbook()) {
-                Sheet sheet = workbook.createSheet("Ementa Planejada");
+                Sheet sheet = workbook.createSheet("Grade Diária");
                 Row headerRow = sheet.createRow(0);
 
-                // Criação do cabeçalho do Excel
-                String[] columns = {"Ordem", "Tema da Aula", "Carga Mínima", "Carga Máxima", "Prioridade", "É Prova?"};
+                String[] columns = {"Data", "Dia da Semana", "Conteúdo"};
                 for (int i = 0; i < columns.length; i++) {
                     headerRow.createCell(i).setCellValue(columns[i]);
                 }
 
-                // Inserção dos dados iterando sobre os temas da disciplina
-                int rowNum = 1;
-                for (Tema tema : disciplinaAtual.getTemas()) {
-                    Row row = sheet.createRow(rowNum++);
-                    row.createCell(0).setCellValue(tema.getOrdem());
-                    row.createCell(1).setCellValue(tema.getTitulo());
-                    row.createCell(2).setCellValue(tema.getCargaMinima());
-                    row.createCell(3).setCellValue(tema.getCargaMaxima());
-                    row.createCell(4).setCellValue(tema.getPrioridade() != null ? tema.getPrioridade().name() : "");
-                    row.createCell(5).setCellValue(tema.isEAvaliacao() ? "Sim" : "Não");
+                // Busca semestre e calcula distribuição
+                Semestre semestre = SemestreService.getSemestreSelecionado();
+                DistribuicaoAulaService distribuicaoService = new DistribuicaoAulaService();
+                List<Tema> temasDistribuidos;
+
+                if (semestre != null) {
+                    temasDistribuidos = distribuicaoService.distribuir(disciplinaAtual.getNome(), semestre.getNome());
+                } else {
+                    temasDistribuidos = new ArrayList<>(disciplinaAtual.getTemas());
                 }
 
-                // Ajusta a largura das colunas automaticamente para não cortar textos
+                // Ordena temas por ordem
+                temasDistribuidos.sort(Comparator.comparingInt(Tema::getOrdem));
+
+                // Monta fila de conteúdos: cada aula alocada vira um item na fila
+                Queue<String> filaConteudos = new LinkedList<>();
+                for (Tema t : temasDistribuidos) {
+                    for (int i = 0; i < t.getAulasAlocadas(); i++) {
+                        filaConteudos.add(t.getTitulo());
+                    }
+                }
+
+                // Busca grade e dias restritos
+                GradeDAO gradeDAO = new GradeDAO();
+                DiaRestritoDAO diaRestritoDAO = new DiaRestritoDAO();
+                Map<DayOfWeek, Integer> gradeAulas = gradeDAO.buscarGradePorDisciplina(disciplinaAtual.getNome());
+                Set<LocalDate> datasRestritas = diaRestritoDAO.listarPorSemestre(semestre)
+                        .stream().map(DiaRestrito::getData)
+                        .collect(java.util.stream.Collectors.toSet());
+
+                // Itera os dias do semestre
+                String[] nomesDias = {"", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"};
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                int rowNum = 1;
+                LocalDate data = semestre.getDataInicio();
+
+                while (!data.isAfter(semestre.getDataFim()) && !filaConteudos.isEmpty()) {
+                    DayOfWeek dia = data.getDayOfWeek();
+
+                    if (gradeAulas.containsKey(dia) && !datasRestritas.contains(data)) {
+                        int qtdAulas = gradeAulas.get(dia);
+
+                        // Agrupa conteúdos do dia
+                        Map<String, Integer> conteudosDoDia = new LinkedHashMap<>();
+                        for (int i = 0; i < qtdAulas && !filaConteudos.isEmpty(); i++) {
+                            String conteudo = filaConteudos.poll();
+                            conteudosDoDia.merge(conteudo, 1, Integer::sum);
+                        }
+
+                        // Monta string do conteúdo: "Baskara (2 aulas) + Equações (1 aula)"
+                        StringBuilder conteudoStr = new StringBuilder();
+                        conteudosDoDia.forEach((titulo, qtd) -> {
+                            if (conteudoStr.length() > 0) conteudoStr.append(" + ");
+                            conteudoStr.append(titulo);
+                            if (qtd > 1) conteudoStr.append(" (").append(qtd).append(" aulas)");
+                        });
+
+                        Row row = sheet.createRow(rowNum++);
+                        row.createCell(0).setCellValue(data.format(formatter));
+                        row.createCell(1).setCellValue(nomesDias[dia.getValue()]);
+                        row.createCell(2).setCellValue(conteudoStr.toString());
+                    }
+
+                    data = data.plusDays(1);
+                }
+
                 for (int i = 0; i < columns.length; i++) {
                     sheet.autoSizeColumn(i);
                 }
 
-                // Grava em disco o arquivo
                 try (FileOutputStream fileOut = new FileOutputStream(file)) {
                     workbook.write(fileOut);
                 }
 
-                exibirAlerta("Sucesso", "Planejamento exportado com sucesso!\nO arquivo foi salvo em:\n" + file.getAbsolutePath(), Alert.AlertType.INFORMATION);
+                exibirAlerta("Sucesso", "Grade exportada com sucesso!\nArquivo salvo em:\n" + file.getAbsolutePath(), Alert.AlertType.INFORMATION);
 
             } catch (Exception e) {
                 exibirAlerta("Erro na Exportação", "Ocorreu um erro ao gerar a planilha XLSX:\n" + e.getMessage(), Alert.AlertType.ERROR);
