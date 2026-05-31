@@ -5,56 +5,62 @@ import com.sigafeliz.model.Disciplina;
 import com.sigafeliz.model.Professor;
 import com.sigafeliz.service.DisciplinaService;
 import com.sigafeliz.service.ProfessorService;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
 
 import java.sql.SQLException;
 
 public class CoordenadorListaDisciplinasControllerEX {
 
+    @FXML private Label lblTituloGeral;
     @FXML private TableView<Disciplina> tabelaDisciplinas;
+    @FXML private TableColumn<Disciplina, String> colCurso;
     @FXML private TableColumn<Disciplina, String> colNome;
-    @FXML private TableColumn<Disciplina, String> colProfessor;
     @FXML private TableColumn<Disciplina, Integer> colCarga;
     @FXML private TableColumn<Disciplina, Void> colAcoesGrade;
     @FXML private TableColumn<Disciplina, Void> colAcoesSelec;
 
+    @FXML private TextField txtCurso;
     @FXML private TextField txtDisciplina;
-    @FXML private ComboBox<Professor> cbProfessor;
     @FXML private ComboBox<Integer> comboCarga;
 
     private ObservableList<Disciplina> listaDisciplinas;
     private final ToggleGroup disciplinaGroup = new ToggleGroup();
     private Disciplina disciplinaSelecionadaTable;
+    private Professor professorAtual;
 
     @FXML
     public void initialize() {
+        // Resgata o professor que foi clicado na tela anterior
+        professorAtual = ProfessorService.getProfessorLogado();
+
+        if (professorAtual == null) {
+            mostrarAlerta("Nenhum professor selecionado! Retornando...");
+            Main.loadView("ProfessoresLista.fxml");
+            return;
+        }
+
+        // Define o título da tela com o nome do professor selecionado
+        if (lblTituloGeral != null) {
+            lblTituloGeral.setText("DISCIPLINAS DO PROFESSOR: " + professorAtual.getNome().toUpperCase());
+        }
+
         comboCarga.getItems().addAll(40, 80);
 
-        // Carrega os professores do banco de dados
-        cbProfessor.setItems(ProfessorService.getAllProfessores());
-        cbProfessor.setConverter(new StringConverter<Professor>() {
-            @Override public String toString(Professor p) { return p == null ? "" : p.getNome(); }
-            @Override public Professor fromString(String string) { return null; }
-        });
-
-        // Configuração das colunas de texto
+        // Configuração das colunas de texto da Tabela
+        colCurso.setCellValueFactory(new PropertyValueFactory<>("curso"));
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colCarga.setCellValueFactory(new PropertyValueFactory<>("cargaHorariaTotal"));
-        colProfessor.setCellValueFactory(cellData -> new SimpleStringProperty(
-                cellData.getValue().getProfessor() != null ? cellData.getValue().getProfessor().getNome() : "Sem Professor"
-        ));
 
         configurarColunasAcoes();
 
-        // Carrega a lista real de disciplinas do banco
-        listaDisciplinas = DisciplinaService.getAllDisciplinas();
+        // Carrega as disciplinas APENAS do professor selecionado
+        listaDisciplinas = FXCollections.observableArrayList(DisciplinaService.getDisciplinasPorProfessor(professorAtual));
         tabelaDisciplinas.setItems(listaDisciplinas);
     }
 
@@ -104,16 +110,17 @@ public class CoordenadorListaDisciplinasControllerEX {
 
     @FXML
     private void salvarDisciplina(ActionEvent event) {
+        String curso = txtCurso.getText();
         String nome = txtDisciplina.getText();
-        Professor professor = cbProfessor.getValue();
         Integer carga = comboCarga.getValue();
 
-        if (nome == null || nome.trim().isEmpty() || professor == null || carga == null) {
+        if (curso == null || curso.trim().isEmpty() || nome == null || nome.trim().isEmpty() || carga == null) {
             mostrarAlerta("Preencha todos os campos para salvar a disciplina.");
             return;
         }
 
-        Disciplina novaDisciplina = new Disciplina(nome, professor, carga);
+        // Atrela a disciplina automaticamente ao professor logado
+        Disciplina novaDisciplina = new Disciplina(curso, nome, professorAtual, carga);
 
         try {
             DisciplinaService.salvar(novaDisciplina);
@@ -142,8 +149,8 @@ public class CoordenadorListaDisciplinasControllerEX {
     }
 
     private void limparCampos() {
+        txtCurso.clear();
         txtDisciplina.clear();
-        cbProfessor.setValue(null);
         comboCarga.setValue(null);
     }
 

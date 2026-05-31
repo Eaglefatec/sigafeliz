@@ -18,7 +18,7 @@
             <padding>
                 <Insets bottom="15" left="25" right="25" top="25" />
             </padding>
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Monospaced';" text="LISTA DE DISCIPLINAS" />
+            <Label fx:id="lblTituloGeral" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Monospaced';" text="LISTA DE DISCIPLINAS" />
             <Separator style="-fx-background-color: black; -fx-pref-height: 2;" />
         </VBox>
     </top>
@@ -34,8 +34,8 @@
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
                 <columns>
-                    <TableColumn fx:id="colNome" text="Nome" prefWidth="350.0" />
-                    <TableColumn fx:id="colProfessor" text="Professor" prefWidth="250.0" />
+                    <TableColumn fx:id="colCurso" text="Curso (Turma)" prefWidth="250.0" />
+                    <TableColumn fx:id="colNome" text="Disciplina" prefWidth="350.0" />
                     <TableColumn fx:id="colCarga" text="Carga Horária" prefWidth="120.0" minWidth="120.0" maxWidth="150.0" style="-fx-alignment: CENTER;" />
                     <TableColumn fx:id="colAcoesGrade" text="Grade" prefWidth="80.0" minWidth="80.0" maxWidth="100.0" style="-fx-alignment: CENTER;" />
                     <TableColumn fx:id="colAcoesSelec" text="Selec." prefWidth="60.0" minWidth="60.0" maxWidth="80.0" style="-fx-alignment: CENTER;" />
@@ -53,11 +53,11 @@
                 </rowConstraints>
 
                 <HBox alignment="CENTER" style="-fx-padding: 5;">
-                    <TextField fx:id="txtDisciplina" promptText="Nome da Disciplina" style="-fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="txtCurso" promptText="Curso (Turma)" style="-fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS" />
                 </HBox>
 
                 <HBox alignment="CENTER" style="-fx-padding: 5;" GridPane.columnIndex="1">
-                    <ComboBox fx:id="cbProfessor" maxWidth="Infinity" promptText="Selecione o Professor" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="txtDisciplina" promptText="Nome da Disciplina" style="-fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS" />
                 </HBox>
 
                 <HBox alignment="CENTER" style="-fx-padding: 5;" GridPane.columnIndex="2">
