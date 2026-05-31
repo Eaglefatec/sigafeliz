@@ -94,7 +94,7 @@
         </HBox>
 
         <HBox maxWidth="1.7976931348623157E308">
-            <Button fx:id="btnVoltar" mnemonicParsing="false" onAction="#salvarGrade" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;" text="←  Salvar / Voltar">
+            <Button fx:id="btnVoltar" mnemonicParsing="false" onAction="#salvarGrade" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand;" text="←  Salvar / Voltar">
                 <font>
                     <Font name="Monospaced Bold" size="14.0" />
                 </font>
@@ -102,7 +102,7 @@
 
             <Region HBox.hgrow="ALWAYS" />
 
-            <Button fx:id="btnVoltar1" mnemonicParsing="false" onAction="#voltarTela" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;" text="Voltar sem salvar">
+            <Button fx:id="btnVoltar1" mnemonicParsing="false" onAction="#voltarTela" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand;" text="Voltar sem salvar">
                 <font>
                     <Font name="Monospaced Bold" size="14.0" />
                 </font>

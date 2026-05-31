@@ -92,9 +92,9 @@
             <padding>
                 <Insets bottom="30" left="25" right="25" top="10" />
             </padding>
-            <Button onAction="#voltar" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-weight: bold;" text="← Voltar" />
+            <Button onAction="#voltar" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-weight: bold; -fx-cursor: hand;" text="← Voltar" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button onAction="#avancar" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-weight: bold;" text="Avançar →" />
+            <Button onAction="#avancar" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-weight: bold; -fx-cursor: hand;" text="Avançar →" />
         </HBox>
     </bottom>
 </BorderPane>
