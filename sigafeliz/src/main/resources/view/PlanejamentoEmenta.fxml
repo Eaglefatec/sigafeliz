@@ -40,7 +40,6 @@
         <Label text="Ementa de Temas" style="-fx-font-family: 'Monospaced'; -fx-font-weight: bold; -fx-font-size: 16px;" />
         <HBox HBox.hgrow="ALWAYS" />
         <Label fx:id="lblSomaAtualBarra" style="-fx-border-color: black; -fx-border-width: 1; -fx-padding: 4 8 4 8; -fx-font-family: 'Monospaced'; -fx-font-size: 12px; -fx-background-color: white;" text="Soma Atual Mín: 0 | Máx: 0" />
-        <Button onAction="#handleValidar" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;" text="Validar Distribuição" />
         <Button onAction="#handleExportar" style="-fx-background-color: #e0e0e0; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;" text="📥 Exportar .XLSX" />
     </HBox>
 
@@ -55,7 +54,7 @@
             <TableColumn fx:id="colMax" maxWidth="70.0" minWidth="70.0" text="Máx" style="-fx-alignment: CENTER;" />
             <TableColumn fx:id="colPrioridade" maxWidth="110.0" minWidth="110.0" text="Prioridade" style="-fx-alignment: CENTER;" />
             <TableColumn fx:id="colProva" maxWidth="60.0" minWidth="60.0" text="Prova?" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colAcoes" maxWidth="140.0" minWidth="140.0" text="Ações" style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colAcoes" maxWidth="250.0" minWidth="250.0" text="Ações" style="-fx-alignment: CENTER;" />
         </columns>
     </TableView>
 

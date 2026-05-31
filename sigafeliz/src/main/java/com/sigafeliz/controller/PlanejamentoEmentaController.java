@@ -241,16 +241,21 @@ public class PlanejamentoEmentaController {
 
         // COLUNA DE AÇÕES
         colAcoes.setCellFactory(col -> new TableCell<>() {
-            private final Button btnSalvar = new Button("✔ Salvar");
-            private final Button btnCancelar = new Button("X");
-            private final Button btnEditar = new Button("✎");
-            private final Button btnExcluir = new Button("X");
+            private final Button btnSalvar = new Button("✔ SALVAR");
+            private final Button btnCancelar = new Button("✖ CANCELAR");
+            private final Button btnEditar = new Button("✎ EDITAR");
+            private final Button btnExcluir = new Button("✖ EXCLUIR");
 
             {
-                btnSalvar.setStyle("-fx-background-color: #d4edda; -fx-border-color: black; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
-                btnCancelar.setStyle("-fx-background-color: #f8d7da; -fx-border-color: black; -fx-cursor: hand; -fx-text-fill: #721c24; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
-                btnEditar.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15px;");
-                btnExcluir.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 15px; -fx-text-fill: red; -fx-font-weight: bold;");
+                // Estilo Azul (Baseado no botão Configurar de SemestreLista)
+                btnEditar.setStyle("-fx-background-color: #cfe2f3; -fx-border-color: #0b5394; -fx-text-fill: #0b5394; -fx-border-width: 2; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
+
+                // Estilo Vermelho (Baseado no botão Excluir de SemestreLista)
+                btnExcluir.setStyle("-fx-background-color: #f8d7da; -fx-border-color: #b30000; -fx-border-width: 2; -fx-text-fill: #b30000; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
+                btnCancelar.setStyle("-fx-background-color: #f8d7da; -fx-border-color: #b30000; -fx-border-width: 2; -fx-text-fill: #b30000; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
+
+                // Estilo Verde (Seguindo a estrutura de borda colorida 2px e fonte colorida)
+                btnSalvar.setStyle("-fx-background-color: #d4edda; -fx-border-color: #155724; -fx-text-fill: #155724; -fx-border-width: 2; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
 
                 btnEditar.setOnAction(e -> iniciarEdicaoInline(getTableView().getItems().get(getIndex())));
                 btnExcluir.setOnAction(e -> excluirTema(getTableView().getItems().get(getIndex())));
@@ -263,12 +268,13 @@ public class PlanejamentoEmentaController {
                 if (empty) { setGraphic(null); return; }
                 Tema t = getTableView().getItems().get(getIndex());
 
+                // Espaçamento padronizado de 10px entre os botões
                 if (t == temaEmEdicao) {
-                    HBox box = new HBox(5, btnSalvar, btnCancelar);
+                    HBox box = new HBox(10, btnSalvar, btnCancelar);
                     box.setAlignment(Pos.CENTER);
                     setGraphic(box);
                 } else {
-                    HBox box = new HBox(15, btnEditar, btnExcluir);
+                    HBox box = new HBox(10, btnEditar, btnExcluir);
                     box.setAlignment(Pos.CENTER);
                     setGraphic(box);
                 }
