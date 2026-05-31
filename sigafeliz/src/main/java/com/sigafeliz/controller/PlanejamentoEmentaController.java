@@ -356,7 +356,7 @@ public class PlanejamentoEmentaController {
 
     @FXML private void handleVoltar() { Main.loadView("MinhasDisciplinas.fxml"); }
 
-    // --- NOVO: EXPORTAÇÃO EXCEL ATUALIZADA SEGUNDO PO ---
+
     @FXML
     private void handleExportar() {
         if (disciplinaAtual == null || disciplinaAtual.getTemas().isEmpty()) {
@@ -378,7 +378,6 @@ public class PlanejamentoEmentaController {
                 Sheet sheet = workbook.createSheet("Grade Diária");
                 Row headerRow = sheet.createRow(0);
 
-                // Novas Colunas solicitadas pelo PO
                 String[] columns = {
                         "Número da Aula",
                         "Data",
@@ -392,7 +391,6 @@ public class PlanejamentoEmentaController {
                     headerRow.createCell(i).setCellValue(columns[i]);
                 }
 
-                // Busca semestre e calcula distribuição
                 Semestre semestre = SemestreService.getSemestreSelecionado();
                 DistribuicaoAulaService distribuicaoService = new DistribuicaoAulaService();
                 List<Tema> temasDistribuidos;
@@ -405,11 +403,14 @@ public class PlanejamentoEmentaController {
 
                 temasDistribuidos.sort(Comparator.comparingInt(Tema::getOrdem));
 
-                // Fila atualizada para armazenar o objeto Tema inteiro, permitindo extrair dados específicos por aula
                 Queue<Tema> filaAulas = new LinkedList<>();
                 for (Tema t : temasDistribuidos) {
-                    for (int i = 0; i < t.getAulasAlocadas(); i++) {
-                        filaAulas.add(t);
+                    if (t.isEAvaliacao()) {
+                        filaAulas.add(t); // prova entra UMA vez só
+                    } else {
+                        for (int i = 0; i < t.getAulasAlocadas(); i++) {
+                            filaAulas.add(t); // conteúdo normal entra uma vez por aula
+                        }
                     }
                 }
 
@@ -424,7 +425,7 @@ public class PlanejamentoEmentaController {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                 int rowNum = 1;
-                int numeroDaAula = 1; // Contador absoluto de aulas
+                int numeroDaAula = 1;
                 LocalDate data = semestre.getDataInicio();
 
                 while (!data.isAfter(semestre.getDataFim()) && !filaAulas.isEmpty()) {
@@ -432,26 +433,80 @@ public class PlanejamentoEmentaController {
 
                     if (gradeAulas.containsKey(dia) && !datasRestritas.contains(data)) {
                         int qtdAulasNoDia = gradeAulas.get(dia);
+                        Tema proximoTema = filaAulas.peek();
 
-                        // Agora geramos 1 linha estrita para CADA aula dentro do dia
-                        for (int i = 0; i < qtdAulasNoDia && !filaAulas.isEmpty(); i++) {
-                            Tema temaAula = filaAulas.poll();
+                        if (proximoTema != null && proximoTema.isEAvaliacao()) {
+                            // Procura o próximo dia com 2+ aulas para a prova
+                            LocalDate melhorDia = null;
+                            int melhorQtd = 0;
+                            LocalDate buscaData = data;
+
+                            while (!buscaData.isAfter(semestre.getDataFim())) {
+                                DayOfWeek buscaDia = buscaData.getDayOfWeek();
+                                if (gradeAulas.containsKey(buscaDia) && !datasRestritas.contains(buscaData)) {
+                                    int qtd = gradeAulas.get(buscaDia);
+                                    if (qtd >= 2) {
+                                        melhorDia = buscaData;
+                                        melhorQtd = qtd;
+                                        break;
+                                    } else if (melhorDia == null) {
+                                        // Guarda o primeiro dia disponível como fallback
+                                        melhorDia = buscaData;
+                                        melhorQtd = qtd;
+                                    }
+                                }
+                                buscaData = buscaData.plusDays(1);
+                            }
+
+                            // Avança 'data' até o melhor dia encontrado
+                            if (melhorDia != null) {
+                                data = melhorDia;
+                                dia = data.getDayOfWeek();
+                                qtdAulasNoDia = melhorQtd;
+                            }
+
+                            // Consome a prova e gera uma linha
+                            Tema temaProva = filaAulas.poll();
+                            for (int i = 1; i < qtdAulasNoDia; i++) {
+                                if (!filaAulas.isEmpty() && filaAulas.peek() == temaProva) {
+                                    filaAulas.poll();
+                                }
+                            }
 
                             Row row = sheet.createRow(rowNum++);
+                            row.createCell(0).setCellValue(numeroDaAula);
+                            numeroDaAula += qtdAulasNoDia;
+                            row.createCell(1).setCellValue(data.format(formatter));
+                            row.createCell(2).setCellValue(temaProva.getTitulo());
+                            row.createCell(3).setCellValue("Sim");
+                            row.createCell(4).setCellValue(nomesDias[dia.getValue()]);
+                            row.createCell(5).setCellValue(disciplinaAtual.getNome());
 
-                            row.createCell(0).setCellValue(numeroDaAula++); // Número da aula
-                            row.createCell(1).setCellValue(data.format(formatter)); // Data
-                            row.createCell(2).setCellValue(temaAula.getTitulo()); // Tema
-                            row.createCell(3).setCellValue(temaAula.isEAvaliacao() ? "Sim" : "Não"); // Marcador de prova
-                            row.createCell(4).setCellValue(nomesDias[dia.getValue()]); // Dia da Semana
-                            row.createCell(5).setCellValue(disciplinaAtual.getNome()); // Disciplina
+                        } else {
+                            // Comportamento normal: 1 linha por aula
+                            for (int i = 0; i < qtdAulasNoDia && !filaAulas.isEmpty(); i++) {
+                                Tema temaAula = filaAulas.poll();
+
+                                // Se o próximo tema normal for prova, para o dia aqui
+                                if (temaAula.isEAvaliacao()) {
+                                    filaAulas.add(temaAula); // devolve pra fila
+                                    break;
+                                }
+
+                                Row row = sheet.createRow(rowNum++);
+                                row.createCell(0).setCellValue(numeroDaAula++);
+                                row.createCell(1).setCellValue(data.format(formatter));
+                                row.createCell(2).setCellValue(temaAula.getTitulo());
+                                row.createCell(3).setCellValue("Sim".equals("Não") ? "Sim" : "Não");
+                                row.createCell(4).setCellValue(nomesDias[dia.getValue()]);
+                                row.createCell(5).setCellValue(disciplinaAtual.getNome());
+                            }
                         }
                     }
 
                     data = data.plusDays(1);
                 }
 
-                // Ajuste automático da largura das colunas
                 for (int i = 0; i < columns.length; i++) {
                     sheet.autoSizeColumn(i);
                 }
@@ -478,4 +533,5 @@ public class PlanejamentoEmentaController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+
 }
