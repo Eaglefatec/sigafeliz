@@ -1,122 +1,135 @@
-/* Remove o fundo padrão da tabela */
+/* =======================================================
+   CONFIGURAÇÕES GLOBAIS
+   ======================================================= */
+.root {
+    /* Define uma fonte moderna, limpa e legível para todo o sistema */
+    -fx-font-family: "Segoe UI", "Roboto", "Open Sans", "Helvetica", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: #f4f6f8; /* Fundo levemente acinzentado para destacar os painéis brancos */
+}
+
+/* =======================================================
+   TABELAS MODERNIZADAS (Antiga .wireframe-table)
+   ======================================================= */
 .wireframe-table {
     -fx-background-color: white;
-    -fx-border-color: black;
-    -fx-border-width: 2px;
-    -fx-font-family: 'Monospaced';
-    -fx-font-size: 14px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
 }
 
-/* Estiliza o fundo da área de cabeçalhos (Cinza claro como no seu HTML) */
+/* Fundo da área de cabeçalhos */
 .wireframe-table .column-header-background {
-    -fx-background-color: #eee;
-    -fx-border-color: transparent transparent black transparent;
-    -fx-border-width: 2px;
+    -fx-background-color: #fafafa;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 1px;
 }
 
-/* Estiliza cada cabeçalho de coluna individualmente */
+/* Cabeçalho de coluna individual */
 .wireframe-table .column-header {
     -fx-background-color: transparent;
-    -fx-border-color: transparent black transparent transparent;
-    -fx-border-width: 2px;
+    -fx-border-color: transparent #f0f0f0 transparent transparent;
+    -fx-border-width: 1px;
     -fx-size: 40px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER; /* <-- CORRIGIDO: Centraliza o contêiner do cabeçalho */
 }
 
-/* Estiliza o texto do cabeçalho */
+/* Texto do cabeçalho */
 .wireframe-table .column-header .label {
-    -fx-text-fill: black;
-    -fx-font-weight: bold;
-    -fx-alignment: center-left;
+    -fx-text-fill: #333333;
+    -fx-font-weight: 600;
+    -fx-alignment: CENTER; /* <-- CORRIGIDO: Centraliza o texto dentro do rótulo */
 }
 
-/* Estiliza a linha da tabela e aumenta a altura */
+/* Linha da tabela */
 .wireframe-table .table-row-cell {
     -fx-background-color: white;
     -fx-cell-size: 45px;
-}
-
-/* Sobrescreve o azul padrão do JavaFX para um cinza ao selecionar a linha */
-.wireframe-table .table-row-cell:selected {
-    -fx-background-color: #e0e0e0;
-}
-
-/* Estiliza as células individuais (adiciona bordas internas) */
-.wireframe-table .table-cell {
-    -fx-border-color: transparent black black transparent;
+    -fx-border-color: transparent transparent #f5f5f5 transparent;
     -fx-border-width: 1px;
-    -fx-text-fill: black;
-    -fx-alignment: center-left;
 }
 
-/* Remove o contorno azul ao clicar na tabela */
-.wireframe-table:focused {
-    -fx-background-color: white;
-}
-/* Remove o fundo padrão da tabela */
-.wireframe-table {
-    -fx-background-color: white;
-    -fx-border-color: black;
-    -fx-border-width: 2px;
-    -fx-font-family: 'Monospaced';
-    -fx-font-size: 14px;
+/* Efeito ao passar o mouse na linha (Affordance) */
+.wireframe-table .table-row-cell:hover {
+    -fx-background-color: #f8f9fa;
 }
 
-/* Estiliza o fundo da área de cabeçalhos (Cinza claro como no seu HTML) */
-.wireframe-table .column-header-background {
-    -fx-background-color: #eee;
-    -fx-border-color: transparent transparent black transparent;
-    -fx-border-width: 2px;
-}
-
-/* Estiliza cada cabeçalho de coluna individualmente */
-.wireframe-table .column-header {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent black transparent transparent;
-    -fx-border-width: 2px;
-    -fx-size: 40px;
-    -fx-cursor: hand; /* Indica que é clicável para ordenar */
-}
-
-/* Estiliza o texto do cabeçalho */
-.wireframe-table .column-header .label {
-    -fx-text-fill: black;
-    -fx-font-weight: bold;
-    -fx-alignment: center-left;
-}
-
-/* Estiliza a linha da tabela e aumenta a altura */
-.wireframe-table .table-row-cell {
-    -fx-background-color: white;
-    -fx-cell-size: 45px;
-}
-
-/* Sobrescreve o azul padrão do JavaFX para um cinza ao selecionar a linha */
+/* Seleção da linha */
 .wireframe-table .table-row-cell:selected {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: #e3f2fd; /* Azul bem clarinho */
+    -fx-text-fill: #0b5394;
 }
 
-/* Estiliza as células individuais (adiciona bordas internas) */
-.wireframe-table .table-cell {
-    -fx-border-color: transparent black black transparent;
-    -fx-border-width: 1px;
-    -fx-text-fill: black;
-    -fx-alignment: center-left;
-}
-
-/* Remove o contorno azul ao clicar na tabela */
+/* Remove a borda azul de foco padrão do JavaFX */
 .wireframe-table:focused {
     -fx-background-color: white;
 }
 
-/* --- NOVO: UX PARA ORDENAÇÃO DE COLUNAS --- */
-
-/* Deixa a setinha de ordenação sempre visível (clara quando inativa) */
+/* Setinhas de ordenação */
 .wireframe-table .column-header .sort-order {
     -fx-opacity: 0.3;
 }
-
-/* Deixa a setinha totalmente opaca quando a coluna estiver ativamente ordenada */
 .wireframe-table .column-header.sort-ascending .sort-order,
 .wireframe-table .column-header.sort-descending .sort-order {
     -fx-opacity: 1.0;
+}
+
+/* =======================================================
+   CLASSES PARA BOTÕES E PAINÉIS (Para usar nos FXMLs)
+   ======================================================= */
+
+/* Botão Principal (Ação primária: Salvar, Avançar) */
+.btn-primary {
+    -fx-background-color: #0b5394;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+.btn-primary:hover {
+    -fx-background-color: #084298;
+}
+
+/* Botão Secundário (Ação de apoio: Voltar, Cancelar) */
+.btn-secondary {
+    -fx-background-color: white;
+    -fx-text-fill: #333333;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+.btn-secondary:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Botão de Perigo (Ação destrutiva: Excluir) */
+.btn-danger {
+    -fx-background-color: white;
+    -fx-text-fill: #dc3545;
+    -fx-border-color: #dc3545;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+.btn-danger:hover {
+    -fx-background-color: #f8d7da;
+}
+
+/* Painel estilo "Cartão" com sombra leve */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);
 }

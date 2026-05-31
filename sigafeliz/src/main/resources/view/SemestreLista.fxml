@@ -5,71 +5,58 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" spacing="20.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;"
-      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigafeliz.controller.SemestreListaController">
+<VBox prefHeight="650.0" prefWidth="900.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigafeliz.controller.SemestreListaController">
 
     <stylesheets>
         <URL value="@../css/style.css" />
     </stylesheets>
 
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
     </padding>
 
-    <Label maxWidth="1.7976931348623157E308" style="-fx-border-color: transparent transparent black transparent; -fx-border-width: 0 0 2 0; -fx-padding: 0 0 5 0;" text="CADASTRO DE SEMESTRE">
-        <font>
-            <Font name="Monospaced Bold" size="18.0" />
-        </font>
-    </Label>
+    <VBox spacing="10">
+        <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="CADASTRO DE SEMESTRE" />
+        <Separator />
+    </VBox>
 
-    <VBox spacing="15.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-padding: 15; -fx-background-color: #f8f9fa;">
-        <Label text="Formulário para criar um novo semestre:">
-            <font>
-                <Font name="Monospaced Bold" size="14.0" />
-            </font>
-        </Label>
+    <VBox spacing="15.0" styleClass="card">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        </padding>
+
+        <Label style="-fx-font-weight: bold; -fx-font-size: 15px;" text="Formulário para criar um novo semestre:" />
 
         <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <Label text="Nome:" />
+            <TextField fx:id="txtNome" prefWidth="120.0" promptText="Ex: 2025.1" />
 
-            <Label style="-fx-font-family: 'Monospaced';" text="Nome:" />
-            <TextField fx:id="txtNome" prefWidth="120.0" promptText="Ex: 2025.1" style="-fx-border-color: black; -fx-border-width: 2; -fx-font-family: 'Monospaced';" />
+            <Label text="Início:" />
+            <DatePicker fx:id="dpInicio" prefWidth="130.0" />
 
-            <Label style="-fx-font-family: 'Monospaced';" text="Início:" />
-            <DatePicker fx:id="dpInicio" prefWidth="130.0" style="-fx-border-color: black; -fx-border-width: 2;" />
-
-            <Label style="-fx-font-family: 'Monospaced';" text="Fim:" />
-            <DatePicker fx:id="dpFim" prefWidth="130.0" style="-fx-border-color: black; -fx-border-width: 2;" />
-
+            <Label text="Fim:" />
+            <DatePicker fx:id="dpFim" prefWidth="130.0" />
         </HBox>
 
         <HBox alignment="CENTER_LEFT" spacing="15.0">
-            <Label style="-fx-font-family: 'Monospaced';" text="Kickoff:" />
-            <DatePicker fx:id="dpKickoff" prefWidth="130.0" style="-fx-border-color: black; -fx-border-width: 2;" />
+            <Label text="Kickoff:" />
+            <DatePicker fx:id="dpKickoff" prefWidth="130.0" />
 
-            <Button onAction="#handleCriarSemestre" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-family: 'Monospaced'; -fx-font-weight: bold; -fx-cursor: hand;" text="CRIAR NOVO SEMESTRE" />
-
+            <Button onAction="#handleCriarSemestre" styleClass="btn-primary" text="Criar Novo Semestre" />
         </HBox>
     </VBox>
 
     <HBox alignment="CENTER_LEFT" spacing="15.0">
-        <Label text="Lista de Semestres">
-            <font>
-                <Font name="Monospaced Bold" size="16.0" />
-            </font>
-        </Label>
+        <Label style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Lista de Semestres" />
 
-        <Label style="-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-border-color: #ffeeba; -fx-border-width: 2; -fx-padding: 4 10 4 10; -fx-border-radius: 4; -fx-background-radius: 4;" text="💡 Dica: Dê 2 cliques nas datas para editá-las diretamente na tabela.">
-            <font>
-                <Font name="Monospaced Bold" size="12.0" />
-            </font>
-        </Label>
+        <Label style="-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-border-color: #ffeeba; -fx-border-width: 1; -fx-padding: 6 12 6 12; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 13px;" text="💡 Dica: Dê 2 cliques nas datas para editá-las diretamente na tabela." />
     </HBox>
 
     <TableView fx:id="tabelaSemestres" editable="true" styleClass="wireframe-table" VBox.vgrow="ALWAYS">
@@ -85,7 +72,10 @@
         </columns>
     </TableView>
 
-    <HBox style="-fx-border-color: black transparent transparent transparent; -fx-border-width: 2 0 0 0; -fx-border-style: dashed; -fx-padding: 15 0 0 0;">
-        <Button onAction="#handleVoltar" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-family: 'Monospaced'; -fx-font-weight: bold; -fx-cursor: hand;" text="← Voltar" />
+    <Separator />
+
+    <HBox alignment="CENTER_LEFT">
+        <Button onAction="#handleVoltar" styleClass="btn-secondary" text="← Voltar" prefHeight="40.0" prefWidth="120.0" />
     </HBox>
+
 </VBox>
