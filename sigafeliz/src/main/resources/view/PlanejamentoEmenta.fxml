@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="650.0" prefWidth="900.0" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigafeliz.controller.PlanejamentoEmentaController">
+<VBox prefHeight="650.0" prefWidth="1050.0" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigafeliz.controller.PlanejamentoEmentaController">
 
     <stylesheets>
         <URL value="@../css/style.css" />
@@ -45,24 +45,27 @@
 
     <TableView fx:id="tabelaTemas" styleClass="wireframe-table" VBox.vgrow="ALWAYS">
         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
         <columns>
-            <TableColumn fx:id="colOrdem" maxWidth="50.0" minWidth="50.0" text="Ord." style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colOrdem" prefWidth="50.0" text="Ord." style="-fx-alignment: CENTER;" />
 
-            <TableColumn fx:id="colTitulo" text="Tema da Aula" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" />
+            <TableColumn fx:id="colTitulo" prefWidth="250.0" text="Tema da Aula" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" />
 
-            <TableColumn fx:id="colMin" maxWidth="70.0" minWidth="70.0" text="Mín" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colMax" maxWidth="70.0" minWidth="70.0" text="Máx" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colPrioridade" maxWidth="110.0" minWidth="110.0" text="Prioridade" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colProva" maxWidth="60.0" minWidth="60.0" text="Prova?" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colAcoes" maxWidth="250.0" minWidth="250.0" text="Ações" style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colObrigatorio" prefWidth="95.0" text="Obrigatório?" style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colDependencia" prefWidth="160.0" text="Depende do Tema" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;" />
+            <TableColumn fx:id="colMin" prefWidth="60.0" text="Mín" style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colMax" prefWidth="60.0" text="Máx" style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colPrioridade" prefWidth="100.0" text="Prioridade" style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colProva" prefWidth="60.0" text="Prova?" style="-fx-alignment: CENTER;" />
+
+            <TableColumn fx:id="colAcoes" prefWidth="220.0" text="Ações" style="-fx-alignment: CENTER;" />
         </columns>
     </TableView>
 
     <Button maxWidth="1.7976931348623157E308" onAction="#handleAdicionarTema" styleClass="btn-secondary" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 4 0;" text="+" />
 
-    <Label style="-fx-font-size: 13px; -fx-text-fill: #666666;" text="* O sistema aloca primeiro a carga Mínima de todos os temas. As vagas restantes são preenchidas pela Prioridade até o limite Máximo." />
+    <Label style="-fx-font-size: 13px; -fx-text-fill: #666666;" text="* O sistema aloca primeiro a carga Mínima de todos os temas. As vagas restantes são preenchidas pela Prioridade até o limite Máximo. Temas não obrigatórios servem como blocos flexíveis no calendário." />
 
     <Separator />
 

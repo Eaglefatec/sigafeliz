@@ -13,7 +13,7 @@ public class TemaDAO {
 
     public List<Tema> listarPorDisciplina(Disciplina disciplina) throws SQLException {
         List<Tema> lista = new ArrayList<>();
-        String sql = "SELECT titulo, carga_minima, carga_maxima, prioridade, e_avaliacao, ordem " +
+        String sql = "SELECT titulo, carga_minima, carga_maxima, prioridade, e_avaliacao, ordem, obrigatorio, dependencia_titulo " +
                 "FROM tema WHERE disciplina_nome = ? ORDER BY ordem";
 
         try (Connection con = ConexaoDB.getConexao();
@@ -29,7 +29,9 @@ public class TemaDAO {
                             rs.getInt("carga_maxima"),
                             Prioridade.valueOf(rs.getString("prioridade")),
                             rs.getBoolean("e_avaliacao"),
-                            rs.getInt("ordem")
+                            rs.getInt("ordem"),
+                            rs.getBoolean("obrigatorio"),
+                            rs.getString("dependencia_titulo")
                     ));
                 }
             }
@@ -39,8 +41,8 @@ public class TemaDAO {
 
     public void salvar(Tema t) throws SQLException {
         String sql = """
-                INSERT INTO tema (disciplina_nome, titulo, carga_minima, carga_maxima, prioridade, e_avaliacao, ordem)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO tema (disciplina_nome, titulo, carga_minima, carga_maxima, prioridade, e_avaliacao, ordem, obrigatorio, dependencia_titulo)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
         try (Connection con = ConexaoDB.getConexao();
@@ -53,6 +55,8 @@ public class TemaDAO {
             ps.setString(5, t.getPrioridade().name());
             ps.setBoolean(6, t.isEAvaliacao());
             ps.setInt(7, t.getOrdem());
+            ps.setBoolean(8, t.isObrigatorio());
+            ps.setString(9, t.getDependenciaTitulo());
             ps.executeUpdate();
         }
     }
@@ -60,7 +64,7 @@ public class TemaDAO {
     public void editar(Tema t, String tituloAntigo) throws SQLException {
         String sql = """
                 UPDATE tema 
-                SET titulo = ?, carga_minima = ?, carga_maxima = ?, prioridade = ?, e_avaliacao = ?, ordem = ?
+                SET titulo = ?, carga_minima = ?, carga_maxima = ?, prioridade = ?, e_avaliacao = ?, ordem = ?, obrigatorio = ?, dependencia_titulo = ?
                 WHERE disciplina_nome = ? AND titulo = ?
                 """;
 
@@ -73,8 +77,10 @@ public class TemaDAO {
             ps.setString(4, t.getPrioridade().name());
             ps.setBoolean(5, t.isEAvaliacao());
             ps.setInt(6, t.getOrdem());
-            ps.setString(7, t.getDisciplina().getNome());
-            ps.setString(8, tituloAntigo); // Usado na cláusula WHERE para achar o registro correto
+            ps.setBoolean(7, t.isObrigatorio());
+            ps.setString(8, t.getDependenciaTitulo());
+            ps.setString(9, t.getDisciplina().getNome());
+            ps.setString(10, tituloAntigo);
             ps.executeUpdate();
         }
     }
@@ -88,15 +94,13 @@ public class TemaDAO {
             ps.executeUpdate();
         }
     }
-    /**
-     * Busca todos os temas de uma disciplina, ordenados por ordem.
-     */
+
     public List<Tema> buscarPorDisciplina(String disciplinaNome) throws SQLException {
         List<Tema> lista = new ArrayList<>();
 
         String sql = """
                 SELECT t.disciplina_nome, t.titulo, t.carga_minima, t.carga_maxima,
-                       t.prioridade, t.e_avaliacao, t.ordem,
+                       t.prioridade, t.e_avaliacao, t.ordem, t.obrigatorio, t.dependencia_titulo,
                        d.professor_email, d.carga_horaria_total
                 FROM tema t
                 JOIN disciplina d ON d.nome = t.disciplina_nome
@@ -113,7 +117,7 @@ public class TemaDAO {
             while (rs.next()) {
                 Disciplina disciplina = new Disciplina(
                         rs.getString("disciplina_nome"),
-                        null, // Professor pode ser carregado se necessário
+                        null,
                         rs.getInt("carga_horaria_total")
                 );
 
@@ -128,7 +132,9 @@ public class TemaDAO {
                         rs.getInt("carga_maxima"),
                         prioridade,
                         rs.getBoolean("e_avaliacao"),
-                        rs.getInt("ordem")
+                        rs.getInt("ordem"),
+                        rs.getBoolean("obrigatorio"),
+                        rs.getString("dependencia_titulo")
                 );
 
                 lista.add(tema);
@@ -138,10 +144,6 @@ public class TemaDAO {
         return lista;
     }
 
-    /**
-     * Busca o total de aulas por semana de uma disciplina
-     * somando os dias cadastrados em aula_por_dia.
-     */
     public int buscarAulasPorSemana(String disciplinaNome) throws SQLException {
         String sql = """
                 SELECT COALESCE(SUM(quantidade_aulas), 0) AS total
@@ -160,12 +162,6 @@ public class TemaDAO {
         return 1;
     }
 
-    /**
-     * Salva as aulas alocadas pelo algoritmo na tabela tema.
-     *
-     * Rode antes no banco:
-     * ALTER TABLE tema ADD COLUMN IF NOT EXISTS aulas_alocadas int4 DEFAULT 0;
-     */
     public void salvarAulasAlocadas(Tema tema) throws SQLException {
         String sql = """
                 UPDATE tema

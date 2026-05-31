@@ -70,7 +70,7 @@ public class Main extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/" + fxmlFileName));
             Parent root = loader.load();
-            Scene scene = new Scene(root, 900, 600);
+            Scene scene = new Scene(root, 1100, 700);
             scene.getStylesheets().add(Main.class.getResource("/css/style.css").toExternalForm());
 
             primaryStage.setScene(scene);

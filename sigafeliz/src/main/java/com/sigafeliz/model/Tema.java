@@ -9,8 +9,10 @@ public class Tema {
     private boolean eAvaliacao;
     private int ordem;
     private int aulasAlocadas; // preenchido pelo algoritmo de distribuição
+    private boolean obrigatorio; // NOVO
+    private String dependenciaTitulo; // NOVO (Aponta para outro tema da mesma disciplina)
 
-    public Tema(Disciplina disciplina, String titulo, int cargaMinima, int cargaMaxima, Prioridade prioridade, boolean eAvaliacao, int ordem) {
+    public Tema(Disciplina disciplina, String titulo, int cargaMinima, int cargaMaxima, Prioridade prioridade, boolean eAvaliacao, int ordem, boolean obrigatorio, String dependenciaTitulo) {
         this.disciplina    = disciplina;
         this.titulo        = titulo;
         this.cargaMinima   = cargaMinima;
@@ -19,6 +21,13 @@ public class Tema {
         this.eAvaliacao    = eAvaliacao;
         this.ordem         = ordem;
         this.aulasAlocadas = cargaMinima; // começa alocado no mínimo
+        this.obrigatorio   = obrigatorio;
+        this.dependenciaTitulo = dependenciaTitulo;
+    }
+
+    // Construtor legado para manter a compatibilidade com mocks se houver
+    public Tema(Disciplina disciplina, String titulo, int cargaMinima, int cargaMaxima, Prioridade prioridade, boolean eAvaliacao, int ordem) {
+        this(disciplina, titulo, cargaMinima, cargaMaxima, prioridade, eAvaliacao, ordem, true, null);
     }
 
     public Disciplina getDisciplina() { return disciplina; }
@@ -46,4 +55,10 @@ public class Tema {
     public void setAulasAlocadas(int aulasAlocadas) { this.aulasAlocadas = aulasAlocadas; }
 
     public int getVagasRestantes() { return cargaMaxima - aulasAlocadas; }
+
+    public boolean isObrigatorio() { return obrigatorio; }
+    public void setObrigatorio(boolean obrigatorio) { this.obrigatorio = obrigatorio; }
+
+    public String getDependenciaTitulo() { return dependenciaTitulo; }
+    public void setDependenciaTitulo(String dependenciaTitulo) { this.dependenciaTitulo = dependenciaTitulo; }
 }

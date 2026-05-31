@@ -48,6 +48,8 @@ public class PlanejamentoEmentaController {
     @FXML private TableView<Tema> tabelaTemas;
     @FXML private TableColumn<Tema, Integer> colOrdem;
     @FXML private TableColumn<Tema, String> colTitulo;
+    @FXML private TableColumn<Tema, Boolean> colObrigatorio;
+    @FXML private TableColumn<Tema, String> colDependencia;
     @FXML private TableColumn<Tema, Integer> colMin;
     @FXML private TableColumn<Tema, Integer> colMax;
     @FXML private TableColumn<Tema, Prioridade> colPrioridade;
@@ -55,8 +57,6 @@ public class PlanejamentoEmentaController {
     @FXML private TableColumn<Tema, Void> colAcoes;
 
     private Disciplina disciplinaAtual;
-
-    // Controles de Sessão de Edição Inline
     private Tema temaEmEdicao = null;
     private String tituloOriginalEdicao = null;
     private boolean showSprintError = false;
@@ -99,23 +99,26 @@ public class PlanejamentoEmentaController {
         lblSomaAtualBarra.setText(textoSoma);
     }
 
-    // --- MÁGICA DA EDIÇÃO DIRETO NA TABELA ---
     private void configurarColunasInline() {
         colOrdem.setCellValueFactory(new PropertyValueFactory<>("ordem"));
 
-        // COLUNA TÍTULO
+        // COLUNA TITULO (COM CHECAGEM SEGURA DE LIMITES)
         colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         colTitulo.setCellFactory(col -> new TableCell<>() {
             private final TextField txt = new TextField();
-            { txt.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-font-family: 'Monospaced';"); }
-
             @Override protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) { setGraphic(null); setText(null); return; }
-                Tema t = getTableView().getItems().get(getIndex());
-
+                if (empty || getTableView() == null || getTableView().getItems() == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
                 if (t == temaEmEdicao) {
-                    txt.setText(t.getTitulo());
+                    txt.setText(t.getTitulo() != null ? t.getTitulo() : "");
+                    txt.setMaxWidth(Double.MAX_VALUE);
                     txt.setOnKeyReleased(e -> t.setTitulo(txt.getText()));
                     setGraphic(txt);
                     setText(null);
@@ -126,24 +129,88 @@ public class PlanejamentoEmentaController {
             }
         });
 
-        // COLUNA MÍNIMO
+        // COLUNA OBRIGATÓRIO (COM CHECAGEM SEGURA DE LIMITES)
+        colObrigatorio.setCellValueFactory(new PropertyValueFactory<>("obrigatorio"));
+        colObrigatorio.setCellFactory(col -> new TableCell<>() {
+            private final CheckBox chk = new CheckBox();
+            {
+                chk.setStyle("-fx-cursor: hand;");
+                chk.selectedProperty().addListener((obs, old, newVal) -> {
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
+                        if (t == temaEmEdicao) t.setObrigatorio(newVal);
+                    }
+                });
+            }
+            @Override protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null) {
+                    setGraphic(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size() || item == null) {
+                    setGraphic(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                chk.setSelected(item);
+                chk.setDisable(t != temaEmEdicao);
+                setGraphic(chk);
+                setAlignment(Pos.CENTER);
+            }
+        });
+
+        // COLUNA DEPENDÊNCIA (COM CHECAGEM SEGURA DE LIMITES)
+        colDependencia.setCellValueFactory(new PropertyValueFactory<>("dependenciaTitulo"));
+        colDependencia.setCellFactory(col -> new TableCell<>() {
+            private final TextField txt = new TextField();
+            @Override protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                if (t == temaEmEdicao) {
+                    txt.setText(t.getDependenciaTitulo() != null ? t.getDependenciaTitulo() : "");
+                    txt.setMaxWidth(Double.MAX_VALUE);
+                    txt.setOnKeyReleased(e -> t.setDependenciaTitulo(txt.getText().trim().isEmpty() ? null : txt.getText().trim()));
+                    setGraphic(txt);
+                    setText(null);
+                } else {
+                    setGraphic(null);
+                    setText(item != null ? item : "-");
+                }
+            }
+        });
+
+        // COLUNA MÍNIMO (COM CHECAGEM SEGURA DE LIMITES)
         colMin.setCellValueFactory(new PropertyValueFactory<>("cargaMinima"));
         colMin.setCellFactory(col -> new TableCell<>() {
             private final Spinner<Integer> spinner = new Spinner<>(1, 100, 1);
             {
                 spinner.setEditable(true);
-                spinner.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-font-family: 'Monospaced';");
                 spinner.valueProperty().addListener((obs, old, newVal) -> {
-                    if (getIndex() >= 0 && getIndex() < getTableView().getItems().size() && newVal != null) {
-                        Tema t = getTableView().getItems().get(getIndex());
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
                         if (t == temaEmEdicao) t.setCargaMinima(newVal);
                     }
                 });
             }
             @Override protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) { setGraphic(null); setText(null); return; }
-                Tema t = getTableView().getItems().get(getIndex());
+                if (empty || getTableView() == null || getTableView().getItems() == null || item == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
                 if (t == temaEmEdicao) {
                     spinner.getValueFactory().setValue(item);
                     setGraphic(spinner);
@@ -156,24 +223,30 @@ public class PlanejamentoEmentaController {
             }
         });
 
-        // COLUNA MÁXIMO
+        // COLUNA MÁXIMO (COM CHECAGEM SEGURA DE LIMITES)
         colMax.setCellValueFactory(new PropertyValueFactory<>("cargaMaxima"));
         colMax.setCellFactory(col -> new TableCell<>() {
             private final Spinner<Integer> spinner = new Spinner<>(1, 100, 1);
             {
                 spinner.setEditable(true);
-                spinner.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-font-family: 'Monospaced';");
                 spinner.valueProperty().addListener((obs, old, newVal) -> {
-                    if (getIndex() >= 0 && getIndex() < getTableView().getItems().size() && newVal != null) {
-                        Tema t = getTableView().getItems().get(getIndex());
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
                         if (t == temaEmEdicao) t.setCargaMaxima(newVal);
                     }
                 });
             }
             @Override protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) { setGraphic(null); setText(null); return; }
-                Tema t = getTableView().getItems().get(getIndex());
+                if (empty || getTableView() == null || getTableView().getItems() == null || item == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
                 if (t == temaEmEdicao) {
                     spinner.getValueFactory().setValue(item);
                     setGraphic(spinner);
@@ -186,23 +259,29 @@ public class PlanejamentoEmentaController {
             }
         });
 
-        // COLUNA PRIORIDADE
+        // COLUNA PRIORIDADE (COM CHECAGEM SEGURA DE LIMITES)
         colPrioridade.setCellValueFactory(new PropertyValueFactory<>("prioridade"));
         colPrioridade.setCellFactory(col -> new TableCell<>() {
             private final ComboBox<Prioridade> combo = new ComboBox<>(FXCollections.observableArrayList(Prioridade.values()));
             {
-                combo.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-font-family: 'Monospaced';");
                 combo.valueProperty().addListener((obs, old, newVal) -> {
-                    if (getIndex() >= 0 && getIndex() < getTableView().getItems().size()) {
-                        Tema t = getTableView().getItems().get(getIndex());
-                        if (t == temaEmEdicao && newVal != null) t.setPrioridade(newVal);
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
+                        if (t == temaEmEdicao) t.setPrioridade(newVal);
                     }
                 });
             }
             @Override protected void updateItem(Prioridade item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) { setGraphic(null); setText(null); return; }
-                Tema t = getTableView().getItems().get(getIndex());
+                if (empty || getTableView() == null || getTableView().getItems() == null || item == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
                 if (t == temaEmEdicao) {
                     combo.setValue(item);
                     setGraphic(combo);
@@ -215,74 +294,73 @@ public class PlanejamentoEmentaController {
             }
         });
 
-        // COLUNA PROVA
+        // COLUNA PROVA (COM CHECAGEM SEGURA DE LIMITES)
         colProva.setCellValueFactory(new PropertyValueFactory<>("eAvaliacao"));
         colProva.setCellFactory(col -> new TableCell<>() {
             private final CheckBox chk = new CheckBox();
             {
-                chk.setStyle("-fx-scale-x: 1.3; -fx-scale-y: 1.3; -fx-cursor: hand;");
+                chk.setStyle("-fx-cursor: hand;");
                 chk.selectedProperty().addListener((obs, old, newVal) -> {
-                    if (getIndex() >= 0 && getIndex() < getTableView().getItems().size()) {
-                        Tema t = getTableView().getItems().get(getIndex());
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
                         if (t == temaEmEdicao) t.setEAvaliacao(newVal);
                     }
                 });
             }
             @Override protected void updateItem(Boolean item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) { setGraphic(null); return; }
-                Tema t = getTableView().getItems().get(getIndex());
+                if (empty || getTableView() == null || getTableView().getItems() == null || item == null) {
+                    setGraphic(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
                 chk.setSelected(item);
-                chk.setDisable(t != temaEmEdicao); // Fica cinza se não estiver editando
+                chk.setDisable(t != temaEmEdicao);
                 setGraphic(chk);
                 setAlignment(Pos.CENTER);
             }
         });
 
-        // COLUNA DE AÇÕES
+        // COLUNA DE AÇÕES (COM CHECAGEM SEGURA DE LIMITES)
         colAcoes.setCellFactory(col -> new TableCell<>() {
             private final Button btnSalvar = new Button("✔ SALVAR");
             private final Button btnCancelar = new Button("✖ CANCELAR");
             private final Button btnEditar = new Button("✎ EDITAR");
             private final Button btnExcluir = new Button("✖ EXCLUIR");
-
             {
-                // Estilo Azul (Baseado no botão Configurar de SemestreLista)
-                btnEditar.setStyle("-fx-background-color: #cfe2f3; -fx-border-color: #0b5394; -fx-text-fill: #0b5394; -fx-border-width: 2; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
-
-                // Estilo Vermelho (Baseado no botão Excluir de SemestreLista)
-                btnExcluir.setStyle("-fx-background-color: #f8d7da; -fx-border-color: #b30000; -fx-border-width: 2; -fx-text-fill: #b30000; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
-                btnCancelar.setStyle("-fx-background-color: #f8d7da; -fx-border-color: #b30000; -fx-border-width: 2; -fx-text-fill: #b30000; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
-
-                // Estilo Verde (Seguindo a estrutura de borda colorida 2px e fonte colorida)
-                btnSalvar.setStyle("-fx-background-color: #d4edda; -fx-border-color: #155724; -fx-text-fill: #155724; -fx-border-width: 2; -fx-cursor: hand; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
+                btnEditar.setStyle("-fx-background-color: #cfe2f3; -fx-border-color: #0b5394; -fx-text-fill: #0b5394; -fx-border-width: 2; -fx-cursor: hand; -fx-font-weight: bold;");
+                btnExcluir.setStyle("-fx-background-color: #f8d7da; -fx-border-color: #b30000; -fx-border-width: 2; -fx-text-fill: #b30000; -fx-cursor: hand; -fx-font-weight: bold;");
+                btnCancelar.setStyle("-fx-background-color: #f8d7da; -fx-border-color: #b30000; -fx-border-width: 2; -fx-text-fill: #b30000; -fx-cursor: hand; -fx-font-weight: bold;");
+                btnSalvar.setStyle("-fx-background-color: #d4edda; -fx-border-color: #155724; -fx-text-fill: #155724; -fx-border-width: 2; -fx-cursor: hand; -fx-font-weight: bold;");
 
                 btnEditar.setOnAction(e -> iniciarEdicaoInline(getTableView().getItems().get(getIndex())));
                 btnExcluir.setOnAction(e -> excluirTema(getTableView().getItems().get(getIndex())));
                 btnSalvar.setOnAction(e -> salvarEdicaoInline(getTableView().getItems().get(getIndex())));
                 btnCancelar.setOnAction(e -> cancelarEdicaoInline(getTableView().getItems().get(getIndex())));
             }
-
             @Override protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) { setGraphic(null); return; }
-                Tema t = getTableView().getItems().get(getIndex());
-
-                // Espaçamento padronizado de 10px entre os botões
+                if (empty || getTableView() == null || getTableView().getItems() == null) {
+                    setGraphic(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
                 if (t == temaEmEdicao) {
-                    HBox box = new HBox(10, btnSalvar, btnCancelar);
-                    box.setAlignment(Pos.CENTER);
-                    setGraphic(box);
+                    HBox box = new HBox(10, btnSalvar, btnCancelar); box.setAlignment(Pos.CENTER); setGraphic(box);
                 } else {
-                    HBox box = new HBox(10, btnEditar, btnExcluir);
-                    box.setAlignment(Pos.CENTER);
-                    setGraphic(box);
+                    HBox box = new HBox(10, btnEditar, btnExcluir); box.setAlignment(Pos.CENTER); setGraphic(box);
                 }
             }
         });
     }
 
-    // --- AÇÕES INLINE ---
     @FXML
     private void handleAdicionarTema() {
         if (temaEmEdicao != null) {
@@ -290,10 +368,8 @@ public class PlanejamentoEmentaController {
             return;
         }
         int proximaOrdem = disciplinaAtual.getTemas().size() + 1;
-
-        Tema novoTema = new Tema(disciplinaAtual, "", 2, 4, Prioridade.MEDIA, false, proximaOrdem);
+        Tema novoTema = new Tema(disciplinaAtual, "", 2, 4, Prioridade.MEDIA, false, proximaOrdem, true, null);
         disciplinaAtual.getTemas().add(novoTema);
-
         atualizarTabelaESomas();
         iniciarEdicaoInline(novoTema);
     }
@@ -310,7 +386,6 @@ public class PlanejamentoEmentaController {
             exibirAlerta("Aviso", "O título do tema não pode ser vazio.", Alert.AlertType.WARNING);
             return;
         }
-
         try {
             if (tituloOriginalEdicao == null || tituloOriginalEdicao.isEmpty()) {
                 TemaService.salvar(t);
@@ -320,7 +395,6 @@ public class PlanejamentoEmentaController {
             temaEmEdicao = null;
             tituloOriginalEdicao = null;
             carregarTemasDoBanco();
-
         } catch (SQLException e) {
             exibirAlerta("Erro", "Erro ao gravar tema no banco: " + e.getMessage(), Alert.AlertType.ERROR);
         }
@@ -349,19 +423,39 @@ public class PlanejamentoEmentaController {
         });
     }
 
-    // --- OUTRAS AÇÕES DA TELA ---
-    @FXML
-    private void handleValidar() {
-        showSprintError = !showSprintError;
-        boxSprintError.setVisible(showSprintError);
-        boxSprintError.setManaged(showSprintError);
-        if (!showSprintError) {
-            exibirAlerta("Sucesso", "Distribuição validada! Sem conflitos de Sprint.", Alert.AlertType.INFORMATION);
+    private List<Tema> ordenarPorDependencia(List<Tema> temas) {
+        List<Tema> resultado = new ArrayList<>();
+        Set<String> visitados = new HashSet<>();
+        Set<String> emProcesso = new HashSet<>();
+        Map<String, Tema> mapa = new HashMap<>();
+
+        for (Tema t : temas) mapa.put(t.getTitulo(), t);
+
+        for (Tema t : temas) {
+            if (!visitados.contains(t.getTitulo())) {
+                dfsTopological(t, mapa, visitados, emProcesso, resultado);
+            }
         }
+        return resultado;
     }
 
-    @FXML private void handleVoltar() { Main.loadView("MinhasDisciplinas.fxml"); }
+    private void dfsTopological(Tema t, Map<String, Tema> mapa, Set<String> visitados, Set<String> emProcesso, List<Tema> resultado) {
+        emProcesso.add(t.getTitulo());
+        String dep = t.getDependenciaTitulo();
 
+        if (dep != null && !dep.trim().isEmpty() && mapa.containsKey(dep)) {
+            if (!visitados.contains(dep)) {
+                if (!emProcesso.contains(dep)) {
+                    dfsTopological(mapa.get(dep), mapa, visitados, emProcesso, resultado);
+                } else {
+                    System.err.println("Aviso: Dependência cíclica detectada em: " + dep);
+                }
+            }
+        }
+        emProcesso.remove(t.getTitulo());
+        visitados.add(t.getTitulo());
+        resultado.add(t);
+    }
 
     @FXML
     private void handleExportar() {
@@ -373,9 +467,7 @@ public class PlanejamentoEmentaController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Salvar Planejamento como Excel");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Planilha do Excel (*.xlsx)", "*.xlsx"));
-
-        String defaultName = "Planejamento_" + disciplinaAtual.getNome().replaceAll("\\s+", "_") + ".xlsx";
-        fileChooser.setInitialFileName(defaultName);
+        fileChooser.setInitialFileName("Planejamento_" + disciplinaAtual.getNome().replaceAll("\\s+", "_") + ".xlsx");
 
         File file = fileChooser.showSaveDialog(tabelaTemas.getScene().getWindow());
 
@@ -383,19 +475,9 @@ public class PlanejamentoEmentaController {
             try (Workbook workbook = new XSSFWorkbook()) {
                 Sheet sheet = workbook.createSheet("Grade Diária");
                 Row headerRow = sheet.createRow(0);
+                String[] columns = {"Número da Aula", "Data", "Tema", "Marcador de Prova", "Dia da Semana", "Identificação da Disciplina"};
 
-                String[] columns = {
-                        "Número da Aula",
-                        "Data",
-                        "Tema",
-                        "Marcador de Prova",
-                        "Dia da Semana",
-                        "Identificação da Disciplina"
-                };
-
-                for (int i = 0; i < columns.length; i++) {
-                    headerRow.createCell(i).setCellValue(columns[i]);
-                }
+                for (int i = 0; i < columns.length; i++) headerRow.createCell(i).setCellValue(columns[i]);
 
                 Semestre semestre = SemestreService.getSemestreSelecionado();
                 DistribuicaoAulaService distribuicaoService = new DistribuicaoAulaService();
@@ -407,137 +489,93 @@ public class PlanejamentoEmentaController {
                     temasDistribuidos = new ArrayList<>(disciplinaAtual.getTemas());
                 }
 
-                temasDistribuidos.sort(Comparator.comparingInt(Tema::getOrdem));
+                temasDistribuidos = ordenarPorDependencia(temasDistribuidos);
 
                 Queue<Tema> filaAulas = new LinkedList<>();
                 for (Tema t : temasDistribuidos) {
                     if (t.isEAvaliacao()) {
-                        filaAulas.add(t); // prova entra UMA vez só
+                        filaAulas.add(t);
                     } else {
-                        for (int i = 0; i < t.getAulasAlocadas(); i++) {
-                            filaAulas.add(t); // conteúdo normal entra uma vez por aula
-                        }
+                        for (int i = 0; i < t.getAulasAlocadas(); i++) filaAulas.add(t);
                     }
                 }
 
                 GradeDAO gradeDAO = new GradeDAO();
                 DiaRestritoDAO diaRestritoDAO = new DiaRestritoDAO();
                 Map<DayOfWeek, Integer> gradeAulas = gradeDAO.buscarGradePorDisciplina(disciplinaAtual.getNome());
-                Set<LocalDate> datasRestritas = diaRestritoDAO.listarPorSemestre(semestre)
-                        .stream().map(DiaRestrito::getData)
-                        .collect(java.util.stream.Collectors.toSet());
+                Set<LocalDate> datasRestritas = diaRestritoDAO.listarPorSemestre(semestre).stream().map(DiaRestrito::getData).collect(java.util.stream.Collectors.toSet());
 
                 String[] nomesDias = {"", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"};
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-                int rowNum = 1;
-                int numeroDaAula = 1;
-                LocalDate data = semestre.getDataInicio();
+                int rowNum = 1; int numeroDaAula = 1; LocalDate data = semestre.getDataInicio();
 
                 while (!data.isAfter(semestre.getDataFim()) && !filaAulas.isEmpty()) {
                     DayOfWeek dia = data.getDayOfWeek();
-
                     if (gradeAulas.containsKey(dia) && !datasRestritas.contains(data)) {
                         int qtdAulasNoDia = gradeAulas.get(dia);
                         Tema proximoTema = filaAulas.peek();
 
                         if (proximoTema != null && proximoTema.isEAvaliacao()) {
-                            // Procura o próximo dia com 2+ aulas para a prova
-                            LocalDate melhorDia = null;
-                            int melhorQtd = 0;
-                            LocalDate buscaData = data;
-
+                            LocalDate melhorDia = null; int melhorQtd = 0; LocalDate buscaData = data;
                             while (!buscaData.isAfter(semestre.getDataFim())) {
                                 DayOfWeek buscaDia = buscaData.getDayOfWeek();
                                 if (gradeAulas.containsKey(buscaDia) && !datasRestritas.contains(buscaData)) {
                                     int qtd = gradeAulas.get(buscaDia);
-                                    if (qtd >= 2) {
-                                        melhorDia = buscaData;
-                                        melhorQtd = qtd;
-                                        break;
-                                    } else if (melhorDia == null) {
-                                        // Guarda o primeiro dia disponível como fallback
-                                        melhorDia = buscaData;
-                                        melhorQtd = qtd;
-                                    }
+                                    if (qtd >= 2) { melhorDia = buscaData; melhorQtd = qtd; break; }
+                                    else if (melhorDia == null) { melhorDia = buscaData; melhorQtd = qtd; }
                                 }
                                 buscaData = buscaData.plusDays(1);
                             }
+                            if (melhorDia != null) { data = melhorDia; dia = data.getDayOfWeek(); qtdAulasNoDia = melhorQtd; }
 
-                            // Avança 'data' até o melhor dia encontrado
-                            if (melhorDia != null) {
-                                data = melhorDia;
-                                dia = data.getDayOfWeek();
-                                qtdAulasNoDia = melhorQtd;
-                            }
-
-                            // Consome a prova e gera uma linha
                             Tema temaProva = filaAulas.poll();
                             for (int i = 1; i < qtdAulasNoDia; i++) {
-                                if (!filaAulas.isEmpty() && filaAulas.peek() == temaProva) {
-                                    filaAulas.poll();
-                                }
+                                if (!filaAulas.isEmpty() && filaAulas.peek() == temaProva) filaAulas.poll();
                             }
 
                             Row row = sheet.createRow(rowNum++);
-                            row.createCell(0).setCellValue(numeroDaAula);
-                            numeroDaAula += qtdAulasNoDia;
+                            row.createCell(0).setCellValue(numeroDaAula); numeroDaAula += qtdAulasNoDia;
                             row.createCell(1).setCellValue(data.format(formatter));
                             row.createCell(2).setCellValue(temaProva.getTitulo());
                             row.createCell(3).setCellValue("Sim");
                             row.createCell(4).setCellValue(nomesDias[dia.getValue()]);
                             row.createCell(5).setCellValue(disciplinaAtual.getNome());
-
                         } else {
-                            // Comportamento normal: 1 linha por aula
                             for (int i = 0; i < qtdAulasNoDia && !filaAulas.isEmpty(); i++) {
                                 Tema temaAula = filaAulas.poll();
-
-                                // Se o próximo tema normal for prova, para o dia aqui
-                                if (temaAula.isEAvaliacao()) {
-                                    filaAulas.add(temaAula); // devolve pra fila
-                                    break;
-                                }
+                                if (temaAula.isEAvaliacao()) { filaAulas.add(temaAula); break; }
 
                                 Row row = sheet.createRow(rowNum++);
                                 row.createCell(0).setCellValue(numeroDaAula++);
                                 row.createCell(1).setCellValue(data.format(formatter));
                                 row.createCell(2).setCellValue(temaAula.getTitulo());
-                                row.createCell(3).setCellValue("Sim".equals("Não") ? "Sim" : "Não");
+                                row.createCell(3).setCellValue("Não");
                                 row.createCell(4).setCellValue(nomesDias[dia.getValue()]);
                                 row.createCell(5).setCellValue(disciplinaAtual.getNome());
                             }
                         }
                     }
-
                     data = data.plusDays(1);
                 }
 
-                for (int i = 0; i < columns.length; i++) {
-                    sheet.autoSizeColumn(i);
-                }
-
-                try (FileOutputStream fileOut = new FileOutputStream(file)) {
-                    workbook.write(fileOut);
-                }
-
-                exibirAlerta("Sucesso", "Grade exportada com sucesso!\nArquivo salvo em:\n" + file.getAbsolutePath(), Alert.AlertType.INFORMATION);
+                for (int i = 0; i < columns.length; i++) sheet.autoSizeColumn(i);
+                try (FileOutputStream fileOut = new FileOutputStream(file)) { workbook.write(fileOut); }
+                exibirAlerta("Sucesso", "Grade exportada com sucesso baseado na hierarquia de dependências!", Alert.AlertType.INFORMATION);
 
             } catch (Exception e) {
                 exibirAlerta("Erro na Exportação", "Ocorreu um erro ao gerar a planilha XLSX:\n" + e.getMessage(), Alert.AlertType.ERROR);
-                e.printStackTrace();
             }
         }
     }
 
-    @FXML private void handleFinalizar() { exibirAlerta("Concluído", "Planejamento salvo.", Alert.AlertType.INFORMATION); }
-
-    private void exibirAlerta(String titulo, String msg, Alert.AlertType tipo) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
+    @FXML private void handleValidar() {
+        showSprintError = !showSprintError; boxSprintError.setVisible(showSprintError); boxSprintError.setManaged(showSprintError);
+        if (!showSprintError) exibirAlerta("Sucesso", "Distribuição validada! Sem conflitos de Sprint.", Alert.AlertType.INFORMATION);
     }
-
+    @FXML private void handleVoltar() { Main.loadView("MinhasDisciplinas.fxml"); }
+    @FXML private void handleFinalizar() { exibirAlerta("Concluído", "Planejamento salvo.", Alert.AlertType.INFORMATION); }
+    private void exibirAlerta(String titulo, String msg, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo); alert.setTitle(titulo); alert.setHeaderText(null); alert.setContentText(msg); alert.showAndWait();
+    }
 }
