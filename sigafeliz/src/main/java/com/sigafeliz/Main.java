@@ -70,11 +70,19 @@ public class Main extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/" + fxmlFileName));
             Parent root = loader.load();
-            Scene scene = new Scene(root, 1100, 700);
-            scene.getStylesheets().add(Main.class.getResource("/css/style.css").toExternalForm());
 
-            primaryStage.setScene(scene);
-            primaryStage.centerOnScreen();
+            // Verifica se a janela (Stage) já tem uma Cena (Scene)
+            if (primaryStage.getScene() == null) {
+                // Se for a primeira vez (abertura do app), cria a Scene e centraliza
+                Scene scene = new Scene(root, 1100, 700);
+                scene.getStylesheets().add(Main.class.getResource("/css/style.css").toExternalForm());
+                primaryStage.setScene(scene);
+                primaryStage.centerOnScreen();
+            } else {
+                // Se já existir, APENAS troca o conteúdo. Isso preserva o estado maximizado!
+                primaryStage.getScene().setRoot(root);
+            }
+
             primaryStage.show();
 
         } catch (IOException e) {
