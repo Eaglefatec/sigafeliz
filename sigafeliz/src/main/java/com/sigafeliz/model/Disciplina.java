@@ -3,6 +3,7 @@ package com.sigafeliz.model;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Disciplina {
     private String curso;
     private String nome;

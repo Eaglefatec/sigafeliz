@@ -14,6 +14,23 @@ public class TemaService {
         return dao.listarPorDisciplina(d);
     }
 
+    public static int getTotalMinimoPorDisciplina(Disciplina d) throws SQLException {
+
+        List<Tema> listTemas = getTemasPorDisciplina(d);
+        int total = 0;
+
+        for (Tema tema : listTemas) {
+            if (tema.isObrigatorio()) {
+               total += tema.getCargaMinima();
+            }
+        }
+
+        return total;
+
+
+    }
+
+
     public static void salvar(Tema t) throws SQLException {
         validarDependencia(t);
         dao.salvar(t);

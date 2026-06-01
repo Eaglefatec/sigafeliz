@@ -459,10 +459,26 @@ public class PlanejamentoEmentaController {
 
     @FXML
     private void handleExportar() {
+
+        // validação inicial
         if (disciplinaAtual == null || disciplinaAtual.getTemas().isEmpty()) {
             exibirAlerta("Aviso", "Não há temas cadastrados nesta disciplina para exportar.", Alert.AlertType.WARNING);
             return;
         }
+
+        // valida se as aulas cabem
+
+        try {
+            int somaMin = TemaService.getTotalMinimoPorDisciplina(disciplinaAtual);
+            if (somaMin > disciplinaAtual.getCargaHorariaTotal()){
+                exibirAlerta("Aviso", "O número mínimo ["+String.valueOf(somaMin)+"] de aulas cadastradas e obrigatórias excede o máximo ["+String.valueOf(disciplinaAtual.getCargaHorariaTotal())
+                        +"] permitido para esta disciplina. ", Alert.AlertType.WARNING);
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Salvar Planejamento como Excel");
