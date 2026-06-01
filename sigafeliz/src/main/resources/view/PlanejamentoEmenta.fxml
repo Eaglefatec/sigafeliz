@@ -16,56 +16,81 @@
     </padding>
 
     <VBox spacing="10">
-        <Label fx:id="lblTituloDisciplina" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="PLANEJAMENTO: DISCIPLINA" />
+        <Label fx:id="lblTituloDisciplina" style="-fx-font-size: 20px; -fx-font-weight: bold;"
+               text="PLANEJAMENTO: DISCIPLINA" />
         <Separator />
     </VBox>
 
     <HBox spacing="15.0">
-        <VBox style="-fx-background-color: #e3f2fd; -fx-border-color: #bbdefb; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;" HBox.hgrow="ALWAYS">
-            <Label fx:id="lblMetaAulas" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Meta: 80 Aulas" />
-            <Label fx:id="lblSomaNoBox" style="-fx-font-size: 14px;" text="Dias letivos regulares mapeados: --" />
+        <VBox style="-fx-background-color: #e3f2fd; -fx-border-color: #bbdefb; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;"
+              HBox.hgrow="ALWAYS">
+            <Label fx:id="lblMetaAulas" style="-fx-font-weight: bold; -fx-font-size: 14px;"
+                   text="Meta: 80 Aulas" />
+            <Label fx:id="lblSomaNoBox" style="-fx-font-size: 14px;"
+                   text="Dias letivos regulares mapeados: --" />
         </VBox>
-        <VBox style="-fx-background-color: #fff3cd; -fx-border-color: #ffeeba; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;" HBox.hgrow="ALWAYS">
-            <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="⚠️ Déficit identificado!" />
-            <Label style="-fx-font-size: 14px;" text="O sistema ativará automaticamente sábados letivos." />
+        <VBox style="-fx-background-color: #fff3cd; -fx-border-color: #ffeeba; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;"
+              HBox.hgrow="ALWAYS">
+            <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="⚠️ Déficit identificado!"
+            />
+            <Label style="-fx-font-size: 14px;"
+                   text="O sistema ativará automaticamente sábados letivos." />
         </VBox>
     </HBox>
 
-    <VBox fx:id="boxSprintError" managed="false" style="-fx-background-color: #f8d7da; -fx-border-color: #f5c6cb; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;" visible="false">
-        <Label style="-fx-font-weight: bold; -fx-text-fill: #721c24; -fx-font-size: 14px;" text="❌ Conflito de Avaliação!" />
-        <Label style="-fx-text-fill: #721c24; -fx-font-size: 14px;" text="A aula caiu em zona restrita de Sprint. Ajuste a ordem ou carga." />
+    <VBox fx:id="boxSprintError" managed="false" style="-fx-background-color: #f8d7da; -fx-border-color: #f5c6cb; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;"
+          visible="false">
+        <Label style="-fx-font-weight: bold; -fx-text-fill: #721c24; -fx-font-size: 14px;" text="❌ Conflito de Avaliação!"
+        />
+        <Label style="-fx-text-fill: #721c24; -fx-font-size: 14px;"
+               text="A aula caiu em zona restrita de Sprint. Ajuste a ordem ou carga."
+        />
     </VBox>
 
     <HBox alignment="BOTTOM_LEFT" spacing="15.0">
-        <Label text="Ementa de Temas" style="-fx-font-weight: bold; -fx-font-size: 16px;" />
+        <Label text="Ementa de Temas" style="-fx-font-weight: bold; -fx-font-size: 16px;"
+        />
         <Region HBox.hgrow="ALWAYS" />
-        <Label fx:id="lblSomaAtualBarra" style="-fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-color: white; -fx-background-radius: 4; -fx-padding: 6 12 6 12; -fx-font-size: 13px; -fx-font-weight: bold;" text="Soma Atual Mín: 0 | Máx: 0" />
+        <Label fx:id="lblSomaAtualBarra" style="-fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-color: white; -fx-background-radius: 4; -fx-padding: 6 12 6 12; -fx-font-size: 13px; -fx-font-weight: bold;"
+               text="Soma Atual Mín: 0 | Máx: 0" />
         <Button onAction="#handleExportar" styleClass="btn-secondary" text="📥 Exportar .XLSX" />
     </HBox>
 
     <TableView fx:id="tabelaTemas" styleClass="wireframe-table" VBox.vgrow="ALWAYS">
         <columnResizePolicy>
-            <TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY" />
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
         <columns>
-            <TableColumn fx:id="colOrdem" prefWidth="50.0" text="Ord." style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colOrdem" prefWidth="50.0" text="Ord."
+                         style="-fx-alignment: CENTER;" />
 
-            <TableColumn fx:id="colTitulo" prefWidth="250.0" text="Tema da Aula" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" />
+            <TableColumn fx:id="colTitulo" prefWidth="250.0" text="Tema da Aula" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;"
+            />
 
-            <TableColumn fx:id="colObrigatorio" prefWidth="95.0" text="Obrigatório?" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colDependencia" prefWidth="160.0" text="Depende do Tema" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;" />
-            <TableColumn fx:id="colMin" prefWidth="60.0" text="Mín" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colMax" prefWidth="60.0" text="Máx" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colPrioridade" prefWidth="100.0" text="Prioridade" style="-fx-alignment: CENTER;" />
-            <TableColumn fx:id="colProva" prefWidth="60.0" text="Prova?" style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colObrigatorio" prefWidth="95.0" text="Obrigatório?" style="-fx-alignment: CENTER;"
+            />
+            <TableColumn fx:id="colDependencia" prefWidth="160.0" text="Depende do Tema" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;"
+            />
+            <TableColumn fx:id="colMin" prefWidth="60.0" text="Mín" style="-fx-alignment: CENTER;"
+            />
+            <TableColumn fx:id="colMax" prefWidth="60.0" text="Máx" style="-fx-alignment: CENTER;"
+            />
+            <TableColumn fx:id="colPrioridade" prefWidth="100.0" text="Prioridade" style="-fx-alignment: CENTER;"
+            />
+            <TableColumn fx:id="colProva" prefWidth="60.0" text="Prova?" style="-fx-alignment: CENTER;"
+            />
 
-            <TableColumn fx:id="colAcoes" prefWidth="220.0" text="Ações" style="-fx-alignment: CENTER;" />
+            <TableColumn fx:id="colAcoes" prefWidth="220.0" text="Ações" style="-fx-alignment: CENTER;"
+            />
         </columns>
     </TableView>
 
-    <Button maxWidth="1.7976931348623157E308" onAction="#handleAdicionarTema" styleClass="btn-secondary" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 4 0;" text="+" />
+    <Button maxWidth="1.7976931348623157E308" onAction="#handleAdicionarTema" styleClass="btn-secondary" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 4 0;"
+            text="+" />
 
-    <Label style="-fx-font-size: 13px; -fx-text-fill: #666666;" text="* O sistema aloca primeiro a carga Mínima de todos os temas. As vagas restantes são preenchidas pela Prioridade até o limite Máximo. Temas não obrigatórios servem como blocos flexíveis no calendário." />
+    <Label style="-fx-font-size: 13px; -fx-text-fill: #666666;"
+           text="* O sistema aloca primeiro a carga Mínima de todos os temas. As vagas restantes são preenchidas pela Prioridade até o limite Máximo. Temas não obrigatórios servem como blocos flexíveis no calendário."
+    />
 
     <Separator />
 
