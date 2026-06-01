@@ -56,10 +56,14 @@
     -fx-background-color: #f8f9fa;
 }
 
-/* Seleção da linha */
+/* Seleção da linha (Fundo) */
 .wireframe-table .table-row-cell:selected {
     -fx-background-color: #e3f2fd; /* Azul bem clarinho */
-    -fx-text-fill: #0b5394;
+}
+
+/* Força a cor do texto nas células da linha selecionada para não sumir */
+.wireframe-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: #0b5394; /* Azul escuro para contraste */
 }
 
 /* Remove a borda azul de foco padrão do JavaFX */
