@@ -3,10 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <?import java.net.URL?>
 
-<BorderPane prefHeight="650" prefWidth="950" style="-fx-border-color: black; -fx-border-width: 3; -fx-background-color: white;"
+<BorderPane prefHeight="650" prefWidth="950"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigafeliz.controller.CoordenadorListaDisciplinasControllerEX">
 
     <stylesheets>
@@ -18,8 +17,8 @@
             <padding>
                 <Insets bottom="15" left="25" right="25" top="25" />
             </padding>
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Monospaced';" text="LISTA DE DISCIPLINAS" />
-            <Separator style="-fx-background-color: black; -fx-pref-height: 2;" />
+            <Label fx:id="lblTituloGeral" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="LISTA DE DISCIPLINAS" />
+            <Separator />
         </VBox>
     </top>
 
@@ -34,34 +33,37 @@
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
                 <columns>
-                    <TableColumn fx:id="colNome" text="Nome" prefWidth="350.0" />
-                    <TableColumn fx:id="colProfessor" text="Professor" prefWidth="250.0" />
+                    <TableColumn fx:id="colCurso" text="Curso (Turma)" prefWidth="250.0" />
+                    <TableColumn fx:id="colNome" text="Disciplina" prefWidth="350.0" />
                     <TableColumn fx:id="colCarga" text="Carga Horária" prefWidth="120.0" minWidth="120.0" maxWidth="150.0" style="-fx-alignment: CENTER;" />
                     <TableColumn fx:id="colAcoesGrade" text="Grade" prefWidth="80.0" minWidth="80.0" maxWidth="100.0" style="-fx-alignment: CENTER;" />
                     <TableColumn fx:id="colAcoesSelec" text="Selec." prefWidth="60.0" minWidth="60.0" maxWidth="80.0" style="-fx-alignment: CENTER;" />
                 </columns>
             </TableView>
 
-            <GridPane gridLinesVisible="true" style="-fx-border-color: black; -fx-border-width: 2; -fx-background-color: #eeeeee;">
+            <GridPane styleClass="card" hgap="15" vgap="10">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
                 <columnConstraints>
                     <ColumnConstraints percentWidth="40" />
                     <ColumnConstraints percentWidth="40" />
                     <ColumnConstraints percentWidth="20" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="60.0" />
+                    <RowConstraints minHeight="40.0" />
                 </rowConstraints>
 
-                <HBox alignment="CENTER" style="-fx-padding: 5;">
-                    <TextField fx:id="txtDisciplina" promptText="Nome da Disciplina" style="-fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER" GridPane.columnIndex="0">
+                    <TextField fx:id="txtCurso" promptText="Curso (Turma)" HBox.hgrow="ALWAYS" />
                 </HBox>
 
-                <HBox alignment="CENTER" style="-fx-padding: 5;" GridPane.columnIndex="1">
-                    <ComboBox fx:id="cbProfessor" maxWidth="Infinity" promptText="Selecione o Professor" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER" GridPane.columnIndex="1">
+                    <TextField fx:id="txtDisciplina" promptText="Nome da Disciplina" HBox.hgrow="ALWAYS" />
                 </HBox>
 
-                <HBox alignment="CENTER" style="-fx-padding: 5;" GridPane.columnIndex="2">
-                    <ComboBox fx:id="comboCarga" maxWidth="Infinity" promptText="Carga Horária" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;" HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER" GridPane.columnIndex="2">
+                    <ComboBox fx:id="comboCarga" maxWidth="Infinity" promptText="Carga Horária" HBox.hgrow="ALWAYS" />
                 </HBox>
             </GridPane>
 
@@ -70,16 +72,12 @@
                     <Insets top="10.0" />
                 </VBox.margin>
                 <Button fx:id="btnSalvar" onAction="#salvarDisciplina" prefHeight="40.0" prefWidth="120.0"
-                        style="-fx-background-color: #E0E0E0; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand;" text="Salvar">
-                    <font><Font name="Monospaced Bold" size="14.0" /></font>
-                </Button>
+                        styleClass="btn-primary" text="Salvar" />
                 <Button fx:id="btnExcluir" onAction="#excluirDisciplina" prefHeight="40.0" prefWidth="120.0"
-                        style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand;" text="Excluir">
-                    <font><Font name="Monospaced Bold" size="14.0" /></font>
-                </Button>
+                        styleClass="btn-danger" text="Excluir" />
             </HBox>
 
-            <Separator style="-fx-border-color: black; -fx-border-style: dashed; -fx-border-width: 2 0 0 0; -fx-background-color: transparent;">
+            <Separator>
                 <VBox.margin>
                     <Insets top="15" />
                 </VBox.margin>
@@ -92,9 +90,9 @@
             <padding>
                 <Insets bottom="30" left="25" right="25" top="10" />
             </padding>
-            <Button onAction="#voltar" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-weight: bold;" text="← Voltar" />
+            <Button onAction="#voltar" prefHeight="45.0" prefWidth="120.0" styleClass="btn-secondary" text="← Voltar" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button onAction="#avancar" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3; -fx-font-weight: bold;" text="Avançar →" />
+            <Button onAction="#avancar" prefHeight="45.0" prefWidth="120.0" styleClass="btn-primary" text="Avançar →" />
         </HBox>
     </bottom>
 </BorderPane>

@@ -2,66 +2,58 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox prefHeight="650.0" prefWidth="900.0" spacing="15.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigafeliz.controller.PlanejamentoEmentaController">
+<VBox prefHeight="650.0" prefWidth="1050.0" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sigafeliz.controller.PlanejamentoEmentaController">
 
     <stylesheets>
         <URL value="@../css/style.css" />
     </stylesheets>
 
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
     </padding>
 
-    <Label fx:id="lblTituloDisciplina" text="PLANEJAMENTO: DISCIPLINA">
-        <font>
-            <Font name="Monospaced Bold" size="18.0" />
-        </font>
-    </Label>
+    <VBox spacing="10">
+        <Label fx:id="lblTituloDisciplina" style="-fx-font-size: 20px; -fx-font-weight: bold;"
+               text="PLANEJAMENTO: DISCIPLINA" />
+        <Separator />
+    </VBox>
 
     <HBox spacing="15.0">
-        <VBox style="-fx-border-color: black; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #d1ecf1;" HBox.hgrow="ALWAYS">
-            <children>
-                <Label fx:id="lblMetaAulas" style="-fx-font-weight: bold; -fx-font-family: 'Monospaced';" text="Meta: 80 Aulas" />
-                <Label fx:id="lblSomaNoBox" style="-fx-font-family: 'Monospaced';" text="Soma Cadastrada Mín: 0 | Máx: 0" />
-            </children>
+        <VBox style="-fx-background-color: #e3f2fd; -fx-border-color: #bbdefb; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;"
+              HBox.hgrow="ALWAYS">
+            <Label fx:id="lblMetaAulas" style="-fx-font-weight: bold; -fx-font-size: 14px;"
+                   text="Meta: 80 Aulas" />
+            <Label fx:id="lblSomaNoBox" style="-fx-font-size: 14px;"
+                   text="Dias letivos regulares mapeados: --" />
         </VBox>
-        <VBox style="-fx-border-color: black; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #fff3cd;" HBox.hgrow="ALWAYS">
-            <children>
-                <Label style="-fx-font-weight: bold; -fx-font-family: 'Monospaced';" text="[!] Déficit identificado!" />
-                <Label style="-fx-font-family: 'Monospaced';" text="Ativação automática de sábados para atingir a meta." />
-            </children>
+        <VBox style="-fx-background-color: #fff3cd; -fx-border-color: #ffeeba; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;"
+              HBox.hgrow="ALWAYS">
+            <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="⚠️ Déficit identificado!"
+            />
+            <Label style="-fx-font-size: 14px;"
+                   text="O sistema ativará automaticamente sábados letivos." />
         </VBox>
     </HBox>
 
-    <VBox fx:id="boxSprintError" managed="false" style="-fx-background-color: #f8d7da; -fx-border-color: #f5c6cb; -fx-border-width: 2; -fx-padding: 10;" visible="false">
-        <children>
-            <Label style="-fx-font-weight: bold; -fx-text-fill: #721c24; -fx-font-family: 'Monospaced';" text="[X] Conflito de Avaliação!" />
-            <Label style="-fx-text-fill: #721c24; -fx-font-family: 'Monospaced';" text="A aula caiu em zona restrita de Sprint. Ajuste a ordem ou carga." />
-        </children>
+    <VBox fx:id="boxSprintError" managed="false" style="-fx-background-color: #f8d7da; -fx-border-color: #f5c6cb; -fx-border-radius: 4; -fx-background-radius: 4; -fx-padding: 10;"
+          visible="false">
+        <Label style="-fx-font-weight: bold; -fx-text-fill: #721c24; -fx-font-size: 14px;" text="❌ Conflito de Avaliação!"
+        />
+        <Label style="-fx-text-fill: #721c24; -fx-font-size: 14px;"
+               text="A aula caiu em zona restrita de Sprint. Ajuste a ordem ou carga."
+        />
     </VBox>
 
     <HBox alignment="BOTTOM_LEFT" spacing="15.0">
-        <children>
-            <Label text="Ementa de Temas">
-                <font>
-                    <Font name="Monospaced Bold" size="14.0" />
-                </font>
-            </Label>
-            <HBox HBox.hgrow="ALWAYS" />
-            <Label fx:id="lblSomaAtualBarra" style="-fx-border-color: black; -fx-padding: 2 5 2 5; -fx-font-family: 'Monospaced'; -fx-font-size: 12px;" text="Soma Atual Mín: 0 | Máx: 0" />
-            <Button onAction="#handleExportar" style="-fx-background-color: #e0e0e0; -fx-border-color: black; -fx-border-width: 2; -fx-cursor: hand; -fx-font-family: 'Monospaced';" text="📥 Exportar .XLSX" />
-        </children>
+        <Label text="Ementa de Temas" style="-fx-font-weight: bold; -fx-font-size: 16px;"
+        />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label fx:id="lblSomaAtualBarra" style="-fx-border-color: #cccccc; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-color: white; -fx-background-radius: 4; -fx-padding: 6 12 6 12; -fx-font-size: 13px; -fx-font-weight: bold;"
+               text="Soma Atual Mín: 0 | Máx: 0" />
+        <Button onAction="#handleExportar" styleClass="btn-secondary" text="📥 Exportar .XLSX" />
     </HBox>
 
     <TableView fx:id="tabelaTemas" styleClass="wireframe-table" VBox.vgrow="ALWAYS">
@@ -69,44 +61,43 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
         <columns>
-            <TableColumn fx:id="colOrdem" maxWidth="50.0" minWidth="50.0" text="Ord." />
-            <TableColumn fx:id="colTitulo" text="Tema da Aula" />
-            <TableColumn fx:id="colMin" maxWidth="60.0" minWidth="60.0" text="Mín" />
-            <TableColumn fx:id="colMax" maxWidth="60.0" minWidth="60.0" text="Máx" />
-            <TableColumn fx:id="colPrioridade" maxWidth="100.0" minWidth="100.0" text="Prioridade" />
-            <TableColumn fx:id="colProva" maxWidth="60.0" minWidth="60.0" text="Prova?" />
-            <TableColumn fx:id="colAcoes" maxWidth="60.0" minWidth="60.0" text="Ações" />
+            <TableColumn fx:id="colOrdem" prefWidth="50.0" text="Ord."
+                         style="-fx-alignment: CENTER;" />
+
+            <TableColumn fx:id="colTitulo" prefWidth="250.0" text="Tema da Aula" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;"
+            />
+
+            <TableColumn fx:id="colObrigatorio" prefWidth="95.0" text="Obrigatório?" style="-fx-alignment: CENTER;"
+            />
+            <TableColumn fx:id="colDependencia" prefWidth="160.0" text="Depende do Tema" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;"
+            />
+            <TableColumn fx:id="colMin" prefWidth="60.0" text="Mín" style="-fx-alignment: CENTER;"
+            />
+            <TableColumn fx:id="colMax" prefWidth="60.0" text="Máx" style="-fx-alignment: CENTER;"
+            />
+            <TableColumn fx:id="colPrioridade" prefWidth="100.0" text="Prioridade" style="-fx-alignment: CENTER;"
+            />
+            <TableColumn fx:id="colProva" prefWidth="60.0" text="Prova?" style="-fx-alignment: CENTER;"
+            />
+
+            <TableColumn fx:id="colAcoes" prefWidth="220.0" text="Ações" style="-fx-alignment: CENTER;"
+            />
         </columns>
     </TableView>
 
-    <HBox fx:id="boxInlineAdd" managed="false" spacing="5.0" style="-fx-background-color: #f0f0f0; -fx-padding: 5; -fx-border-color: black; -fx-border-width: 1;" visible="false">
-        <children>
-            <TextField fx:id="txtOrd" disable="true" prefWidth="50.0" style="-fx-font-family: 'Monospaced';" />
-            <TextField fx:id="txtTema" promptText="Nome do tema..." style="-fx-font-family: 'Monospaced';" HBox.hgrow="ALWAYS" />
-            <TextField fx:id="txtMin" prefWidth="60.0" promptText="Min" style="-fx-font-family: 'Monospaced';" />
-            <TextField fx:id="txtMax" prefWidth="60.0" promptText="Max" style="-fx-font-family: 'Monospaced';" />
-            <ComboBox fx:id="cbPrioridade" prefWidth="100.0" style="-fx-font-family: 'Monospaced';" />
-            <CheckBox fx:id="chkProva" alignment="CENTER" prefWidth="60.0" />
-            <Button onAction="#handleSalvarInline" prefWidth="60.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-cursor: hand; -fx-font-family: 'Monospaced';" text="Salvar" />
-        </children>
+    <Button maxWidth="1.7976931348623157E308" onAction="#handleAdicionarTema" styleClass="btn-secondary" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 4 0;"
+            text="+" />
+
+    <Label style="-fx-font-size: 13px; -fx-text-fill: #666666;"
+           text="* O sistema aloca primeiro a carga Mínima de todos os temas. As vagas restantes são preenchidas pela Prioridade até o limite Máximo. Temas não obrigatórios servem como blocos flexíveis no calendário."
+    />
+
+    <Separator />
+
+    <HBox alignment="CENTER" spacing="15.0">
+        <Button onAction="#handleVoltar" styleClass="btn-secondary" prefHeight="40.0" prefWidth="120.0" text="← Voltar" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#handleFinalizar" styleClass="btn-primary" prefHeight="40.0" prefWidth="180.0" text="Finalizar Planejamento" />
     </HBox>
 
-    <Button maxWidth="1.7976931348623157E308" onAction="#handleExibirInlineAdd" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-font-size: 16px; -fx-cursor: hand;" text="+" />
-
-    <Label style="-fx-font-family: 'Monospaced'; -fx-font-size: 12px;" text="* O sistema aloca primeiro a carga Mínima de todos os temas. As vagas restantes são preenchidas pela Prioridade até o limite Máximo." />
-
-    <HBox alignment="CENTER_RIGHT" spacing="15.0">
-        <children>
-            <Button onAction="#handleVoltar" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-cursor: hand;" text="← Voltar">
-                <font>
-                    <Font name="Monospaced Bold" size="13.0" />
-                </font>
-            </Button>
-            <Button onAction="#handleFinalizar" style="-fx-background-color: #eee; -fx-border-color: black; -fx-border-width: 3; -fx-cursor: hand;" text="Finalizar Planejamento">
-                <font>
-                    <Font name="Monospaced Bold" size="13.0" />
-                </font>
-            </Button>
-        </children>
-    </HBox>
 </VBox>

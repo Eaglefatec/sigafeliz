@@ -1,5 +1,10 @@
 package com.sigafeliz;
 
+import com.sigafeliz.model.Disciplina;
+import com.sigafeliz.model.Professor;
+import com.sigafeliz.service.DisciplinaService;
+import com.sigafeliz.service.FeriadoNacionalService;
+import com.sigafeliz.service.ProfessorService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,58 +12,85 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Main extends Application {
 
-    // O objeto stage (palco) equivale à "moldura" da janela do windows.
-    // Dentro do stage, serão carregadas scenes (cenas).
-    // Dentro das scenes, serão produzidas as views (telas) a partir de uma hierarquia de elementos nós.
     private static Stage primaryStage;
 
-    // O JavaFX chama esse método 'start' automaticamente assim que o programa abre, e injeta o stage instanciado por ele.
     @Override
     public void start(Stage stage) {
-        // Fazemos a variável que criamos apontar para o objeto stage que foi criado pelo JavaFX, para mexermos nele depois.
         primaryStage = stage;
-        // Define o texto que aparece em cima, na barra da janela.
-        primaryStage.setTitle("Siga Feliz");
-        // Abre a primeira tela do sistema (a tela inicial).
+        primaryStage.setTitle("Siga Feliz - MODO DE TESTE DA EMENTA");
+
+        // --- INÍCIO DA EXECUÇÃO DA NOVA FEATURE ---
+        // Verifica e popula a nova tabela com feriados nacionais do range atual + 3 semestres futuros
+        FeriadoNacionalService.inicializarFeriadosProximosSemestres();
+        // --- FIM DA EXECUÇÃO DA NOVA FEATURE ---
+
+        // --- INÍCIO DO SETUP DE TESTE DA SUA FEATURE ---
+        //prepararDadosDeTeste();
+        // --- FIM DO SETUP DE TESTE ---
+
+        // Carrega DIRETO a sua tela, pulando o login e a lista de disciplinas
         loadView("TelaInicial.fxml");
     }
 
     /**
-     * Esse método serve para trocar de tela.
-     * Você só precisa passar o nome do arquivo .fxml que quer mostrar.
+     * Injeta dados no banco de dados para evitar erro de Foreign Key
+     * e simula a seleção feita nas telas anteriores.
      */
+    private void prepararDadosDeTeste() {
+        try {
+            // 1. Garante que existe um professor no banco
+            Professor profTeste = ProfessorService.getProfessorPorNome("Professor Teste");
+            if (profTeste == null) {
+                profTeste = new Professor("Professor Teste", "teste27@fatec.com");
+                ProfessorService.salvar(profTeste);
+            }
+
+            // 2. Garante que existe uma disciplina no banco atrelada a esse professor
+            Disciplina discTeste = new Disciplina("Disciplina de Teste Automático", profTeste, 80);
+            try {
+                DisciplinaService.salvar(discTeste);
+            } catch (SQLException e) {
+                // Ignora o erro se a disciplina já existir no banco das execuções anteriores
+            }
+
+            // 3. O PULO DO GATO: Seta a disciplina na "sessão" do sistema!
+            DisciplinaService.setDisciplinaSelecionada(discTeste);
+            System.out.println("✅ Ambiente de teste preparado. Disciplina em sessão: " + discTeste.getNome());
+
+        } catch (SQLException e) {
+            System.err.println("❌ Erro ao preparar dados de teste: " + e.getMessage());
+        }
+    }
+
     public static void loadView(String fxmlFileName) {
         try {
-            // 1. Instancia Classe FXMLLoader que é capaz de carregar FXML
-            // Ele sempre olhará pro caminho pasado como argumento quando for instanciado.
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/" + fxmlFileName));
-
-            // 2. Chama o método que efetivamente carrega o arquivo FXML em um nó do tipo Parent
-            //  Atribui o resultado do método à variável root (raíz).
             Parent root = loader.load();
 
-            // 3. Cria a Scene (o conteúdo) partindo do nó root com o tamanho fixo de 900x600.
-            Scene scene = new Scene(root, 900, 600);
+            // Verifica se a janela (Stage) já tem uma Cena (Scene)
+            if (primaryStage.getScene() == null) {
+                // Se for a primeira vez (abertura do app), cria a Scene e centraliza
+                Scene scene = new Scene(root, 1100, 700);
+                scene.getStylesheets().add(Main.class.getResource("/css/style.css").toExternalForm());
+                primaryStage.setScene(scene);
+                primaryStage.centerOnScreen();
+            } else {
+                // Se já existir, APENAS troca o conteúdo. Isso preserva o estado maximizado!
+                primaryStage.getScene().setRoot(root);
+            }
 
-            // 4. Aplica o arquivo de estilo (CSS) para a tela não ficar com a aparência padrão.
-            scene.getStylesheets().add(Main.class.getResource("/css/style.css").toExternalForm());
-
-            // 5. Coloca o conteúdo dentro do stage, centraliza e mostra para o usuário.
-            primaryStage.setScene(scene);
-            primaryStage.centerOnScreen();
             primaryStage.show();
 
         } catch (IOException e) {
-            // Se o arquivo não for encontrado ou estiver com erro, avisa no console.
             System.err.println("Erro ao carregar a tela: " + fxmlFileName);
             e.printStackTrace();
         }
     }
 
-    // O ponto de partida de qualquer programa Java. Só serve para dar o "play" no JavaFX.
     public static void main(String[] args) {
         launch(args);
     }

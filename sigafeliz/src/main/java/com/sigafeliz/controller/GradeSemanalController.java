@@ -1,15 +1,16 @@
 package com.sigafeliz.controller;
 
 import com.sigafeliz.Main;
+import com.sigafeliz.service.DisciplinaService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import com.sigafeliz.model.Disciplina;
 import com.sigafeliz.dao.GradeDAO;
+import com.sigafeliz.dao.DisciplinaDAO; // NOVO IMPORT: Para acessar a DAO da disciplina
 import com.sigafeliz.model.AulasPorDia;
 import java.time.DayOfWeek;
 import java.sql.SQLException;
-import java.util.Map;
 
 public class GradeSemanalController {
 
@@ -19,7 +20,7 @@ public class GradeSemanalController {
     @FXML private Spinner<Integer> spnQui;
     @FXML private Spinner<Integer> spnSex;
 
-    private Disciplina disciplinaAtual = new Disciplina("Matematica", null, 0);
+    private Disciplina disciplinaAtual;
 
     @FXML
     public void initialize() {
@@ -28,7 +29,15 @@ public class GradeSemanalController {
         configurarSpinner(spnQua);
         configurarSpinner(spnQui);
         configurarSpinner(spnSex);
-        carregarGrade();
+
+        // Resgata a disciplina selecionada pelo coordenador
+        this.disciplinaAtual = DisciplinaService.getDisciplinaSelecionada();
+
+        if (disciplinaAtual != null) {
+            carregarGrade();
+        } else {
+            System.out.println("Aviso: Nenhuma disciplina foi pré-selecionada no DisciplinaService.");
+        }
     }
 
     private void configurarSpinner(Spinner<Integer> spinner) {
@@ -37,25 +46,49 @@ public class GradeSemanalController {
     }
 
     private void carregarGrade() {
-        GradeDAO gradeDAO = new GradeDAO();
-        try {
-            Map<DayOfWeek, Integer> grade = gradeDAO.buscarGradePorDisciplina(disciplinaAtual.getNome());
+        if (disciplinaAtual == null) return;
 
-            spnSeg.getValueFactory().setValue(grade.getOrDefault(DayOfWeek.MONDAY,    0));
-            spnTer.getValueFactory().setValue(grade.getOrDefault(DayOfWeek.TUESDAY,   0));
-            spnQua.getValueFactory().setValue(grade.getOrDefault(DayOfWeek.WEDNESDAY, 0));
-            spnQui.getValueFactory().setValue(grade.getOrDefault(DayOfWeek.THURSDAY,  0));
-            spnSex.getValueFactory().setValue(grade.getOrDefault(DayOfWeek.FRIDAY,    0));
+        // Reinicia os spinners zerados por segurança antes de popular
+        spnSeg.getValueFactory().setValue(0);
+        spnTer.getValueFactory().setValue(0);
+        spnQua.getValueFactory().setValue(0);
+        spnQui.getValueFactory().setValue(0);
+        spnSex.getValueFactory().setValue(0);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("ERRO ao carregar grade do banco.");
+        // Alimenta a tela usando a lista interna carregada do banco pelo DisciplinaDAO
+        if (disciplinaAtual.getAulasPorDia() != null) {
+            for (AulasPorDia aula : disciplinaAtual.getAulasPorDia()) {
+                switch (aula.getDiaSemana()) {
+                    case MONDAY:
+                        spnSeg.getValueFactory().setValue(aula.getQuantidadeAulas());
+                        break;
+                    case TUESDAY:
+                        spnTer.getValueFactory().setValue(aula.getQuantidadeAulas());
+                        break;
+                    case WEDNESDAY:
+                        spnQua.getValueFactory().setValue(aula.getQuantidadeAulas());
+                        break;
+                    case THURSDAY:
+                        spnQui.getValueFactory().setValue(aula.getQuantidadeAulas());
+                        break;
+                    case FRIDAY:
+                        spnSex.getValueFactory().setValue(aula.getQuantidadeAulas());
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
-    public void setDisciplina(Disciplina disciplina) {
-        this.disciplinaAtual = disciplina;
-        carregarGrade(); // Recarrega se a disciplina for definida depois do initialize
+    public void setDisciplina(Disciplina d) {
+        this.disciplinaAtual = d;
+        carregarGrade();
+    }
+
+    @FXML
+    private void volverTela() {
+        Main.loadView("CoordenadorListaDisciplinasEX.fxml");
     }
 
     @FXML
@@ -65,7 +98,13 @@ public class GradeSemanalController {
 
     @FXML
     private void salvarGrade() {
+        if (disciplinaAtual == null) {
+            System.err.println("ERRO: Não é possível salvar a grade porque nenhuma disciplina está ativa.");
+            return;
+        }
+
         GradeDAO gradeDAO = new GradeDAO();
+        DisciplinaDAO disciplinaDAO = new DisciplinaDAO(); // Instanciado o DAO para sincronizar colunas nativas
 
         int seg = spnSeg.getValue();
         int ter = spnTer.getValue();
@@ -74,19 +113,32 @@ public class GradeSemanalController {
         int sex = spnSex.getValue();
 
         try {
+            // 1. Limpa o histórico antigo na tabela temporária aula_por_dia
             gradeDAO.deletarPorDisciplina(disciplinaAtual.getNome());
 
+            // 2. Grava as novas quantidades configuradas nos Spinners na tabela aula_por_dia
             if (seg > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.MONDAY,    seg));
             if (ter > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.TUESDAY,   ter));
             if (qua > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.WEDNESDAY, qua));
             if (qui > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.THURSDAY,  qui));
             if (sex > 0) gradeDAO.salvarGrade(new AulasPorDia(disciplinaAtual, DayOfWeek.FRIDAY,    sex));
 
-            voltarTela();
+            // 3. ATUALIZA A TABELA PAI DISCIPLINA PARA MANTER A SINCRONIA COM AS CONSULTAS DA TELA DE LISTA
+            disciplinaDAO.atualizarGrade(disciplinaAtual.getNome(), seg, ter, qua, qui, sex);
+
+            // 4. Atualiza o objeto em memória para refletir imediatamente as alterações nos acessos de sessão
+            disciplinaAtual.getAulasPorDia().clear();
+            if (seg > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.MONDAY, seg));
+            if (ter > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.TUESDAY, ter));
+            if (qua > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.WEDNESDAY, qua));
+            if (qui > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.THURSDAY, qui));
+            if (sex > 0) disciplinaAtual.addAulaPorDia(new AulasPorDia(disciplinaAtual, DayOfWeek.FRIDAY, sex));
+
+            voltarTela(); // Executa o retorno com os dados sincronizados em DB e na Memória
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("ERRO: não voltou por causa desse exception");
+            System.out.println("ERRO: Ocorreu uma exceção ao salvar no banco de dados.");
         }
     }
 

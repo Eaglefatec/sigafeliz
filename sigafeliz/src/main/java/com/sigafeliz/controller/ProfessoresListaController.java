@@ -81,18 +81,18 @@ public class ProfessoresListaController {
             exibirAlerta(e.getMessage());
         }
 
-        Professor selecionado = ProfessorService.getProfessorLogado();
-        if (selecionado != null) {
-            try {
-                selecionado.setNome(txtNome.getText());
-                ProfessorService.atualizar(selecionado);
-                tabelaProfessores.refresh();
-            } catch (SQLException e) {
-                exibirAlerta("Erro ao atualizar: " + e.getMessage());
-            }
-        } else {
-            exibirAlerta("Selecione um professor e digite o novo nome para editar.");
-        }
+//        Professor selecionado = ProfessorService.getProfessorLogado();
+//        if (selecionado != null) {
+//            try {
+//                selecionado.setNome(txtNome.getText());
+//                // ProfessorService.atualizar(selecionado);
+//                tabelaProfessores.refresh();
+//            } catch (SQLException e) {
+//                exibirAlerta("Erro ao atualizar: " + e.getMessage());
+//            }
+//        } else {
+//            exibirAlerta("Selecione um professor e digite o novo nome para editar.");
+//        }
     }
 
 

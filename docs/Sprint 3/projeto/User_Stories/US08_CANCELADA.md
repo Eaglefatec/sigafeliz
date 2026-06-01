@@ -1,0 +1,15 @@
+# 📝 User Story 08 - CANCELADA
+
+Como professor, quero identificar quais aulas são provas, para que o sistema impeça que elas sejam alocadas nas semanas de entrega de Projeto Integrador, garantindo conformidade com a política institucional de não sobreposição de avaliações.
+
+## 📌 Síntese
+Impede que provas sejam marcadas nas semanas de entrega do Projeto Integrador (semanas 3 e 4 das Sprints), emitindo alertas para evitar sobrecarga dos alunos.
+
+## 📌 Informações Apresentadas
+* Garantia de conformidade institucional
+* Identificação de provas
+
+## 📌 Critérios de Aceitação
+* Atribuição de identificador de "Avaliação" aos temas pertinentes
+* O sistema deve verificar se a data projetada para a avaliação incide entre o 15º e o 28º dia (semanas 3 e 4) de qualquer ciclo de Sprint originado pelo Kickoff
+* Aviso bloqueante na interface caso a distribuição resulte em avaliação alocada dentro dessas semanas restritas em qualquer ponto do semestre, exigindo ajuste por parte do professor

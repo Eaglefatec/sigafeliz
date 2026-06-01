@@ -29,13 +29,12 @@ public class GradeDAO {
         try (Connection con = ConexaoDB.getConexao();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, a.getDisciplina().getNome());
-            ps.setInt(2, a.getDiaSemana().getValue());
+            ps.setInt(2, a.getDiaSemana().getValue()); // DayOfWeek.getValue() = 1(Seg)..7(Dom)
             ps.setInt(3, a.getQuantidadeAulas());
             ps.executeUpdate();
         }
     }
 
-    // Retorna um Map de DayOfWeek -> quantidade de aulas para a disciplina
     public Map<DayOfWeek, Integer> buscarGradePorDisciplina(String nomeDisciplina) throws SQLException {
         String sql = "SELECT dia_semana, quantidade_aulas FROM aula_por_dia WHERE disciplina_nome = ?";
         Map<DayOfWeek, Integer> grade = new HashMap<>();
@@ -45,7 +44,9 @@ public class GradeDAO {
             ps.setString(1, nomeDisciplina);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                DayOfWeek dia = DayOfWeek.of(rs.getInt("dia_semana"));
+                int diaInt = rs.getInt("dia_semana");
+                // Banco guarda 1=Seg, 2=Ter... mas DayOfWeek.of() espera 1=Seg também — OK!
+                DayOfWeek dia = DayOfWeek.of(diaInt);
                 int quantidade = rs.getInt("quantidade_aulas");
                 grade.put(dia, quantidade);
             }

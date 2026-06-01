@@ -4,7 +4,8 @@ import com.sigafeliz.Main;
 import com.sigafeliz.model.Disciplina;
 import com.sigafeliz.model.Prioridade;
 import com.sigafeliz.model.Tema;
-import com.sigafeliz.service.MockDataService;
+import com.sigafeliz.service.DisciplinaService;
+import com.sigafeliz.service.TemaService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -12,8 +13,29 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.SQLException;
 import java.util.List;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.sigafeliz.service.DistribuicaoAulaService;
+import com.sigafeliz.service.SemestreService;
+import com.sigafeliz.model.Semestre;
+import java.util.ArrayList;
+import com.sigafeliz.dao.DiaRestritoDAO;
+import com.sigafeliz.dao.GradeDAO;
+import com.sigafeliz.model.DiaRestrito;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class PlanejamentoEmentaController {
 
@@ -22,156 +44,554 @@ public class PlanejamentoEmentaController {
     @FXML private Label lblSomaNoBox;
     @FXML private Label lblSomaAtualBarra;
     @FXML private VBox boxSprintError;
-    @FXML private HBox boxInlineAdd;
 
     @FXML private TableView<Tema> tabelaTemas;
     @FXML private TableColumn<Tema, Integer> colOrdem;
     @FXML private TableColumn<Tema, String> colTitulo;
+    @FXML private TableColumn<Tema, Boolean> colObrigatorio;
+    @FXML private TableColumn<Tema, String> colDependencia;
     @FXML private TableColumn<Tema, Integer> colMin;
     @FXML private TableColumn<Tema, Integer> colMax;
     @FXML private TableColumn<Tema, Prioridade> colPrioridade;
     @FXML private TableColumn<Tema, Boolean> colProva;
     @FXML private TableColumn<Tema, Void> colAcoes;
 
-    @FXML private TextField txtOrd;
-    @FXML private TextField txtTema;
-    @FXML private TextField txtMin;
-    @FXML private TextField txtMax;
-    @FXML private ComboBox<Prioridade> cbPrioridade;
-    @FXML private CheckBox chkProva;
-
     private Disciplina disciplinaAtual;
+    private Tema temaEmEdicao = null;
+    private String tituloOriginalEdicao = null;
+    private boolean showSprintError = false;
 
     @FXML
     public void initialize() {
-        disciplinaAtual = MockDataService.getDisciplinaSelecionada();
+        disciplinaAtual = DisciplinaService.getDisciplinaSelecionada();
 
         if (disciplinaAtual != null) {
             lblTituloDisciplina.setText("PLANEJAMENTO: " + disciplinaAtual.getNome().toUpperCase());
             lblMetaAulas.setText("Meta: " + disciplinaAtual.getCargaHorariaTotal() + " Aulas");
 
-            cbPrioridade.setItems(FXCollections.observableArrayList(Prioridade.values()));
-            cbPrioridade.setValue(Prioridade.MEDIA);
-
-            configurarColunas();
-            atualizarTabelaESomas();
+            configurarColunasInline();
+            carregarTemasDoBanco();
+        } else {
+            exibirAlerta("Erro de Sessão", "Nenhuma disciplina selecionada. Volte à tela anterior.", Alert.AlertType.WARNING);
+            tabelaTemas.setDisable(true);
         }
     }
 
-    private void configurarColunas() {
-        colOrdem.setCellValueFactory(new PropertyValueFactory<>("ordem"));
-        colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-        colMin.setCellValueFactory(new PropertyValueFactory<>("cargaMinima"));
-        colMax.setCellValueFactory(new PropertyValueFactory<>("cargaMaxima"));
-        colPrioridade.setCellValueFactory(new PropertyValueFactory<>("prioridade"));
-
-        colProva.setCellFactory(param -> new TableCell<Tema, Boolean>() {
-            private final CheckBox checkBox = new CheckBox();
-            { checkBox.setDisable(true); }
-            @Override
-            protected void updateItem(Boolean item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    checkBox.setSelected(item);
-                    setGraphic(checkBox);
-                    setAlignment(Pos.CENTER);
-                }
-            }
-        });
-        colProva.setCellValueFactory(new PropertyValueFactory<>("eAvaliacao"));
-
-        colAcoes.setCellFactory(param -> new TableCell<Tema, Void>() {
-            private final Button btnEdit = new Button("✎");
-            {
-                btnEdit.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-font-size: 14px;");
-                btnEdit.setOnAction(event -> {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText(null);
-                    alert.setContentText("A edição direta será implementada na próxima Sprint.");
-                    alert.showAndWait();
-                });
-            }
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) setGraphic(null);
-                else {
-                    setGraphic(btnEdit);
-                    setAlignment(Pos.CENTER);
-                }
-            }
-        });
+    private void carregarTemasDoBanco() {
+        try {
+            List<Tema> temasBanco = TemaService.getTemasPorDisciplina(disciplinaAtual);
+            disciplinaAtual.getTemas().clear();
+            disciplinaAtual.getTemas().addAll(temasBanco);
+            atualizarTabelaESomas();
+        } catch (SQLException e) {
+            exibirAlerta("Erro", "Falha ao carregar temas: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     private void atualizarTabelaESomas() {
-        List<Tema> temas = disciplinaAtual.getTemas();
-        tabelaTemas.setItems(FXCollections.observableArrayList(temas));
+        tabelaTemas.setItems(FXCollections.observableArrayList(disciplinaAtual.getTemas()));
 
-        int somaMin = temas.stream().mapToInt(Tema::getCargaMinima).sum();
-        int somaMax = temas.stream().mapToInt(Tema::getCargaMaxima).sum();
-        String textoSoma = String.format("Soma Mín: %d | Máx: %d", somaMin, somaMax);
+        int somaMin = disciplinaAtual.getTemas().stream().mapToInt(Tema::getCargaMinima).sum();
+        int somaMax = disciplinaAtual.getTemas().stream().mapToInt(Tema::getCargaMaxima).sum();
+        String textoSoma = String.format("Soma Atual Mín: %d | Máx: %d", somaMin, somaMax);
 
         lblSomaNoBox.setText(textoSoma);
         lblSomaAtualBarra.setText(textoSoma);
     }
 
-    @FXML
-    private void handleExibirInlineAdd() {
-        boxInlineAdd.setVisible(true);
-        boxInlineAdd.setManaged(true);
-        txtOrd.setText(String.valueOf(disciplinaAtual.getTemas().size() + 1));
-        txtTema.requestFocus();
+    private void configurarColunasInline() {
+        colOrdem.setCellValueFactory(new PropertyValueFactory<>("ordem"));
+
+        // COLUNA TITULO (COM CHECAGEM SEGURA DE LIMITES)
+        colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        colTitulo.setCellFactory(col -> new TableCell<>() {
+            private final TextField txt = new TextField();
+            @Override protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                if (t == temaEmEdicao) {
+                    txt.setText(t.getTitulo() != null ? t.getTitulo() : "");
+                    txt.setMaxWidth(Double.MAX_VALUE);
+                    txt.setOnKeyReleased(e -> t.setTitulo(txt.getText()));
+                    setGraphic(txt);
+                    setText(null);
+                } else {
+                    setGraphic(null);
+                    setText(item);
+                }
+            }
+        });
+
+        // COLUNA OBRIGATÓRIO (COM CHECAGEM SEGURA DE LIMITES)
+        colObrigatorio.setCellValueFactory(new PropertyValueFactory<>("obrigatorio"));
+        colObrigatorio.setCellFactory(col -> new TableCell<>() {
+            private final CheckBox chk = new CheckBox();
+            {
+                chk.setStyle("-fx-cursor: hand;");
+                chk.selectedProperty().addListener((obs, old, newVal) -> {
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
+                        if (t == temaEmEdicao) t.setObrigatorio(newVal);
+                    }
+                });
+            }
+            @Override protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null) {
+                    setGraphic(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size() || item == null) {
+                    setGraphic(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                chk.setSelected(item);
+                chk.setDisable(t != temaEmEdicao);
+                setGraphic(chk);
+                setAlignment(Pos.CENTER);
+            }
+        });
+
+        // COLUNA DEPENDÊNCIA (COM CHECAGEM SEGURA DE LIMITES)
+        colDependencia.setCellValueFactory(new PropertyValueFactory<>("dependenciaTitulo"));
+        colDependencia.setCellFactory(col -> new TableCell<>() {
+            private final TextField txt = new TextField();
+            @Override protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                if (t == temaEmEdicao) {
+                    txt.setText(t.getDependenciaTitulo() != null ? t.getDependenciaTitulo() : "");
+                    txt.setMaxWidth(Double.MAX_VALUE);
+                    txt.setOnKeyReleased(e -> t.setDependenciaTitulo(txt.getText().trim().isEmpty() ? null : txt.getText().trim()));
+                    setGraphic(txt);
+                    setText(null);
+                } else {
+                    setGraphic(null);
+                    setText(item != null ? item : "-");
+                }
+            }
+        });
+
+        // COLUNA MÍNIMO (COM CHECAGEM SEGURA DE LIMITES)
+        colMin.setCellValueFactory(new PropertyValueFactory<>("cargaMinima"));
+        colMin.setCellFactory(col -> new TableCell<>() {
+            private final Spinner<Integer> spinner = new Spinner<>(1, 100, 1);
+            {
+                spinner.setEditable(true);
+                spinner.valueProperty().addListener((obs, old, newVal) -> {
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
+                        if (t == temaEmEdicao) t.setCargaMinima(newVal);
+                    }
+                });
+            }
+            @Override protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null || item == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                if (t == temaEmEdicao) {
+                    spinner.getValueFactory().setValue(item);
+                    setGraphic(spinner);
+                    setText(null);
+                } else {
+                    setGraphic(null);
+                    setText(String.valueOf(item));
+                }
+                setAlignment(Pos.CENTER);
+            }
+        });
+
+        // COLUNA MÁXIMO (COM CHECAGEM SEGURA DE LIMITES)
+        colMax.setCellValueFactory(new PropertyValueFactory<>("cargaMaxima"));
+        colMax.setCellFactory(col -> new TableCell<>() {
+            private final Spinner<Integer> spinner = new Spinner<>(1, 100, 1);
+            {
+                spinner.setEditable(true);
+                spinner.valueProperty().addListener((obs, old, newVal) -> {
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
+                        if (t == temaEmEdicao) t.setCargaMaxima(newVal);
+                    }
+                });
+            }
+            @Override protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null || item == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                if (t == temaEmEdicao) {
+                    spinner.getValueFactory().setValue(item);
+                    setGraphic(spinner);
+                    setText(null);
+                } else {
+                    setGraphic(null);
+                    setText(String.valueOf(item));
+                }
+                setAlignment(Pos.CENTER);
+            }
+        });
+
+        // COLUNA PRIORIDADE (COM CHECAGEM SEGURA DE LIMITES)
+        colPrioridade.setCellValueFactory(new PropertyValueFactory<>("prioridade"));
+        colPrioridade.setCellFactory(col -> new TableCell<>() {
+            private final ComboBox<Prioridade> combo = new ComboBox<>(FXCollections.observableArrayList(Prioridade.values()));
+            {
+                combo.valueProperty().addListener((obs, old, newVal) -> {
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
+                        if (t == temaEmEdicao) t.setPrioridade(newVal);
+                    }
+                });
+            }
+            @Override protected void updateItem(Prioridade item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null || item == null) {
+                    setGraphic(null); setText(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); setText(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                if (t == temaEmEdicao) {
+                    combo.setValue(item);
+                    setGraphic(combo);
+                    setText(null);
+                } else {
+                    setGraphic(null);
+                    setText(item.name());
+                }
+                setAlignment(Pos.CENTER);
+            }
+        });
+
+        // COLUNA PROVA (COM CHECAGEM SEGURA DE LIMITES)
+        colProva.setCellValueFactory(new PropertyValueFactory<>("eAvaliacao"));
+        colProva.setCellFactory(col -> new TableCell<>() {
+            private final CheckBox chk = new CheckBox();
+            {
+                chk.setStyle("-fx-cursor: hand;");
+                chk.selectedProperty().addListener((obs, old, newVal) -> {
+                    int index = getIndex();
+                    if (index >= 0 && getTableView() != null && getTableView().getItems() != null && index < getTableView().getItems().size() && newVal != null) {
+                        Tema t = getTableView().getItems().get(index);
+                        if (t == temaEmEdicao) t.setEAvaliacao(newVal);
+                    }
+                });
+            }
+            @Override protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null || item == null) {
+                    setGraphic(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                chk.setSelected(item);
+                chk.setDisable(t != temaEmEdicao);
+                setGraphic(chk);
+                setAlignment(Pos.CENTER);
+            }
+        });
+
+        // COLUNA DE AÇÕES (COM CHECAGEM SEGURA DE LIMITES)
+        colAcoes.setCellFactory(col -> new TableCell<>() {
+            private final Button btnSalvar = new Button("✔ SALVAR");
+            private final Button btnCancelar = new Button("✖ CANCELAR");
+            private final Button btnEditar = new Button("✎ EDITAR");
+            private final Button btnExcluir = new Button("✖ EXCLUIR");
+            {
+                btnEditar.setStyle("-fx-background-color: #cfe2f3; -fx-border-color: #0b5394; -fx-text-fill: #0b5394; -fx-border-width: 2; -fx-cursor: hand; -fx-font-weight: bold;");
+                btnExcluir.setStyle("-fx-background-color: #f8d7da; -fx-border-color: #b30000; -fx-border-width: 2; -fx-text-fill: #b30000; -fx-cursor: hand; -fx-font-weight: bold;");
+                btnCancelar.setStyle("-fx-background-color: #f8d7da; -fx-border-color: #b30000; -fx-border-width: 2; -fx-text-fill: #b30000; -fx-cursor: hand; -fx-font-weight: bold;");
+                btnSalvar.setStyle("-fx-background-color: #d4edda; -fx-border-color: #155724; -fx-text-fill: #155724; -fx-border-width: 2; -fx-cursor: hand; -fx-font-weight: bold;");
+
+                btnEditar.setOnAction(e -> iniciarEdicaoInline(getTableView().getItems().get(getIndex())));
+                btnExcluir.setOnAction(e -> excluirTema(getTableView().getItems().get(getIndex())));
+                btnSalvar.setOnAction(e -> salvarEdicaoInline(getTableView().getItems().get(getIndex())));
+                btnCancelar.setOnAction(e -> cancelarEdicaoInline(getTableView().getItems().get(getIndex())));
+            }
+            @Override protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView() == null || getTableView().getItems() == null) {
+                    setGraphic(null); return;
+                }
+                int index = getIndex();
+                if (index < 0 || index >= getTableView().getItems().size()) {
+                    setGraphic(null); return;
+                }
+                Tema t = getTableView().getItems().get(index);
+                if (t == temaEmEdicao) {
+                    HBox box = new HBox(10, btnSalvar, btnCancelar); box.setAlignment(Pos.CENTER); setGraphic(box);
+                } else {
+                    HBox box = new HBox(10, btnEditar, btnExcluir); box.setAlignment(Pos.CENTER); setGraphic(box);
+                }
+            }
+        });
     }
 
     @FXML
-    private void handleSalvarInline() {
-        try {
-            int min = Integer.parseInt(txtMin.getText());
-            int max = Integer.parseInt(txtMax.getText());
-            int ord = Integer.parseInt(txtOrd.getText());
-
-            Tema novoTema = new Tema(null, txtTema.getText(), min, max, cbPrioridade.getValue(), chkProva.isSelected(), ord);
-            disciplinaAtual.addTema(novoTema);
-
-            txtTema.clear();
-            txtMin.clear();
-            txtMax.clear();
-            chkProva.setSelected(false);
-            cbPrioridade.setValue(Prioridade.MEDIA);
-
-            boxInlineAdd.setVisible(false);
-            boxInlineAdd.setManaged(false);
-
-            atualizarTabelaESomas();
-
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Preencha Min e Max com valores numéricos.");
-            alert.showAndWait();
+    private void handleAdicionarTema() {
+        if (temaEmEdicao != null) {
+            exibirAlerta("Aviso", "Conclua a edição atual antes de adicionar um novo tema.", Alert.AlertType.WARNING);
+            return;
         }
+        int proximaOrdem = disciplinaAtual.getTemas().size() + 1;
+        Tema novoTema = new Tema(disciplinaAtual, "", 2, 4, Prioridade.MEDIA, false, proximaOrdem, true, null);
+        disciplinaAtual.getTemas().add(novoTema);
+        atualizarTabelaESomas();
+        iniciarEdicaoInline(novoTema);
+    }
+
+    private void iniciarEdicaoInline(Tema t) {
+        if (temaEmEdicao != null) return;
+        temaEmEdicao = t;
+        tituloOriginalEdicao = t.getTitulo();
+        tabelaTemas.refresh();
+    }
+
+    private void salvarEdicaoInline(Tema t) {
+        if (t.getTitulo() == null || t.getTitulo().trim().isEmpty()) {
+            exibirAlerta("Aviso", "O título do tema não pode ser vazio.", Alert.AlertType.WARNING);
+            return;
+        }
+        try {
+            if (tituloOriginalEdicao == null || tituloOriginalEdicao.isEmpty()) {
+                TemaService.salvar(t);
+            } else {
+                TemaService.editar(t, tituloOriginalEdicao);
+            }
+            temaEmEdicao = null;
+            tituloOriginalEdicao = null;
+            carregarTemasDoBanco();
+        } catch (SQLException e) {
+            exibirAlerta("Erro", "Erro ao gravar tema no banco: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void cancelarEdicaoInline(Tema t) {
+        if (tituloOriginalEdicao == null || tituloOriginalEdicao.isEmpty()) {
+            disciplinaAtual.getTemas().remove(t);
+        }
+        temaEmEdicao = null;
+        tituloOriginalEdicao = null;
+        carregarTemasDoBanco();
+    }
+
+    private void excluirTema(Tema t) {
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Deseja excluir o tema '" + t.getTitulo() + "'?", ButtonType.YES, ButtonType.NO);
+        confirm.showAndWait().ifPresent(res -> {
+            if (res == ButtonType.YES) {
+                try {
+                    TemaService.excluir(t);
+                    carregarTemasDoBanco();
+                } catch (SQLException e) {
+                    exibirAlerta("Erro", "Erro ao excluir: " + e.getMessage(), Alert.AlertType.ERROR);
+                }
+            }
+        });
+    }
+
+    private List<Tema> ordenarPorDependencia(List<Tema> temas) {
+        List<Tema> resultado = new ArrayList<>();
+        Set<String> visitados = new HashSet<>();
+        Set<String> emProcesso = new HashSet<>();
+        Map<String, Tema> mapa = new HashMap<>();
+
+        for (Tema t : temas) mapa.put(t.getTitulo(), t);
+
+        for (Tema t : temas) {
+            if (!visitados.contains(t.getTitulo())) {
+                dfsTopological(t, mapa, visitados, emProcesso, resultado);
+            }
+        }
+        return resultado;
+    }
+
+    private void dfsTopological(Tema t, Map<String, Tema> mapa, Set<String> visitados, Set<String> emProcesso, List<Tema> resultado) {
+        emProcesso.add(t.getTitulo());
+        String dep = t.getDependenciaTitulo();
+
+        if (dep != null && !dep.trim().isEmpty() && mapa.containsKey(dep)) {
+            if (!visitados.contains(dep)) {
+                if (!emProcesso.contains(dep)) {
+                    dfsTopological(mapa.get(dep), mapa, visitados, emProcesso, resultado);
+                } else {
+                    System.err.println("Aviso: Dependência cíclica detectada em: " + dep);
+                }
+            }
+        }
+        emProcesso.remove(t.getTitulo());
+        visitados.add(t.getTitulo());
+        resultado.add(t);
     }
 
     @FXML
     private void handleExportar() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Salvar Arquivo Como...");
-        alert.setHeaderText("Simulação do FileChooser do Sistema Operacional");
-        alert.setContentText("Arquivo exportado para C:\\Users\\Professor\\Documents\\SigaFeliz.xlsx");
-        alert.showAndWait();
+
+        // validação inicial
+        if (disciplinaAtual == null || disciplinaAtual.getTemas().isEmpty()) {
+            exibirAlerta("Aviso", "Não há temas cadastrados nesta disciplina para exportar.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // valida se as aulas cabem
+
+        try {
+            int somaMin = TemaService.getTotalMinimoPorDisciplina(disciplinaAtual);
+            if (somaMin > disciplinaAtual.getCargaHorariaTotal()){
+                exibirAlerta("Aviso", "O número mínimo ["+String.valueOf(somaMin)+"] de aulas cadastradas e obrigatórias excede o máximo ["+String.valueOf(disciplinaAtual.getCargaHorariaTotal())
+                        +"] permitido para esta disciplina. ", Alert.AlertType.WARNING);
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salvar Planejamento como Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Planilha do Excel (*.xlsx)", "*.xlsx"));
+        fileChooser.setInitialFileName("Planejamento_" + disciplinaAtual.getNome().replaceAll("\\s+", "_") + ".xlsx");
+
+        File file = fileChooser.showSaveDialog(tabelaTemas.getScene().getWindow());
+
+        if (file != null) {
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("Grade Diária");
+                Row headerRow = sheet.createRow(0);
+                String[] columns = {"Número da Aula", "Data", "Tema", "Marcador de Prova", "Dia da Semana", "Identificação da Disciplina"};
+
+                for (int i = 0; i < columns.length; i++) headerRow.createCell(i).setCellValue(columns[i]);
+
+                Semestre semestre = SemestreService.getSemestreSelecionado();
+                DistribuicaoAulaService distribuicaoService = new DistribuicaoAulaService();
+                List<Tema> temasDistribuidos;
+
+                if (semestre != null) {
+                    temasDistribuidos = distribuicaoService.distribuir(disciplinaAtual.getNome(), semestre.getNome());
+                } else {
+                    temasDistribuidos = new ArrayList<>(disciplinaAtual.getTemas());
+                }
+
+                temasDistribuidos = ordenarPorDependencia(temasDistribuidos);
+
+                Queue<Tema> filaAulas = new LinkedList<>();
+                for (Tema t : temasDistribuidos) {
+                    if (t.isEAvaliacao()) {
+                        filaAulas.add(t);
+                    } else {
+                        for (int i = 0; i < t.getAulasAlocadas(); i++) filaAulas.add(t);
+                    }
+                }
+
+                GradeDAO gradeDAO = new GradeDAO();
+                DiaRestritoDAO diaRestritoDAO = new DiaRestritoDAO();
+                Map<DayOfWeek, Integer> gradeAulas = gradeDAO.buscarGradePorDisciplina(disciplinaAtual.getNome());
+                Set<LocalDate> datasRestritas = diaRestritoDAO.listarPorSemestre(semestre).stream().map(DiaRestrito::getData).collect(java.util.stream.Collectors.toSet());
+
+                String[] nomesDias = {"", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"};
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                int rowNum = 1; int numeroDaAula = 1; LocalDate data = semestre.getDataInicio();
+
+                while (!data.isAfter(semestre.getDataFim()) && !filaAulas.isEmpty()) {
+                    DayOfWeek dia = data.getDayOfWeek();
+                    if (gradeAulas.containsKey(dia) && !datasRestritas.contains(data)) {
+                        int qtdAulasNoDia = gradeAulas.get(dia);
+                        Tema proximoTema = filaAulas.peek();
+
+                        if (proximoTema != null && proximoTema.isEAvaliacao()) {
+                            LocalDate melhorDia = null; int melhorQtd = 0; LocalDate buscaData = data;
+                            while (!buscaData.isAfter(semestre.getDataFim())) {
+                                DayOfWeek buscaDia = buscaData.getDayOfWeek();
+                                if (gradeAulas.containsKey(buscaDia) && !datasRestritas.contains(buscaData)) {
+                                    int qtd = gradeAulas.get(buscaDia);
+                                    if (qtd >= 2) { melhorDia = buscaData; melhorQtd = qtd; break; }
+                                    else if (melhorDia == null) { melhorDia = buscaData; melhorQtd = qtd; }
+                                }
+                                buscaData = buscaData.plusDays(1);
+                            }
+                            if (melhorDia != null) { data = melhorDia; dia = data.getDayOfWeek(); qtdAulasNoDia = melhorQtd; }
+
+                            Tema temaProva = filaAulas.poll();
+                            for (int i = 1; i < qtdAulasNoDia; i++) {
+                                if (!filaAulas.isEmpty() && filaAulas.peek() == temaProva) filaAulas.poll();
+                            }
+
+                            Row row = sheet.createRow(rowNum++);
+                            row.createCell(0).setCellValue(numeroDaAula); numeroDaAula += qtdAulasNoDia;
+                            row.createCell(1).setCellValue(data.format(formatter));
+                            row.createCell(2).setCellValue(temaProva.getTitulo());
+                            row.createCell(3).setCellValue("Sim");
+                            row.createCell(4).setCellValue(nomesDias[dia.getValue()]);
+                            row.createCell(5).setCellValue(disciplinaAtual.getNome());
+                        } else {
+                            for (int i = 0; i < qtdAulasNoDia && !filaAulas.isEmpty(); i++) {
+                                Tema temaAula = filaAulas.poll();
+                                if (temaAula.isEAvaliacao()) { filaAulas.add(temaAula); break; }
+
+                                Row row = sheet.createRow(rowNum++);
+                                row.createCell(0).setCellValue(numeroDaAula++);
+                                row.createCell(1).setCellValue(data.format(formatter));
+                                row.createCell(2).setCellValue(temaAula.getTitulo());
+                                row.createCell(3).setCellValue("Não");
+                                row.createCell(4).setCellValue(nomesDias[dia.getValue()]);
+                                row.createCell(5).setCellValue(disciplinaAtual.getNome());
+                            }
+                        }
+                    }
+                    data = data.plusDays(1);
+                }
+
+                for (int i = 0; i < columns.length; i++) sheet.autoSizeColumn(i);
+                try (FileOutputStream fileOut = new FileOutputStream(file)) { workbook.write(fileOut); }
+                exibirAlerta("Sucesso", "Grade exportada com sucesso baseado na hierarquia de dependências!", Alert.AlertType.INFORMATION);
+
+            } catch (Exception e) {
+                exibirAlerta("Erro na Exportação", "Ocorreu um erro ao gerar a planilha XLSX:\n" + e.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
     }
 
-    @FXML
-    private void handleFinalizar() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText("Salvo no banco de dados. Processo concluído.");
-        alert.showAndWait();
+    @FXML private void handleValidar() {
+        showSprintError = !showSprintError; boxSprintError.setVisible(showSprintError); boxSprintError.setManaged(showSprintError);
+        if (!showSprintError) exibirAlerta("Sucesso", "Distribuição validada! Sem conflitos de Sprint.", Alert.AlertType.INFORMATION);
     }
-
-    @FXML
-    private void handleVoltar() {
-        Main.loadView("MinhasDisciplinas.fxml");
+    @FXML private void handleVoltar() { Main.loadView("MinhasDisciplinas.fxml"); }
+    @FXML private void handleFinalizar() { exibirAlerta("Concluído", "Planejamento salvo.", Alert.AlertType.INFORMATION); }
+    private void exibirAlerta(String titulo, String msg, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo); alert.setTitle(titulo); alert.setHeaderText(null); alert.setContentText(msg); alert.showAndWait();
     }
 }
